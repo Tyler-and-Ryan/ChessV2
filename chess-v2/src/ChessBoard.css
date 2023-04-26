@@ -1,0 +1,4 @@
+.ChessBoard {
+    display: grid;
+    border: 1px white dashed;
+}
