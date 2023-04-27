@@ -1,0 +1,10 @@
+.Tile {
+    color: orange;
+}
+
+.Tile img {
+    position: relative;
+    left: 25%;
+    top: 25%;
+    
+}
