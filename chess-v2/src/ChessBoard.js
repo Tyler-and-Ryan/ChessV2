@@ -1,26 +1,68 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import './ChessBoard.css'
+import blackKing from './visualAssets/blackKing.svg'
+import whiteKing from './visualAssets/whiteKing.svg'
+import blackBishop from './visualAssets/blackBishop.svg'
+import whiteBishop from './visualAssets/whiteBishop.svg'
+import blackKnight from './visualAssets/blackKnight.svg'
+import whiteKnight from './visualAssets/whiteKnight.svg'
+import blackPawn from './visualAssets/blackPawn.svg'
+import whitePawn from './visualAssets/whitePawn.svg'
+import blackQueen from './visualAssets/blackQueen.svg'
+import whiteQueen from './visualAssets/whiteQueen.svg'
+import blackRook from './visualAssets/blackRook.svg'
+import whiteRook from './visualAssets/whiteRook.svg'
 
 
 const ChessBoard = () => {
     return (
         <div className="ChessBoardContainer">
-            <div className="Tile">1</div>
-            <div>2</div>
-            <div>3</div>
-            <div>4</div>
-            <div>5</div>
-            <div>6</div>
-            <div>7</div>
-            <div>8</div>
-            <div>9</div>
-            <div>10</div>
-            <div>11</div>
-            <div>12</div>
-            <div>13</div>
-            <div>14</div>
-            <div>15</div>
-            <div>16</div>
+            <div className="Tile">
+                <img src={blackRook} alt="Black Rook" />
+            </div>
+            <div>
+                <img src={blackKnight} alt="Black Knight" />
+            </div>
+            <div>
+                <img src={blackBishop} alt="Black Bishop" /></div>
+            <div>
+                <img src={blackQueen} alt="Black Queen" /></div>
+            <div>
+                <img src={blackKing} alt="Black King" />
+            </div>
+            <div>
+                <img src={blackBishop} alt="Black Bishop"/>
+            </div>
+            <div>
+                <img src={blackKnight} alt="Black Knight"/>
+            </div>
+            <div>
+                <img src={blackRook} alt="Black Rook"/>
+            </div>
+            <div>
+                <img src={blackPawn} alt="Black Pawn"/>
+            </div>
+            <div>
+                <img src={blackPawn} alt="Black Pawn"/>
+            </div>
+            <div>
+                <img src={blackPawn} alt="Black Pawn"/>
+            </div>
+            <div>
+                <img src={blackPawn} alt="Black Pawn"/>
+            </div>
+            <div>
+                <img src={blackPawn} alt="Black Pawn"/>
+            </div>
+            <div>
+                <img src={blackPawn} alt="Black Pawn"/>
+            </div>
+            <div>
+                <img src={blackPawn} alt="Black Pawn"/>
+            </div>
+            <div>
+                <img src={blackPawn} alt="Black Pawn"/>
+            </div>
             <div>17</div>
             <div>18</div>
             <div>19</div>
@@ -53,22 +95,54 @@ const ChessBoard = () => {
             <div>46</div>
             <div>47</div>
             <div>48</div>
-            <div>49</div>
-            <div>50</div>
-            <div>51</div>
-            <div>52</div>
-            <div>53</div>
-            <div>54</div>
-            <div>55</div>
-            <div>56</div>
-            <div>57</div>
-            <div>58</div>
-            <div>59</div>
-            <div>60</div>
-            <div>61</div>
-            <div>62</div>
-            <div>63</div>
-            <div>64</div>
+            <div>
+                <img src={whitePawn} alt="White Pawn"/>
+            </div>
+            <div>
+                <img src={whitePawn} alt="White Pawn"/>
+            </div>
+            <div>
+                <img src={whitePawn} alt="White Pawn"/>
+            </div>
+            <div>
+                <img src={whitePawn} alt="White Pawn"/>
+            </div>
+            <div>
+                <img src={whitePawn} alt="White Pawn"/>
+            </div>
+            <div>
+                <img src={whitePawn} alt="White Pawn"/>
+            </div>
+            <div>
+                <img src={whitePawn} alt="White Pawn"/>
+            </div>
+            <div>
+                <img src={whitePawn} alt="White Pawn"/>
+            </div>
+            <div>
+                <img src={whiteRook} alt="White Rook"/>
+            </div>
+            <div>
+                <img src={whiteKnight} alt="White Knight"/>
+            </div>
+            <div>
+                <img src={whiteBishop} alt="White Bishop"/>
+            </div>
+            <div>
+                <img src={whiteQueen} alt="White Queen"/>
+            </div>
+            <div>
+                <img src={whiteKing} alt="White King" />
+            </div>
+            <div>
+                <img src={whiteBishop} alt="White Bishop"/>
+            </div>
+            <div>
+                <img src={whiteKnight} alt="White Knight"/>
+            </div>
+            <div>
+                <img src={whiteRook} alt="White Rook"/>
+            </div>
         </div>
     );
 }
