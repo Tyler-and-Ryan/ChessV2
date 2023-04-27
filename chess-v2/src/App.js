@@ -11,9 +11,7 @@ const App = () => {
         <div>Reset</div>
       </header>
       <body className="App-body">
-        <div>
-          <ChessBoard />
-        </div>
+        <ChessBoard />
       </body>
       <footer className="App-footer"><p>Developed by <a href="https://linkedin.com/in/ryan-watson-4a8690213" target="_blank">Ryan Watson</a></p></footer>
     </Fragment>

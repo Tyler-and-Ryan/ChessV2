@@ -1,4 +1,12 @@
-.ChessBoard {
+.ChessBoardContainer {
     display: grid;
+    width: 80vw;
+    height: 80vh;
+    /* fr = take up available space */
+    grid-template-columns: repeat(8, 1fr);
     border: 1px white dashed;
+}
+
+.Tile {
+    color: orange;
 }
