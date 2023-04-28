@@ -1,10 +1,3 @@
-/* .boardLabel {
-    display: grid;
-    width: 11%;
-    height: 11%;
-    grid-template-columns: 1fr;
-} */
-
 .ChessBoardContainer {
     background-color: purple;
     display: grid;
@@ -15,21 +8,4 @@
     border: 1px white solid;
     min-width: 600px;
     min-height: 600px;
-    /* overflow-x: scroll;
-    overflow-y: scroll; */
 }
-
-/* .ChessBoardContainer div {
-    position: relative;
-    color: orange;
-    aspect-ratio: 1 / 1;
-    height: 100%;
-    border: 1px white solid;
-}
-
-.ChessBoardContainer div p {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-} */

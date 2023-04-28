@@ -38,20 +38,7 @@ import whiteRook from "./visualAssets/whiteRook.svg";
 const ChessBoard = () => {
   return (
     <div>
-      {/* <div className="boardLabel">
-        <p>1</p>
-        <p>1</p>
-        <p>1</p>
-        <p>1</p>
-        <p>1</p>
-        <p>1</p>
-        <p>1</p>
-        <p>1</p>
-      </div> */}
       <div className="ChessBoardContainer">
-        {/* <div>
-            <p>8</p>
-        </div> */}
         <Tile svg={blackRook} altText="Black Rook" x={8} y='a' />
         <Tile svg={blackKnight} altText="Black Knight" x={8} y='b' />
         <Tile svg={blackBishop} altText="Black Bishop" x={8} y='c' />
@@ -60,9 +47,6 @@ const ChessBoard = () => {
         <Tile svg={blackBishop} altText="Black Bishop" x={8} y='f' />
         <Tile svg={blackKnight} altText="Black Knight" x={8} y='g' />
         <Tile svg={blackRook} altText="Black Rook" x={8} y='h' />
-        {/* <div>
-            <p>7</p>
-        </div> */}
         <Tile svg={blackPawn} altText="Black Pawn" x={7} y='a' />
         <Tile svg={blackPawn} altText="Black Pawn" x={7} y='b' />
         <Tile svg={blackPawn} altText="Black Pawn" x={7} y='c' />
@@ -71,9 +55,6 @@ const ChessBoard = () => {
         <Tile svg={blackPawn} altText="Black Pawn" x={7} y='f' />
         <Tile svg={blackPawn} altText="Black Pawn" x={7} y='g' />
         <Tile svg={blackPawn} altText="Black Pawn" x={7} y='h' />
-        {/* <div>
-            <p>6</p>
-        </div> */}
         <Tile svg={{}} altText="" x={6} y='a' />
         <Tile svg={{}} altText="" x={6} y='b' />
         <Tile svg={{}} altText="" x={6} y='c' />
@@ -82,9 +63,6 @@ const ChessBoard = () => {
         <Tile svg={{}} altText="" x={6} y='f' />
         <Tile svg={{}} altText="" x={6} y='g' />
         <Tile svg={{}} altText="" x={6} y='h' />
-        {/* <div>
-            <p>5</p>
-        </div> */}
         <Tile svg={{}} altText="" x={5} y='a' />
         <Tile svg={{}} altText="" x={5} y='b' />
         <Tile svg={{}} altText="" x={5} y='c' />
@@ -93,9 +71,6 @@ const ChessBoard = () => {
         <Tile svg={{}} altText="" x={5} y='f' />
         <Tile svg={{}} altText="" x={5} y='g' />
         <Tile svg={{}} altText="" x={5} y='h' />
-        {/* <div>
-            <p>4</p>
-        </div> */}
         <Tile svg={{}} altText="" x={4} y='a' />
         <Tile svg={{}} altText="" x={4} y='b' />
         <Tile svg={{}} altText="" x={4} y='c' />
@@ -104,9 +79,6 @@ const ChessBoard = () => {
         <Tile svg={{}} altText="" x={4} y='f' />
         <Tile svg={{}} altText="" x={4} y='g' />
         <Tile svg={{}} altText="" x={4} y='h' />
-        {/* <div>
-            <p>3</p>
-        </div> */}
         <Tile svg={{}} altText="" x={3} y='a' />
         <Tile svg={{}} altText="" x={3} y='b' />
         <Tile svg={{}} altText="" x={3} y='c' />
@@ -115,9 +87,6 @@ const ChessBoard = () => {
         <Tile svg={{}} altText="" x={3} y='f' />
         <Tile svg={{}} altText="" x={3} y='g' />
         <Tile svg={{}} altText="" x={3} y='h' />
-        {/* <div>
-            <p>2</p>
-        </div> */}
         <Tile svg={whitePawn} altText="White Pawn" x={2} y='a' />
         <Tile svg={whitePawn} altText="White Pawn" x={2} y='b' />
         <Tile svg={whitePawn} altText="White Pawn" x={2} y='c' />
@@ -126,9 +95,6 @@ const ChessBoard = () => {
         <Tile svg={whitePawn} altText="White Pawn" x={2} y='f' />
         <Tile svg={whitePawn} altText="White Pawn" x={2} y='g' />
         <Tile svg={whitePawn} altText="White Pawn" x={2} y='h' />
-        {/* <div>
-            <p>1</p>
-        </div> */}
         <Tile svg={whiteRook} altText="White Rook" x={1}  y='a' />
         <Tile svg={whiteKnight} altText="White Knight" x={1} y='b' />
         <Tile svg={whiteBishop} altText="White Bishop" x={1} y='c' />
@@ -137,31 +103,6 @@ const ChessBoard = () => {
         <Tile svg={whiteBishop} altText="White Bishop" x={1} y='f' />
         <Tile svg={whiteKnight} altText="White Knight" x={1} y='g' />
         <Tile svg={whiteRook} altText="White Rook" x={1} y='h' />
-        {/* <div />
-        <div>
-            <p>a</p>
-        </div>
-        <div>
-            <p>b</p>
-        </div>
-        <div>
-            <p>c</p>
-        </div>
-        <div>
-            <p>d</p>
-        </div>
-        <div>
-            <p>e</p>
-        </div>
-        <div>
-            <p>f</p>
-        </div>
-        <div>
-            <p>g</p>
-        </div>
-        <div>
-            <p>h</p>
-        </div> */}
       </div>
     </div>
   );
