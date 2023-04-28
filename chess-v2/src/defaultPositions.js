@@ -464,14 +464,12 @@ const defaultNodes = [
 ];
 const defaultEdges = [
   {
-    source: 1,
-    target: 2,
-    type: "emptyEdge",
+    source: [1, 'b'],
+    target: [1, 'c'],
   },
   {
-    source: 2,
-    target: 4,
-    type: "emptyEdge",
+    source: [1, 'b'],
+    target: [1, 'd'],
   },
 ];
 

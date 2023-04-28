@@ -19,31 +19,43 @@ import { defaultEdges, defaultNodes } from "./defaultPositions.js"
  *              iv)  iterate through edges, if any friendlies have destination in S, return false.
  *                   if they have no destinations in S, return True
  *
- * Time Complexity: O(E) where E < N(N - 1)
+ * Time Complexity: O(E + N) where E < N(N - 1)
  */
 
-/*
- * Assumption: Tiles/nodes have already been updated to reflect the 
+/* Assumption: Tiles/nodes have already been updated to reflect the 
  *             move that just occurred
- * Goal: to delete all old edges relating to each node involved in the last move, then to 
- *       calculate the new edges for each node
- * generateEdges(startNode, endNode, nodes, E)
- *      1) traverse edges, delete all edges with source at startNode or endNode
- *      2) if startNode has a piece:
- *          a) create list of all possible move locations (in bounds) based on the piece
- *          b) create edges for each of those possible moves
- *          c) add those edges to E
- *      3) if endNode has a piece
- *          a) create list of all possible move locations (in bounds) based on the piece
- *          b) create edges for each of those possible moves
- *          c) add those edges to E
- *          
- *
- *
+ * Goal: return new array with all edges - loop through all nodes and add on to edges array iteratively
  */
+const generateEdges = (nodes) => {
+  let updatedEdges = [];
+
+  nodes.forEach((node) => {
+    let possibleMoves = [];
+    if (node.altText === "White Rook" || node.altText === "Black Rook") {
+      possibleMoves = rookPossibleMoves(node.x, node.y); //TODO: implement this function (returns array of edge objects)
+    } else if (node.altText === "White Knight" || node.altText === "Black Knight") {
+      possibleMoves = knightPossibleMoves(node.x, node.y); //TODO: implement this function (returns array of edge objects)
+    } else if (node.altText === "White Bishop" || node.altText === "Black Bishop") {
+      possibleMoves = bishopPossibleMoves(node.x, node.y); //TODO: implement this function (returns array of edge objects)
+    } else if (node.altText === "White Queen" || node.altText === "Black Queen") {
+      possibleMoves = queenPossibleMoves(node.x, node.y); //TODO: implement this function (returns array of edge objects)
+    } else if (node.altText === "White King" || node.altText === "Black King") {
+      possibleMoves = kingPossibleMoves(node.x, node.y); //TODO: implement this function (returns array of edge objects)
+    } else if (node.altText === "White Pawn") {
+      possibleMoves = whitePawnPossibleMoves(node.x, node.y); //TODO: implement this function (returns array of edge objects)
+    } else if (node.altText === "Black Pawn") {
+      possibleMoves = blackPawnPossibleMoves(node.x, node.y) //TODO: implement this function (returns array of edge objects)
+    }
+    possibleMoves.forEach((possibleMove) => {
+      updatedEdges.push(possibleMove);
+    });
+  });
+
+  return updatedEdges;
+}
 
 const ChessBoard = () => {
-    const [nodes, setNodes] = useState(defaultNodes);
+  const [nodes, setNodes] = useState(defaultNodes);
 
   return (
     <div>
