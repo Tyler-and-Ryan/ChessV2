@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./ChessBoard.css";
 import Tile from "./Tile.js";
+//deprecate defaultEdges once edge generation process is completed and QA'd
 import { defaultEdges, defaultNodes } from "./defaultPositions.js"
 
 /*
@@ -32,19 +33,19 @@ const generateEdges = (nodes) => {
   nodes.forEach((node) => {
     let possibleMoves = [];
     if (node.altText === "White Rook" || node.altText === "Black Rook") {
-      possibleMoves = rookPossibleMoves(node.x, node.y); //TODO: implement this function (returns array of edge objects)
+      possibleMoves = rookPossibleMoves(node); //TODO: implement this function (returns array of edge objects)
     } else if (node.altText === "White Knight" || node.altText === "Black Knight") {
-      possibleMoves = knightPossibleMoves(node.x, node.y); //TODO: implement this function (returns array of edge objects)
+      possibleMoves = knightPossibleMoves(node); //TODO: implement this function (returns array of edge objects)
     } else if (node.altText === "White Bishop" || node.altText === "Black Bishop") {
-      possibleMoves = bishopPossibleMoves(node.x, node.y); //TODO: implement this function (returns array of edge objects)
+      possibleMoves = bishopPossibleMoves(node); //TODO: implement this function (returns array of edge objects)
     } else if (node.altText === "White Queen" || node.altText === "Black Queen") {
-      possibleMoves = queenPossibleMoves(node.x, node.y); //TODO: implement this function (returns array of edge objects)
+      possibleMoves = queenPossibleMoves(node); //TODO: implement this function (returns array of edge objects)
     } else if (node.altText === "White King" || node.altText === "Black King") {
-      possibleMoves = kingPossibleMoves(node.x, node.y); //TODO: implement this function (returns array of edge objects)
+      possibleMoves = kingPossibleMoves(node); //TODO: implement this function (returns array of edge objects)
     } else if (node.altText === "White Pawn") {
-      possibleMoves = whitePawnPossibleMoves(node.x, node.y); //TODO: implement this function (returns array of edge objects)
+      possibleMoves = whitePawnPossibleMoves(node); //TODO: implement this function (returns array of edge objects)
     } else if (node.altText === "Black Pawn") {
-      possibleMoves = blackPawnPossibleMoves(node.x, node.y) //TODO: implement this function (returns array of edge objects)
+      possibleMoves = blackPawnPossibleMoves(node) //TODO: implement this function (returns array of edge objects)
     }
     possibleMoves.forEach((possibleMove) => {
       updatedEdges.push(possibleMove);
@@ -55,12 +56,14 @@ const generateEdges = (nodes) => {
 }
 
 const ChessBoard = () => {
+  //initialize graph that stores board data
   const [nodes, setNodes] = useState(defaultNodes);
+  const [edges, setEdges] = useState(generateEdges(nodes));
 
   return (
     <div>
       <div className="ChessBoardContainer">
-        {nodes.map((node) => {
+        {nodes.map((node) => { //TODO: add onClick event to each tile, at first print out edges from that tile, next make it select the Tile
             return <Tile svg={node.svg} altText={node.altText} 
                         x={node.x} y={node.y} hasPiece={node.hasPiece} />;
         })}
