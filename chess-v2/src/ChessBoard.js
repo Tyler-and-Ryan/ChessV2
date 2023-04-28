@@ -1,18 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./ChessBoard.css";
 import Tile from "./Tile.js";
-import blackKing from "./visualAssets/blackKing.svg";
-import whiteKing from "./visualAssets/whiteKing.svg";
-import blackBishop from "./visualAssets/blackBishop.svg";
-import whiteBishop from "./visualAssets/whiteBishop.svg";
-import blackKnight from "./visualAssets/blackKnight.svg";
-import whiteKnight from "./visualAssets/whiteKnight.svg";
-import blackPawn from "./visualAssets/blackPawn.svg";
-import whitePawn from "./visualAssets/whitePawn.svg";
-import blackQueen from "./visualAssets/blackQueen.svg";
-import whiteQueen from "./visualAssets/whiteQueen.svg";
-import blackRook from "./visualAssets/blackRook.svg";
-import whiteRook from "./visualAssets/whiteRook.svg";
+import { defaultEdges, defaultNodes } from "./defaultPositions.js"
 
 /*
  * isCheckMate pseudocode
@@ -31,78 +20,25 @@ import whiteRook from "./visualAssets/whiteRook.svg";
  *                   if they have no destinations in S, return True
  *
  * Time Complexity: O(E) where E < N(N - 1)
- *
- *
  */
 
 const ChessBoard = () => {
+    const [nodes, setNodes] = useState({});
+
+    //initializing the nodes and edges
+    useEffect(() => {
+        setNodes(defaultNodes);
+    }, [])
+
+
+
   return (
     <div>
       <div className="ChessBoardContainer">
-        <Tile svg={blackRook} altText="Black Rook" x={8} y='a' />
-        <Tile svg={blackKnight} altText="Black Knight" x={8} y='b' />
-        <Tile svg={blackBishop} altText="Black Bishop" x={8} y='c' />
-        <Tile svg={blackQueen} altText="Black Queen" x={8} y='d' />
-        <Tile svg={blackKing} altText="Black King" x={8} y='e' />
-        <Tile svg={blackBishop} altText="Black Bishop" x={8} y='f' />
-        <Tile svg={blackKnight} altText="Black Knight" x={8} y='g' />
-        <Tile svg={blackRook} altText="Black Rook" x={8} y='h' />
-        <Tile svg={blackPawn} altText="Black Pawn" x={7} y='a' />
-        <Tile svg={blackPawn} altText="Black Pawn" x={7} y='b' />
-        <Tile svg={blackPawn} altText="Black Pawn" x={7} y='c' />
-        <Tile svg={blackPawn} altText="Black Pawn" x={7} y='d' />
-        <Tile svg={blackPawn} altText="Black Pawn" x={7} y='e' />
-        <Tile svg={blackPawn} altText="Black Pawn" x={7} y='f' />
-        <Tile svg={blackPawn} altText="Black Pawn" x={7} y='g' />
-        <Tile svg={blackPawn} altText="Black Pawn" x={7} y='h' />
-        <Tile svg={{}} altText="" x={6} y='a' />
-        <Tile svg={{}} altText="" x={6} y='b' />
-        <Tile svg={{}} altText="" x={6} y='c' />
-        <Tile svg={{}} altText="" x={6} y='d' />
-        <Tile svg={{}} altText="" x={6} y='e' />
-        <Tile svg={{}} altText="" x={6} y='f' />
-        <Tile svg={{}} altText="" x={6} y='g' />
-        <Tile svg={{}} altText="" x={6} y='h' />
-        <Tile svg={{}} altText="" x={5} y='a' />
-        <Tile svg={{}} altText="" x={5} y='b' />
-        <Tile svg={{}} altText="" x={5} y='c' />
-        <Tile svg={{}} altText="" x={5} y='d' />
-        <Tile svg={{}} altText="" x={5} y='e' />
-        <Tile svg={{}} altText="" x={5} y='f' />
-        <Tile svg={{}} altText="" x={5} y='g' />
-        <Tile svg={{}} altText="" x={5} y='h' />
-        <Tile svg={{}} altText="" x={4} y='a' />
-        <Tile svg={{}} altText="" x={4} y='b' />
-        <Tile svg={{}} altText="" x={4} y='c' />
-        <Tile svg={{}} altText="" x={4} y='d' />
-        <Tile svg={{}} altText="" x={4} y='e' />
-        <Tile svg={{}} altText="" x={4} y='f' />
-        <Tile svg={{}} altText="" x={4} y='g' />
-        <Tile svg={{}} altText="" x={4} y='h' />
-        <Tile svg={{}} altText="" x={3} y='a' />
-        <Tile svg={{}} altText="" x={3} y='b' />
-        <Tile svg={{}} altText="" x={3} y='c' />
-        <Tile svg={{}} altText="" x={3} y='d' />
-        <Tile svg={{}} altText="" x={3} y='e' />
-        <Tile svg={{}} altText="" x={3} y='f' />
-        <Tile svg={{}} altText="" x={3} y='g' />
-        <Tile svg={{}} altText="" x={3} y='h' />
-        <Tile svg={whitePawn} altText="White Pawn" x={2} y='a' />
-        <Tile svg={whitePawn} altText="White Pawn" x={2} y='b' />
-        <Tile svg={whitePawn} altText="White Pawn" x={2} y='c' />
-        <Tile svg={whitePawn} altText="White Pawn" x={2} y='d' />
-        <Tile svg={whitePawn} altText="White Pawn" x={2} y='e' />
-        <Tile svg={whitePawn} altText="White Pawn" x={2} y='f' />
-        <Tile svg={whitePawn} altText="White Pawn" x={2} y='g' />
-        <Tile svg={whitePawn} altText="White Pawn" x={2} y='h' />
-        <Tile svg={whiteRook} altText="White Rook" x={1}  y='a' />
-        <Tile svg={whiteKnight} altText="White Knight" x={1} y='b' />
-        <Tile svg={whiteBishop} altText="White Bishop" x={1} y='c' />
-        <Tile svg={whiteQueen} altText="White Queen" x={1} y='d' />
-        <Tile svg={whiteKing} altText="White King" x={1} y='e' />
-        <Tile svg={whiteBishop} altText="White Bishop" x={1} y='f' />
-        <Tile svg={whiteKnight} altText="White Knight" x={1} y='g' />
-        <Tile svg={whiteRook} altText="White Rook" x={1} y='h' />
+        {nodes.map((node) => {
+            return <Tile svg={node.svg} altText={node.altText} 
+                        x={node.x} y={node.y} hasPiece={node.hasPiece} />;
+        })}
       </div>
     </div>
   );
