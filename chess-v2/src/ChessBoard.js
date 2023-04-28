@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./ChessBoard.css";
 import Tile from "./Tile.js";
 import { defaultEdges, defaultNodes } from "./defaultPositions.js"
@@ -22,15 +22,28 @@ import { defaultEdges, defaultNodes } from "./defaultPositions.js"
  * Time Complexity: O(E) where E < N(N - 1)
  */
 
+/*
+ * Assumption: Tiles/nodes have already been updated to reflect the 
+ *             move that just occurred
+ * Goal: to delete all old edges relating to each node involved in the last move, then to 
+ *       calculate the new edges for each node
+ * generateEdges(startNode, endNode, nodes, E)
+ *      1) traverse edges, delete all edges with source at startNode or endNode
+ *      2) if startNode has a piece:
+ *          a) create list of all possible move locations (in bounds) based on the piece
+ *          b) create edges for each of those possible moves
+ *          c) add those edges to E
+ *      3) if endNode has a piece
+ *          a) create list of all possible move locations (in bounds) based on the piece
+ *          b) create edges for each of those possible moves
+ *          c) add those edges to E
+ *          
+ *
+ *
+ */
+
 const ChessBoard = () => {
-    const [nodes, setNodes] = useState({});
-
-    //initializing the nodes and edges
-    useEffect(() => {
-        setNodes(defaultNodes);
-    }, [])
-
-
+    const [nodes, setNodes] = useState(defaultNodes);
 
   return (
     <div>
