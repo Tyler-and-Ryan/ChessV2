@@ -10,9 +10,11 @@ const App = () => {
         <div>Chess Version 2</div>
         <div>Reset</div>
       </header>
-      <body className="App-body">
-        <ChessBoard />
-      </body>
+      <div className="App-body">
+        <div>
+          <ChessBoard />
+        </div>
+      </div>
       <footer className="App-footer">
         <p>
           Developed by <a href="https://linkedin.com/in/ryan-watson-4a8690213" target="_blank" rel="noreferrer">Ryan Watson</a>
