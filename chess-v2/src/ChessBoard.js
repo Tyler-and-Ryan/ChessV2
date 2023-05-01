@@ -23,6 +23,17 @@ import { defaultEdges, defaultNodes } from "./defaultPositions.js"
  * Time Complexity: O(E + N) where E < N(N - 1)
  */
 
+/* 
+ * param: node - a tile on the board that contains a knight
+ *        nodes - the list of all tiles on the board
+ * return: an array of objects where each object is an x,y pair that represents a possible legal move
+ */
+const knightPossibleMoves = (node, nodes) => {
+  //check all 8 possible moves
+  //  if tile is in bounds and does not contain friendly piece, add to possibleMoves
+
+}
+
 /*
  * param: node - a tile on the board that contains a rook
  *        nodes - the list of all tiles on the board
