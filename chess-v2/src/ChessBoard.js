@@ -243,7 +243,29 @@ const rookPossibleMoves = (node, nodes) => {
   }
 
   return possibleMoves;
+}
 
+/*
+ * param: node - a tile on the board that contains a rook
+ *        nodes - the list of all tiles on the board
+ * return: an array of objects where each object is an x,y pair that represents a possible legal move 
+ */
+const queenPossibleMoves = (node, nodes) => {
+  //queen possible moves are left/right/up/down (like the rook) and
+  //upright/upleft/downright/downleft (like the bishop)
+  //so queen possible moves is just rook + bishop possible moves
+  let possibleMovesPartOne = rookPossibleMoves(node, nodes);
+  let possibleMovesPartTwo = bishopPossibleMoves(node, nodes);
+  let totalPossibleMoves;
+  if (possibleMovesPartOne.length > 0 && possibleMovesPartTwo.length > 0) {
+    totalPossibleMoves = [...possibleMovesPartOne, ...possibleMovesPartTwo];
+  } else if (possibleMovesPartOne.length > 0) {
+    totalPossibleMoves = possibleMovesPartOne;
+  } else {
+    totalPossibleMoves = possibleMovesPartTwo;
+  }
+
+  return totalPossibleMoves;
 }
 
 /* Assumption: Tiles/nodes have already been updated to reflect the 
@@ -262,7 +284,7 @@ const generateEdges = (nodes) => {
     } else if (nodes.at(i).altText === "White Bishop" || nodes.at(i).altText === "Black Bishop") {
       possibleMoves = bishopPossibleMoves(nodes.at(i), nodes);
     } else if (nodes.at(i).altText === "White Queen" || nodes.at(i).altText === "Black Queen") {
-      //possibleMoves = queenPossibleMoves(nodes.at(i), nodes); //TODO: implement this function (returns array of edge objects)
+      possibleMoves = queenPossibleMoves(nodes.at(i), nodes);
     } else if (nodes.at(i).altText === "White King" || nodes.at(i).altText === "Black King") {
       //possibleMoves = kingPossibleMoves(nodes.at(i), nodes); //TODO: implement this function (returns array of edge objects)
     } else if (nodes.at(i).altText === "White Pawn") {
