@@ -23,6 +23,79 @@ import { defaultEdges, defaultNodes } from "./defaultPositions.js"
  * Time Complexity: O(E + N) where E < N(N - 1)
  */
 
+
+/*
+ * param: node - a tile on the board that contains a rook
+ *        nodes - the list of all tiles on the board
+ * return: an array of objects where each object is an x,y pair that represents a possible legal move 
+ */
+const bishopPossibleMoves = (node, nodes) => {
+  //look in each diagonal (upright, upleft, downright, downleft) until the edge of the board or a friendly/enemy tile is reached
+  //while looking in each direction, add empty tiles to the possible moves list
+  //if the edge of the board is found, do not include moves out of bounds, break out of the loop
+  //if friendly unit is found, do not include that as a possible move, break out of the loop
+  //if enemy unit is found, include that as a possible move, break out of the loop
+  
+  let possibleMoves = [];
+  let bishopPlayer = node.player;
+  let startTileIdx = nodes.indexOf(node);
+  let currTileIdx = startTileIdx;
+  currTileIdx = currTileIdx - 8 + 1; //looking upright one tile
+  while (currTileIdx >= 0 && currTileIdx < nodes.length) { //looking upright
+    let checkTile = nodes.at(currTileIdx);
+    if (checkTile.hasPiece) {
+      if (bishopPlayer !== checkTile.player) {
+        possibleMoves.push({ x: checkTile.x, y: checkTile.y }); //enemy piece in the way, add to possibleMoves then break;
+      }
+      break; //friendly piece in the way, don't add to possibleMoves
+    }
+    possibleMoves.push({ x: checkTile.x, y: checkTile.y });
+    currTileIdx = currTileIdx - 8 + 1; //looking upright one tile
+  }
+  currTileIdx = startTileIdx;
+  currTileIdx = currTileIdx - 8 - 1; //looking upleft one tile
+  while (currTileIdx >= 0 && currTileIdx < nodes.length) { //looking upleft
+    let checkTile = nodes.at(currTileIdx);
+    if (checkTile.hasPiece) {
+      if (bishopPlayer !== checkTile.player) {
+        possibleMoves.push({ x: checkTile.x, y: checkTile.y }); //enemy piece in the way, add to possibleMoves then break;
+      }
+      break; //friendly piece in the way, don't add to possibleMoves
+    }
+    possibleMoves.push({ x: checkTile.x, y: checkTile.y });
+    currTileIdx = currTileIdx - 8 - 1; //looking upleft one tile
+  }
+  currTileIdx = startTileIdx;
+  currTileIdx = currTileIdx + 8 + 1; //looking downright one tile
+  while (currTileIdx >= 0 && currTileIdx < nodes.length) { //looking downright
+    let checkTile = nodes.at(currTileIdx);
+    if (checkTile.hasPiece) {
+      if (bishopPlayer !== checkTile.player) {
+        possibleMoves.push({ x: checkTile.x, y: checkTile.y }); //enemy piece in the way, add to possibleMoves then break;
+      }
+      break; //friendly piece in the way, don't add to possibleMoves
+    }
+    possibleMoves.push({ x: checkTile.x, y: checkTile.y });
+    currTileIdx = currTileIdx + 8 + 1; //looking downright one tile
+  }
+  currTileIdx = startTileIdx;
+  currTileIdx = currTileIdx + 8 - 1; //looking downleft one tile
+  while (currTileIdx >= 0 && currTileIdx < nodes.length) { //looking downleft
+    let checkTile = nodes.at(currTileIdx);
+    if (checkTile.hasPiece) {
+      if (bishopPlayer !== checkTile.player) {
+        possibleMoves.push({ x: checkTile.x, y: checkTile.y }); //enemy piece in the way, add to possibleMoves then break;
+      }
+      break; //friendly piece in the way, don't add to possibleMoves
+    }
+    possibleMoves.push({ x: checkTile.x, y: checkTile.y });
+    currTileIdx = currTileIdx + 8 - 1; //looking downleft one tile
+  }
+
+  return possibleMoves;
+
+}
+
 /* 
  * param: node - a tile on the board that contains a knight
  *        nodes - the list of all tiles on the board
@@ -31,6 +104,73 @@ import { defaultEdges, defaultNodes } from "./defaultPositions.js"
 const knightPossibleMoves = (node, nodes) => {
   //check all 8 possible moves
   //  if tile is in bounds and does not contain friendly piece, add to possibleMoves
+  let possibleMoves = [];
+  let currNodeIdx = nodes.indexOf(node);
+  //checking up 2, left 1 position
+  if (node.x + 2 <= 8 && String.fromCharCode(node.y.charCodeAt(0) - 1) >= 'a') {
+    //if checked tile does not have a friendly piece, it is a possible move
+    if (nodes.at(currNodeIdx - (2 * 8) - 1).player !== node.player) {
+      possibleMoves.push({ x: node.x + 2, y: String.fromCharCode(node.y.charCodeAt(0) - 1) })
+    }
+  }
+
+  //checking up 2, right 1 position
+  if (node.x + 2 <= 8 && String.fromCharCode(node.y.charCodeAt(0) + 1) <= 'h') {
+    //if checked tile does not have a friendly piece, it is a possible move
+    if (nodes.at(currNodeIdx - (2 * 8) + 1).player !== node.player) {
+      possibleMoves.push({ x: node.x + 2, y: String.fromCharCode(node.y.charCodeAt(0) + 1) })
+    }
+  }
+
+  //checking up 1, right 2 position
+  if (node.x + 1 <= 8 && String.fromCharCode(node.y.charCodeAt(0) + 2) <= 'h') {
+    //if checked tile does not have a friendly piece, it is a possible move
+    if (nodes.at(currNodeIdx - (1 * 8) + 2).player !== node.player) {
+      possibleMoves.push({ x: node.x + 1, y: String.fromCharCode(node.y.charCodeAt(0) + 2) })
+    }
+  }
+
+  //checking down 1, right 2 position
+  if (node.x - 1 >= 1 && String.fromCharCode(node.y.charCodeAt(0) + 2) <= 'h') {
+    //if checked tile does not have a friendly piece, it is a possible move
+    if (nodes.at(currNodeIdx + (1 * 8) + 2).player !== node.player) {
+      possibleMoves.push({ x: node.x - 1, y: String.fromCharCode(node.y.charCodeAt(0) + 2) })
+    }
+  }
+
+  //checking down 2, right 1 position
+  if (node.x - 2 >= 1 && String.fromCharCode(node.y.charCodeAt(0) + 1) <= 'h') {
+    //if checked tile does not have a friendly piece, it is a possible move
+    if (nodes.at(currNodeIdx + (2 * 8) + 1).player !== node.player) {
+      possibleMoves.push({ x: node.x - 2, y: String.fromCharCode(node.y.charCodeAt(0) + 1) })
+    }
+  }
+
+  //checking down 2, left 1 position
+  if (node.x - 2 >= 1 && String.fromCharCode(node.y.charCodeAt(0) - 1) >= 'a') {
+    //if checked tile does not have a friendly piece, it is a possible move
+    if (nodes.at(currNodeIdx + (2 * 8) - 1).player !== node.player) {
+      possibleMoves.push({ x: node.x - 2, y: String.fromCharCode(node.y.charCodeAt(0) - 1) })
+    }
+  }
+
+  //checking down 1, left 2 position
+  if (node.x - 1 >= 1 && String.fromCharCode(node.y.charCodeAt(0) - 2) >= 'a') {
+    //if checked tile does not have a friendly piece, it is a possible move
+    if (nodes.at(currNodeIdx + (1 * 8) - 2).player !== node.player) {
+      possibleMoves.push({ x: node.x - 1, y: String.fromCharCode(node.y.charCodeAt(0) - 2) })
+    }
+  }
+
+  //checking up 1, left 2 position
+  if (node.x + 1 <= 8 && String.fromCharCode(node.y.charCodeAt(0) - 2) >= 'a') {
+    //if checked tile does not have a friendly piece, it is a possible move
+    if (nodes.at(currNodeIdx - (1 * 8) - 2).player !== node.player) {
+      possibleMoves.push({ x: node.x + 1, y: String.fromCharCode(node.y.charCodeAt(0) - 2) })
+    }
+  }
+
+  return possibleMoves;
 
 }
 
@@ -116,11 +256,11 @@ const generateEdges = (nodes) => {
   for (let i = 0; i < nodes.length; i++) {
     let possibleMoves = [];
     if (nodes.at(i).altText === "White Rook" || nodes.at(i).altText === "Black Rook") {
-      possibleMoves = rookPossibleMoves(nodes.at(i), nodes); //TODO: implement this function (returns array of edge objects)
+      possibleMoves = rookPossibleMoves(nodes.at(i), nodes);
     } else if (nodes.at(i).altText === "White Knight" || nodes.at(i).altText === "Black Knight") {
-      //possibleMoves = knightPossibleMoves(nodes.at(i), nodes); //TODO: implement this function (returns array of edge objects)
+      possibleMoves = knightPossibleMoves(nodes.at(i), nodes);
     } else if (nodes.at(i).altText === "White Bishop" || nodes.at(i).altText === "Black Bishop") {
-      //possibleMoves = bishopPossibleMoves(nodes.at(i), nodes); //TODO: implement this function (returns array of edge objects)
+      possibleMoves = bishopPossibleMoves(nodes.at(i), nodes);
     } else if (nodes.at(i).altText === "White Queen" || nodes.at(i).altText === "Black Queen") {
       //possibleMoves = queenPossibleMoves(nodes.at(i), nodes); //TODO: implement this function (returns array of edge objects)
     } else if (nodes.at(i).altText === "White King" || nodes.at(i).altText === "Black King") {
@@ -135,14 +275,13 @@ const generateEdges = (nodes) => {
     });
   }
 
-  return updatedEdges;
+  return updatedEdges; //TODO: Remove duplicate edges
 }
 
 const ChessBoard = () => {
   //initialize graph that stores board data
   const [nodes, setNodes] = useState(defaultNodes);
   const [edges, setEdges] = useState(generateEdges(nodes));
-  let updatedEdges = generateEdges(nodes);
 
   return (
     <div className="ChessBoardContainer">
@@ -150,6 +289,11 @@ const ChessBoard = () => {
         return <Tile svg={node.svg} altText={node.altText}
           x={node.x} y={node.y} hasPiece={node.hasPiece} key={Math.random()} />;
       })}
+      <div>
+        {edges.map((edge) => {
+          return <p>x: {edge.x}, y: {edge.y}</p>
+        })}
+      </div>
     </div>
   );
 };
