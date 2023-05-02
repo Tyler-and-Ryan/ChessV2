@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import "./ChessBoard.css";
 import Tile from "./Tile.js";
 //deprecate defaultEdges once edge generation process is completed and QA'd
-import { defaultEdges, defaultNodes } from "./defaultPositions.js"
-
+import { defaultNodes } from "./defaultPositions.js"
+import { uniqueArray } from "./helperFunctions/uniqueArray"
 /*
  * isCheckMate pseudocode
  * isCheckMate(player before their turn starts)
@@ -297,7 +297,7 @@ const generateEdges = (nodes) => {
     });
   }
 
-  return updatedEdges; //TODO: Remove duplicate edges
+  return uniqueArray(updatedEdges);
 }
 
 const ChessBoard = () => {
