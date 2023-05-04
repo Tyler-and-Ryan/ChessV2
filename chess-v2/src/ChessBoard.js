@@ -53,9 +53,15 @@ const whitePawnPossibleMoves = (node, nodes, checkingForKing) => {
   }
 
   //checking up 1 left 1
-  if (node.x <= 7 && (checkingForKing || nodes.at(currNodeIdx + 8 - 1).hasPiece)) {
-    //here
+  if (node.x <= 7 && node.y >= 'b' && (checkingForKing || nodes.at(currNodeIdx - 8 - 1).hasPiece)) {
+    possibleMoves.push({ x: node.x + 1, y: String.fromCharCode(node.y.charCodeAt(0) - 1) });
   }
+
+  //checking up 1 right 1
+  if (node.x <= 7 && node.y <= 'g' &&(checkingForKing || nodes.at(currNodeIdx - 8 + 1).hasPiece)) {
+    possibleMoves.push({ x: node.x + 1, y: String.fromCharCode(node.y.charCodeAt(0) + 1) });
+  }
+
   return possibleMoves;
 }
 
@@ -408,7 +414,7 @@ const generateEdges = (nodes) => {
     } else if (nodes.at(i).altText === "White King" || nodes.at(i).altText === "Black King") {
       possibleMoves = kingPossibleMoves(nodes.at(i), nodes);
     } else if (nodes.at(i).altText === "White Pawn") {
-      possibleMoves = whitePawnPossibleMoves(nodes.at(i), nodes); //TODO: implement this function (returns array of edge objects)
+      possibleMoves = whitePawnPossibleMoves(nodes.at(i), nodes);
     } else if (nodes.at(i).altText === "Black Pawn") {
       //possibleMoves = blackPawnPossibleMoves(nodes.at(i), nodes) //TODO: implement this function (returns array of edge objects)
     }
