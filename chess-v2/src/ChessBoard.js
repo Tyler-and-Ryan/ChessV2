@@ -24,11 +24,45 @@ import { uniqueArray } from "./helperFunctions/uniqueArray"
  */
 
 
+/*
+ * param: node - a tile on the board that contains a rook
+ *        nodes - the list of all tiles on the board
+ *        checkingForKing - boolean that when true tells the function to add 
+ *                          diagonal attacks to possible moves even when no enemy
+ *                          piece is there. This is used to include moves that would be
+ *                          illegal for a King, but not legal for the player with the pawn
+ * return: an array of objects where each object is an x,y pair that represents all possible legal move 
+ */
+const whitePawnPossibleMoves = (node, nodes, checkingForKing) => {
+  //If pawn.x == 2, then check one tile and two tiles above for possible moves
+  //also check up 1 right 1 and up 1 left 1 for moves 
+  //  (only if enemy pieces are there or if checkingForKing is true)
+  //TODO: Implement En Passant
+  //TODO: Implement Pawn Promotion
+
+  const currNodeIdx = nodes.indexOf(node);
+  let possibleMoves = [];
+  //checking up 1
+  if (node.x <= 7 && !nodes.at(currNodeIdx - 8).hasPiece) {
+    possibleMoves.push({ x: node.x + 1, y: node.y });
+  }
+
+  //checking up 2
+  if (node.x === 2 && !nodes.at(currNodeIdx - 8).hasPiece && !nodes.at(currNodeIdx - 16).hasPiece) {
+    possibleMoves.push({ x: node.x + 2, y: node.y });
+  }
+
+  //checking up 1 left 1
+  if (node.x <= 7 && (checkingForKing || nodes.at(currNodeIdx + 8 - 1).hasPiece)) {
+    //here
+  }
+  return possibleMoves;
+}
 
 /*
  * param: node - a tile on the board that contains a rook
  *        nodes - the list of all tiles on the board
- * return: an array of objects where each object is an x,y pair that represents a possible legal move 
+ * return: an array of objects where each object is an x,y pair that represents all possible legal move 
  */
 const kingPossibleMoves = (node, nodes) => {
   //look one tile in each direction around the King
@@ -115,7 +149,7 @@ const kingPossibleMoves = (node, nodes) => {
 /*
  * param: node - a tile on the board that contains a rook
  *        nodes - the list of all tiles on the board
- * return: an array of objects where each object is an x,y pair that represents a possible legal move 
+ * return: an array of objects where each object is an x,y pair that represents all possible legal move 
  */
 const bishopPossibleMoves = (node, nodes) => {
   //look in each diagonal (upright, upleft, downright, downleft) until the edge of the board or a friendly/enemy tile is reached
@@ -186,7 +220,7 @@ const bishopPossibleMoves = (node, nodes) => {
 /* 
  * param: node - a tile on the board that contains a knight
  *        nodes - the list of all tiles on the board
- * return: an array of objects where each object is an x,y pair that represents a possible legal move
+ * return: an array of objects where each object is an x,y pair that represents all possible legal move
  */
 const knightPossibleMoves = (node, nodes) => {
   //check all 8 possible moves
@@ -263,7 +297,7 @@ const knightPossibleMoves = (node, nodes) => {
 /*
  * param: node - a tile on the board that contains a rook
  *        nodes - the list of all tiles on the board
- * return: an array of objects where each object is an x,y pair that represents a possible legal move 
+ * return: an array of objects where each object is an x,y pair that represents all possible legal move 
  */
 const rookPossibleMoves = (node, nodes) => {
   //look in each direction (up, right, down, left) until the edge of the board or a friendly/enemy tile is reached
@@ -334,7 +368,7 @@ const rookPossibleMoves = (node, nodes) => {
 /*
  * param: node - a tile on the board that contains a rook
  *        nodes - the list of all tiles on the board
- * return: an array of objects where each object is an x,y pair that represents a possible legal move 
+ * return: an array of objects where each object is an x,y pair that represents all possible legal move 
  */
 const queenPossibleMoves = (node, nodes) => {
   //queen possible moves are left/right/up/down (like the rook) and
@@ -374,7 +408,7 @@ const generateEdges = (nodes) => {
     } else if (nodes.at(i).altText === "White King" || nodes.at(i).altText === "Black King") {
       possibleMoves = kingPossibleMoves(nodes.at(i), nodes);
     } else if (nodes.at(i).altText === "White Pawn") {
-      //possibleMoves = whitePawnPossibleMoves(nodes.at(i), nodes); //TODO: implement this function (returns array of edge objects)
+      possibleMoves = whitePawnPossibleMoves(nodes.at(i), nodes); //TODO: implement this function (returns array of edge objects)
     } else if (nodes.at(i).altText === "Black Pawn") {
       //possibleMoves = blackPawnPossibleMoves(nodes.at(i), nodes) //TODO: implement this function (returns array of edge objects)
     }
