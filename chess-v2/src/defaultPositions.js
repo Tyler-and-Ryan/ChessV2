@@ -423,6 +423,12 @@ const defaultNodes = [
     player: 0
   },
   {
+    // svg: {},
+    // altText: "",
+    // x: 2,
+    // y: "d",
+    // hasPiece: false,
+    // player: 2
     svg: whitePawn,
     altText: "White Pawn",
     x: 2,
