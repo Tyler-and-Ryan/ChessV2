@@ -472,11 +472,21 @@ const ChessBoard = () => {
   const [nodes, setNodes] = useState(defaultNodes);
   const [edges, setEdges] = useState(generateEdges(nodes));
 
+  const tileOnClick = (e) => {
+    e.preventDefault();
+    //alter nodes and give the correct ones a 'highlight' property
+    
+  }
+
   return (
     <div className="ChessBoardContainer">
       {nodes.map((node) => { //TODO: add onClick event to each tile, at first print out edges from that tile, next make it select the Tile
-        return <Tile svg={node.svg} altText={node.altText}
-          x={node.x} y={node.y} hasPiece={node.hasPiece} key={Math.random()} />;
+        let retVal;
+        //check here if tile has highlighted property, if so return Tile with highlighted CSS, if not then 
+        //return normal one
+        retVal = <Tile onClick={tileOnClick} svg={node.svg} altText={node.altText}
+        x={node.x} y={node.y} hasPiece={node.hasPiece} key={Math.random()} />
+        return retVal;
       })}
       <div>
         {edges.map((edge) => {
