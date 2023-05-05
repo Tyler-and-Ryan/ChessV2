@@ -475,6 +475,11 @@ const ChessBoard = () => {
   const tileOnClick = (e) => {
     e.preventDefault();
     //alter nodes and give the correct ones a 'highlight' property
+    let x;
+    let y;
+    //clicking on empty tile, img tag, or x/y axis label
+    x = e.target.attributes.xlabel.value;
+    y = e.target.attributes.ylabel.value;
     
   }
 
@@ -484,13 +489,18 @@ const ChessBoard = () => {
         let retVal;
         //check here if tile has highlighted property, if so return Tile with highlighted CSS, if not then 
         //return normal one
-        retVal = <Tile onClick={tileOnClick} svg={node.svg} altText={node.altText}
-        x={node.x} y={node.y} hasPiece={node.hasPiece} key={Math.random()} />
+        if (node.isHighlighted) {
+          retVal = <Tile className="highlightedTile" onClick={tileOnClick} svg={node.svg} altText={node.altText}
+                         x={node.x} y={node.y} hasPiece={node.hasPiece} key={Math.random()} />
+        } else {
+          retVal = <Tile onClick={tileOnClick} svg={node.svg} altText={node.altText}
+                         x={node.x} y={node.y} hasPiece={node.hasPiece} key={Math.random()} />
+        }
         return retVal;
       })}
       <div>
         {edges.map((edge) => {
-          return <p>x: {edge.x}, y: {edge.y}</p>
+          return <p key={Math.random()}>x: {edge.x}, y: {edge.y}</p>
         })}
       </div>
     </div>
