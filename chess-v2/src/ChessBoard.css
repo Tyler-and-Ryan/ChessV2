@@ -5,7 +5,7 @@
     height: 100%;
     /* fr = take up available space */
     grid-template-columns: repeat(8, 1fr);
-    border: 1px white solid;
+    border: 2px white solid;
     min-width: 600px;
     min-height: 600px;
 }

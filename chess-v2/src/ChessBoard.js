@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import "./ChessBoard.css";
 import Tile from "./Tile.js";
 //deprecate defaultEdges once edge generation process is completed and QA'd
-import { defaultNodes } from "./defaultPositions.js"
-import { uniqueArray } from "./helperFunctions/uniqueArray"
-/*  
+import { defaultNodes } from "./defaultPositions.js";
+import { uniqueArray } from "./helperFunctions/uniqueArray";
+/*
  * isCheckMate pseudocode
  * isCheckMate(player before their turn starts)
  *      1) iterate through edges, see if any enemies have King as destination // same as isCheck(player)
@@ -23,19 +23,18 @@ import { uniqueArray } from "./helperFunctions/uniqueArray"
  * Time Complexity: O(E + N) where E < N(N - 1)
  */
 
-
 /*
  * param: node - a tile on the board that contains a rook
  *        nodes - the list of all tiles on the board
- *        checkingForKing - boolean that when true tells the function to add 
+ *        checkingForKing - boolean that when true tells the function to add
  *                          diagonal attacks to possible moves even when no enemy
  *                          piece is there. This is used to include moves that would be
  *                          illegal for a King, but not legal for the player with the pawn
- * return: an array of objects where each object is an x,y pair that represents all possible legal move 
+ * return: an array of objects where each object is an x,y pair that represents all possible legal move
  */
 const blackPawnPossibleMoves = (node, nodes, checkingForKing) => {
   //If pawn.x == 7, then check one tile and two tiles above for possible moves
-  //also check up 1 right 1 and up 1 left 1 for moves 
+  //also check up 1 right 1 and up 1 left 1 for moves
   //  (only if enemy pieces are there or if checkingForKing is true)
   //TODO: Implement En Passant
   //TODO: Implement Pawn Promotion
@@ -48,35 +47,53 @@ const blackPawnPossibleMoves = (node, nodes, checkingForKing) => {
   }
 
   //checking down 2
-  if (node.x === 7 && !nodes.at(currNodeIdx + 8).hasPiece && !nodes.at(currNodeIdx + 16).hasPiece) {
+  if (
+    node.x === 7 &&
+    !nodes.at(currNodeIdx + 8).hasPiece &&
+    !nodes.at(currNodeIdx + 16).hasPiece
+  ) {
     possibleMoves.push({ x: node.x - 2, y: node.y });
   }
 
   //checking down 1 left 1
-  if (node.x >= 2 && node.y >= 'b' && (checkingForKing || nodes.at(currNodeIdx + 8 - 1).hasPiece)) {
-    possibleMoves.push({ x: node.x - 1, y: String.fromCharCode(node.y.charCodeAt(0) - 1) });
+  if (
+    node.x >= 2 &&
+    node.y >= "b" &&
+    (checkingForKing || nodes.at(currNodeIdx + 8 - 1).hasPiece)
+  ) {
+    possibleMoves.push({
+      x: node.x - 1,
+      y: String.fromCharCode(node.y.charCodeAt(0) - 1),
+    });
   }
 
   //checking down 1 right 1
-  if (node.x >= 7 && node.y <= 'g' && (checkingForKing || nodes.at(currNodeIdx + 8 + 1).hasPiece)) {
-    possibleMoves.push({ x: node.x - 1, y: String.fromCharCode(node.y.charCodeAt(0) + 1) });
+  if (
+    node.x >= 7 &&
+    node.y <= "g" &&
+    (checkingForKing || nodes.at(currNodeIdx + 8 + 1).hasPiece)
+  ) {
+    possibleMoves.push({
+      x: node.x - 1,
+      y: String.fromCharCode(node.y.charCodeAt(0) + 1),
+    });
   }
 
   return possibleMoves;
-}
+};
 
 /*
  * param: node - a tile on the board that contains a rook
  *        nodes - the list of all tiles on the board
- *        checkingForKing - boolean that when true tells the function to add 
+ *        checkingForKing - boolean that when true tells the function to add
  *                          diagonal attacks to possible moves even when no enemy
  *                          piece is there. This is used to include moves that would be
  *                          illegal for a King, but not legal for the player with the pawn
- * return: an array of objects where each object is an x,y pair that represents all possible legal move 
+ * return: an array of objects where each object is an x,y pair that represents all possible legal move
  */
 const whitePawnPossibleMoves = (node, nodes, checkingForKing) => {
   //If pawn.x == 2, then check one tile and two tiles above for possible moves
-  //also check up 1 right 1 and up 1 left 1 for moves 
+  //also check up 1 right 1 and up 1 left 1 for moves
   //  (only if enemy pieces are there or if checkingForKing is true)
   //TODO: Implement En Passant
   //TODO: Implement Pawn Promotion
@@ -89,27 +106,45 @@ const whitePawnPossibleMoves = (node, nodes, checkingForKing) => {
   }
 
   //checking up 2
-  if (node.x === 2 && !nodes.at(currNodeIdx - 8).hasPiece && !nodes.at(currNodeIdx - 16).hasPiece) {
+  if (
+    node.x === 2 &&
+    !nodes.at(currNodeIdx - 8).hasPiece &&
+    !nodes.at(currNodeIdx - 16).hasPiece
+  ) {
     possibleMoves.push({ x: node.x + 2, y: node.y });
   }
 
   //checking up 1 left 1
-  if (node.x <= 7 && node.y >= 'b' && (checkingForKing || nodes.at(currNodeIdx - 8 - 1).hasPiece)) {
-    possibleMoves.push({ x: node.x + 1, y: String.fromCharCode(node.y.charCodeAt(0) - 1) });
+  if (
+    node.x <= 7 &&
+    node.y >= "b" &&
+    (checkingForKing || nodes.at(currNodeIdx - 8 - 1).hasPiece)
+  ) {
+    possibleMoves.push({
+      x: node.x + 1,
+      y: String.fromCharCode(node.y.charCodeAt(0) - 1),
+    });
   }
 
   //checking up 1 right 1
-  if (node.x <= 7 && node.y <= 'g' && (checkingForKing || nodes.at(currNodeIdx - 8 + 1).hasPiece)) {
-    possibleMoves.push({ x: node.x + 1, y: String.fromCharCode(node.y.charCodeAt(0) + 1) });
+  if (
+    node.x <= 7 &&
+    node.y <= "g" &&
+    (checkingForKing || nodes.at(currNodeIdx - 8 + 1).hasPiece)
+  ) {
+    possibleMoves.push({
+      x: node.x + 1,
+      y: String.fromCharCode(node.y.charCodeAt(0) + 1),
+    });
   }
 
   return possibleMoves;
-}
+};
 
 /*
  * param: node - a tile on the board that contains a rook
  *        nodes - the list of all tiles on the board
- * return: an array of objects where each object is an x,y pair that represents all possible legal move 
+ * return: an array of objects where each object is an x,y pair that represents all possible legal move
  */
 const kingPossibleMoves = (node, nodes) => {
   //look one tile in each direction around the King
@@ -120,83 +155,156 @@ const kingPossibleMoves = (node, nodes) => {
   const currNodeIdx = nodes.indexOf(node);
   let otherKing;
   for (let i = 0; i < nodes.length; i++) {
-    if (nodes.at(i).altText.includes("King") && nodes.at(i).player !== node.player) {
+    if (
+      nodes.at(i).altText.includes("King") &&
+      nodes.at(i).player !== node.player
+    ) {
       otherKing = nodes.at(i);
       break;
     }
   }
 
   //checking up 1
-  if (node.x + 1 <= 8 && !(Math.abs(otherKing.x - (node.x + 1)) <= 1 && Math.abs(otherKing.y.charCodeAt(0) - node.y.charCodeAt(0)) <= 1)) {
+  if (
+    node.x + 1 <= 8 &&
+    !(
+      Math.abs(otherKing.x - (node.x + 1)) <= 1 &&
+      Math.abs(otherKing.y.charCodeAt(0) - node.y.charCodeAt(0)) <= 1
+    )
+  ) {
     //if checked tile does not have a friendly piece, it is a possible move
-    if (nodes.at(currNodeIdx - (1 * 8)).player !== node.player) {
-      possibleMoves.push({ x: node.x + 1, y: node.y })
+    if (nodes.at(currNodeIdx - 1 * 8).player !== node.player) {
+      possibleMoves.push({ x: node.x + 1, y: node.y });
     }
   }
 
   //checking up 1, right 1 position
-  if (node.x + 1 <= 8 && String.fromCharCode(node.y.charCodeAt(0) + 1) <= 'h' && !(Math.abs(otherKing.x - (node.x + 1)) <= 1 && Math.abs(otherKing.y.charCodeAt(0) - (node.y.charCodeAt(0) + 1)) <= 1)) {
+  if (
+    node.x + 1 <= 8 &&
+    String.fromCharCode(node.y.charCodeAt(0) + 1) <= "h" &&
+    !(
+      Math.abs(otherKing.x - (node.x + 1)) <= 1 &&
+      Math.abs(otherKing.y.charCodeAt(0) - (node.y.charCodeAt(0) + 1)) <= 1
+    )
+  ) {
     //if checked tile does not have a friendly piece, it is a possible move
-    if (nodes.at(currNodeIdx - (1 * 8) + 1).player !== node.player) {
-      possibleMoves.push({ x: node.x + 1, y: String.fromCharCode(node.y.charCodeAt(0) + 1) })
+    if (nodes.at(currNodeIdx - 1 * 8 + 1).player !== node.player) {
+      possibleMoves.push({
+        x: node.x + 1,
+        y: String.fromCharCode(node.y.charCodeAt(0) + 1),
+      });
     }
   }
 
   //checking right 1 position
-  if (String.fromCharCode(node.y.charCodeAt(0) + 1) <= 'h' && !(Math.abs(otherKing.x - node.x) <= 1 && Math.abs(otherKing.y.charCodeAt(0) - (node.y.charCodeAt(0) + 1)) <= 1)) {
+  if (
+    String.fromCharCode(node.y.charCodeAt(0) + 1) <= "h" &&
+    !(
+      Math.abs(otherKing.x - node.x) <= 1 &&
+      Math.abs(otherKing.y.charCodeAt(0) - (node.y.charCodeAt(0) + 1)) <= 1
+    )
+  ) {
     //if checked tile does not have a friendly piece, it is a possible move
     if (nodes.at(currNodeIdx + 1).player !== node.player) {
-      possibleMoves.push({ x: node.x, y: String.fromCharCode(node.y.charCodeAt(0) + 1) })
+      possibleMoves.push({
+        x: node.x,
+        y: String.fromCharCode(node.y.charCodeAt(0) + 1),
+      });
     }
   }
 
   //checking down 1, right 1 position
-  if (node.x - 1 >= 1 && String.fromCharCode(node.y.charCodeAt(0) + 1) <= 'h' && !(Math.abs(otherKing.x - (node.x - 1)) <= 1 && Math.abs(otherKing.y.charCodeAt(0) - (node.y.charCodeAt(0) + 1)) <= 1)) {
+  if (
+    node.x - 1 >= 1 &&
+    String.fromCharCode(node.y.charCodeAt(0) + 1) <= "h" &&
+    !(
+      Math.abs(otherKing.x - (node.x - 1)) <= 1 &&
+      Math.abs(otherKing.y.charCodeAt(0) - (node.y.charCodeAt(0) + 1)) <= 1
+    )
+  ) {
     //if checked tile does not have a friendly piece, it is a possible move
-    if (nodes.at(currNodeIdx + (1 * 8) + 1).player !== node.player) {
-      possibleMoves.push({ x: node.x - 1, y: String.fromCharCode(node.y.charCodeAt(0) + 1) })
+    if (nodes.at(currNodeIdx + 1 * 8 + 1).player !== node.player) {
+      possibleMoves.push({
+        x: node.x - 1,
+        y: String.fromCharCode(node.y.charCodeAt(0) + 1),
+      });
     }
   }
 
   //checking down 1
-  if (node.x - 1 >= 1 && !(Math.abs(otherKing.x - (node.x - 1)) <= 1 && Math.abs(otherKing.y.charCodeAt(0) - node.y.charCodeAt(0)) <= 1)) {
+  if (
+    node.x - 1 >= 1 &&
+    !(
+      Math.abs(otherKing.x - (node.x - 1)) <= 1 &&
+      Math.abs(otherKing.y.charCodeAt(0) - node.y.charCodeAt(0)) <= 1
+    )
+  ) {
     //if checked tile does not have a friendly piece, it is a possible move
-    if (nodes.at(currNodeIdx + (1 * 8)).player !== node.player) {
-      possibleMoves.push({ x: node.x - 1, y: node.y })
+    if (nodes.at(currNodeIdx + 1 * 8).player !== node.player) {
+      possibleMoves.push({ x: node.x - 1, y: node.y });
     }
   }
 
   //checking down 1, left 1 position
-  if (node.x - 1 >= 1 && String.fromCharCode(node.y.charCodeAt(0) - 1) >= 'a' && !(Math.abs(otherKing.x - (node.x - 1)) <= 1 && Math.abs(otherKing.y.charCodeAt(0) - (node.y.charCodeAt(0) - 1)) <= 1)) {
+  if (
+    node.x - 1 >= 1 &&
+    String.fromCharCode(node.y.charCodeAt(0) - 1) >= "a" &&
+    !(
+      Math.abs(otherKing.x - (node.x - 1)) <= 1 &&
+      Math.abs(otherKing.y.charCodeAt(0) - (node.y.charCodeAt(0) - 1)) <= 1
+    )
+  ) {
     //if checked tile does not have a friendly piece, it is a possible move
-    if (nodes.at(currNodeIdx + (1 * 8) - 1).player !== node.player) {
-      possibleMoves.push({ x: node.x - 1, y: String.fromCharCode(node.y.charCodeAt(0) - 1) })
+    if (nodes.at(currNodeIdx + 1 * 8 - 1).player !== node.player) {
+      possibleMoves.push({
+        x: node.x - 1,
+        y: String.fromCharCode(node.y.charCodeAt(0) - 1),
+      });
     }
   }
 
   //checking left 1 position
-  if (String.fromCharCode(node.y.charCodeAt(0) - 1) >= 'a' && !(Math.abs(otherKing.x - node.x) <= 1 && Math.abs(otherKing.y.charCodeAt(0) - (node.y.charCodeAt(0) - 1)) <= 1)) {
+  if (
+    String.fromCharCode(node.y.charCodeAt(0) - 1) >= "a" &&
+    !(
+      Math.abs(otherKing.x - node.x) <= 1 &&
+      Math.abs(otherKing.y.charCodeAt(0) - (node.y.charCodeAt(0) - 1)) <= 1
+    )
+  ) {
     //if checked tile does not have a friendly piece, it is a possible move
     if (nodes.at(currNodeIdx - 1).player !== node.player) {
-      possibleMoves.push({ x: node.x, y: String.fromCharCode(node.y.charCodeAt(0) - 1) })
+      possibleMoves.push({
+        x: node.x,
+        y: String.fromCharCode(node.y.charCodeAt(0) - 1),
+      });
     }
   }
 
   //checking up 1, left 1 position
-  if (node.x + 1 <= 8 && String.fromCharCode(node.y.charCodeAt(0) - 1) >= 'a' && !(Math.abs(otherKing.x - (node.x + 1)) <= 1 && Math.abs(otherKing.y.charCodeAt(0) - (node.y.charCodeAt(0) - 1)) <= 1)) {
+  if (
+    node.x + 1 <= 8 &&
+    String.fromCharCode(node.y.charCodeAt(0) - 1) >= "a" &&
+    !(
+      Math.abs(otherKing.x - (node.x + 1)) <= 1 &&
+      Math.abs(otherKing.y.charCodeAt(0) - (node.y.charCodeAt(0) - 1)) <= 1
+    )
+  ) {
     //if checked tile does not have a friendly piece, it is a possible move
-    if (nodes.at(currNodeIdx - (1 * 8) - 1).player !== node.player) {
-      possibleMoves.push({ x: node.x + 1, y: String.fromCharCode(node.y.charCodeAt(0) - 1) })
+    if (nodes.at(currNodeIdx - 1 * 8 - 1).player !== node.player) {
+      possibleMoves.push({
+        x: node.x + 1,
+        y: String.fromCharCode(node.y.charCodeAt(0) - 1),
+      });
     }
   }
 
   return possibleMoves;
-}
+};
 
 /*
  * param: node - a tile on the board that contains a rook
  *        nodes - the list of all tiles on the board
- * return: an array of objects where each object is an x,y pair that represents all possible legal move 
+ * return: an array of objects where each object is an x,y pair that represents all possible legal move
  */
 const bishopPossibleMoves = (node, nodes) => {
   //look in each diagonal (upright, upleft, downright, downleft) until the edge of the board or a friendly/enemy tile is reached
@@ -210,7 +318,8 @@ const bishopPossibleMoves = (node, nodes) => {
   let startTileIdx = nodes.indexOf(node);
   let currTileIdx = startTileIdx;
   currTileIdx = currTileIdx - 8 + 1; //looking upright one tile
-  while (currTileIdx >= 0 && currTileIdx < nodes.length) { //looking upright
+  while (currTileIdx >= 0 && currTileIdx < nodes.length) {
+    //looking upright
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
       if (bishopPlayer !== checkTile.player) {
@@ -223,7 +332,8 @@ const bishopPossibleMoves = (node, nodes) => {
   }
   currTileIdx = startTileIdx;
   currTileIdx = currTileIdx - 8 - 1; //looking upleft one tile
-  while (currTileIdx >= 0 && currTileIdx < nodes.length) { //looking upleft
+  while (currTileIdx >= 0 && currTileIdx < nodes.length) {
+    //looking upleft
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
       if (bishopPlayer !== checkTile.player) {
@@ -236,7 +346,8 @@ const bishopPossibleMoves = (node, nodes) => {
   }
   currTileIdx = startTileIdx;
   currTileIdx = currTileIdx + 8 + 1; //looking downright one tile
-  while (currTileIdx >= 0 && currTileIdx < nodes.length) { //looking downright
+  while (currTileIdx >= 0 && currTileIdx < nodes.length) {
+    //looking downright
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
       if (bishopPlayer !== checkTile.player) {
@@ -249,7 +360,8 @@ const bishopPossibleMoves = (node, nodes) => {
   }
   currTileIdx = startTileIdx;
   currTileIdx = currTileIdx + 8 - 1; //looking downleft one tile
-  while (currTileIdx >= 0 && currTileIdx < nodes.length) { //looking downleft
+  while (currTileIdx >= 0 && currTileIdx < nodes.length) {
+    //looking downleft
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
       if (bishopPlayer !== checkTile.player) {
@@ -262,9 +374,9 @@ const bishopPossibleMoves = (node, nodes) => {
   }
 
   return possibleMoves;
-}
+};
 
-/* 
+/*
  * param: node - a tile on the board that contains a knight
  *        nodes - the list of all tiles on the board
  * return: an array of objects where each object is an x,y pair that represents all possible legal move
@@ -275,76 +387,100 @@ const knightPossibleMoves = (node, nodes) => {
   let possibleMoves = [];
   const currNodeIdx = nodes.indexOf(node);
   //checking up 2, left 1 position
-  if (node.x + 2 <= 8 && String.fromCharCode(node.y.charCodeAt(0) - 1) >= 'a') {
+  if (node.x + 2 <= 8 && String.fromCharCode(node.y.charCodeAt(0) - 1) >= "a") {
     //if checked tile does not have a friendly piece, it is a possible move
-    if (nodes.at(currNodeIdx - (2 * 8) - 1).player !== node.player) {
-      possibleMoves.push({ x: node.x + 2, y: String.fromCharCode(node.y.charCodeAt(0) - 1) })
+    if (nodes.at(currNodeIdx - 2 * 8 - 1).player !== node.player) {
+      possibleMoves.push({
+        x: node.x + 2,
+        y: String.fromCharCode(node.y.charCodeAt(0) - 1),
+      });
     }
   }
 
   //checking up 2, right 1 position
-  if (node.x + 2 <= 8 && String.fromCharCode(node.y.charCodeAt(0) + 1) <= 'h') {
+  if (node.x + 2 <= 8 && String.fromCharCode(node.y.charCodeAt(0) + 1) <= "h") {
     //if checked tile does not have a friendly piece, it is a possible move
-    if (nodes.at(currNodeIdx - (2 * 8) + 1).player !== node.player) {
-      possibleMoves.push({ x: node.x + 2, y: String.fromCharCode(node.y.charCodeAt(0) + 1) })
+    if (nodes.at(currNodeIdx - 2 * 8 + 1).player !== node.player) {
+      possibleMoves.push({
+        x: node.x + 2,
+        y: String.fromCharCode(node.y.charCodeAt(0) + 1),
+      });
     }
   }
 
   //checking up 1, right 2 position
-  if (node.x + 1 <= 8 && String.fromCharCode(node.y.charCodeAt(0) + 2) <= 'h') {
+  if (node.x + 1 <= 8 && String.fromCharCode(node.y.charCodeAt(0) + 2) <= "h") {
     //if checked tile does not have a friendly piece, it is a possible move
-    if (nodes.at(currNodeIdx - (1 * 8) + 2).player !== node.player) {
-      possibleMoves.push({ x: node.x + 1, y: String.fromCharCode(node.y.charCodeAt(0) + 2) })
+    if (nodes.at(currNodeIdx - 1 * 8 + 2).player !== node.player) {
+      possibleMoves.push({
+        x: node.x + 1,
+        y: String.fromCharCode(node.y.charCodeAt(0) + 2),
+      });
     }
   }
 
   //checking down 1, right 2 position
-  if (node.x - 1 >= 1 && String.fromCharCode(node.y.charCodeAt(0) + 2) <= 'h') {
+  if (node.x - 1 >= 1 && String.fromCharCode(node.y.charCodeAt(0) + 2) <= "h") {
     //if checked tile does not have a friendly piece, it is a possible move
-    if (nodes.at(currNodeIdx + (1 * 8) + 2).player !== node.player) {
-      possibleMoves.push({ x: node.x - 1, y: String.fromCharCode(node.y.charCodeAt(0) + 2) })
+    if (nodes.at(currNodeIdx + 1 * 8 + 2).player !== node.player) {
+      possibleMoves.push({
+        x: node.x - 1,
+        y: String.fromCharCode(node.y.charCodeAt(0) + 2),
+      });
     }
   }
 
   //checking down 2, right 1 position
-  if (node.x - 2 >= 1 && String.fromCharCode(node.y.charCodeAt(0) + 1) <= 'h') {
+  if (node.x - 2 >= 1 && String.fromCharCode(node.y.charCodeAt(0) + 1) <= "h") {
     //if checked tile does not have a friendly piece, it is a possible move
-    if (nodes.at(currNodeIdx + (2 * 8) + 1).player !== node.player) {
-      possibleMoves.push({ x: node.x - 2, y: String.fromCharCode(node.y.charCodeAt(0) + 1) })
+    if (nodes.at(currNodeIdx + 2 * 8 + 1).player !== node.player) {
+      possibleMoves.push({
+        x: node.x - 2,
+        y: String.fromCharCode(node.y.charCodeAt(0) + 1),
+      });
     }
   }
 
   //checking down 2, left 1 position
-  if (node.x - 2 >= 1 && String.fromCharCode(node.y.charCodeAt(0) - 1) >= 'a') {
+  if (node.x - 2 >= 1 && String.fromCharCode(node.y.charCodeAt(0) - 1) >= "a") {
     //if checked tile does not have a friendly piece, it is a possible move
-    if (nodes.at(currNodeIdx + (2 * 8) - 1).player !== node.player) {
-      possibleMoves.push({ x: node.x - 2, y: String.fromCharCode(node.y.charCodeAt(0) - 1) })
+    if (nodes.at(currNodeIdx + 2 * 8 - 1).player !== node.player) {
+      possibleMoves.push({
+        x: node.x - 2,
+        y: String.fromCharCode(node.y.charCodeAt(0) - 1),
+      });
     }
   }
 
   //checking down 1, left 2 position
-  if (node.x - 1 >= 1 && String.fromCharCode(node.y.charCodeAt(0) - 2) >= 'a') {
+  if (node.x - 1 >= 1 && String.fromCharCode(node.y.charCodeAt(0) - 2) >= "a") {
     //if checked tile does not have a friendly piece, it is a possible move
-    if (nodes.at(currNodeIdx + (1 * 8) - 2).player !== node.player) {
-      possibleMoves.push({ x: node.x - 1, y: String.fromCharCode(node.y.charCodeAt(0) - 2) })
+    if (nodes.at(currNodeIdx + 1 * 8 - 2).player !== node.player) {
+      possibleMoves.push({
+        x: node.x - 1,
+        y: String.fromCharCode(node.y.charCodeAt(0) - 2),
+      });
     }
   }
 
   //checking up 1, left 2 position
-  if (node.x + 1 <= 8 && String.fromCharCode(node.y.charCodeAt(0) - 2) >= 'a') {
+  if (node.x + 1 <= 8 && String.fromCharCode(node.y.charCodeAt(0) - 2) >= "a") {
     //if checked tile does not have a friendly piece, it is a possible move
-    if (nodes.at(currNodeIdx - (1 * 8) - 2).player !== node.player) {
-      possibleMoves.push({ x: node.x + 1, y: String.fromCharCode(node.y.charCodeAt(0) - 2) })
+    if (nodes.at(currNodeIdx - 1 * 8 - 2).player !== node.player) {
+      possibleMoves.push({
+        x: node.x + 1,
+        y: String.fromCharCode(node.y.charCodeAt(0) - 2),
+      });
     }
   }
 
   return possibleMoves;
-}
+};
 
 /*
  * param: node - a tile on the board that contains a rook
  *        nodes - the list of all tiles on the board
- * return: an array of objects where each object is an x,y pair that represents all possible legal move 
+ * return: an array of objects where each object is an x,y pair that represents all possible legal move
  */
 const rookPossibleMoves = (node, nodes) => {
   //look in each direction (up, right, down, left) until the edge of the board or a friendly/enemy tile is reached
@@ -358,7 +494,8 @@ const rookPossibleMoves = (node, nodes) => {
   let startTile = nodes.at(startTileIdx);
   let currTileIdx = startTileIdx;
   currTileIdx -= 8; //looking at tile one row above
-  while (currTileIdx >= 0 && currTileIdx < nodes.length) { //looking upwards vertical
+  while (currTileIdx >= 0 && currTileIdx < nodes.length) {
+    //looking upwards vertical
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
       if (rookPlayer !== checkTile.player) {
@@ -371,7 +508,8 @@ const rookPossibleMoves = (node, nodes) => {
   }
   currTileIdx = startTileIdx;
   currTileIdx += 8; //looking at tile one row above
-  while (currTileIdx >= 0 && currTileIdx < nodes.length) { //looking downwards vertical
+  while (currTileIdx >= 0 && currTileIdx < nodes.length) {
+    //looking downwards vertical
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
       if (rookPlayer !== checkTile.player) {
@@ -384,7 +522,12 @@ const rookPossibleMoves = (node, nodes) => {
   }
   currTileIdx = startTileIdx;
   currTileIdx++; //looking at tile one row above
-  while (currTileIdx >= 0 && currTileIdx < nodes.length && startTile.x === nodes.at(currTileIdx).x) { //looking right horizontal
+  while (
+    currTileIdx >= 0 &&
+    currTileIdx < nodes.length &&
+    startTile.x === nodes.at(currTileIdx).x
+  ) {
+    //looking right horizontal
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
       if (rookPlayer !== checkTile.player) {
@@ -397,7 +540,12 @@ const rookPossibleMoves = (node, nodes) => {
   }
   currTileIdx = startTileIdx;
   currTileIdx--; //looking at tile one row above
-  while (currTileIdx >= 0 && currTileIdx < nodes.length && startTile.x === nodes.at(currTileIdx).x) { //looking left horizontal
+  while (
+    currTileIdx >= 0 &&
+    currTileIdx < nodes.length &&
+    startTile.x === nodes.at(currTileIdx).x
+  ) {
+    //looking left horizontal
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
       if (rookPlayer !== checkTile.player) {
@@ -410,12 +558,12 @@ const rookPossibleMoves = (node, nodes) => {
   }
 
   return possibleMoves;
-}
+};
 
 /*
  * param: node - a tile on the board that contains a rook
  *        nodes - the list of all tiles on the board
- * return: an array of objects where each object is an x,y pair that represents all possible legal move 
+ * return: an array of objects where each object is an x,y pair that represents all possible legal move
  */
 const queenPossibleMoves = (node, nodes) => {
   //queen possible moves are left/right/up/down (like the rook) and
@@ -433,9 +581,9 @@ const queenPossibleMoves = (node, nodes) => {
   }
 
   return totalPossibleMoves;
-}
+};
 
-/* Assumption: Tiles/nodes have already been updated to reflect the 
+/* Assumption: Tiles/nodes have already been updated to reflect the
  *             move that just occurred
  * Goal: return new array with all edges - loop through all nodes and add on to edges array iteratively
  */
@@ -444,15 +592,30 @@ const generateEdges = (nodes) => {
 
   for (let i = 0; i < nodes.length; i++) {
     let possibleMoves = [];
-    if (nodes.at(i).altText === "White Rook" || nodes.at(i).altText === "Black Rook") {
+    if (
+      nodes.at(i).altText === "White Rook" ||
+      nodes.at(i).altText === "Black Rook"
+    ) {
       possibleMoves = rookPossibleMoves(nodes.at(i), nodes);
-    } else if (nodes.at(i).altText === "White Knight" || nodes.at(i).altText === "Black Knight") {
+    } else if (
+      nodes.at(i).altText === "White Knight" ||
+      nodes.at(i).altText === "Black Knight"
+    ) {
       possibleMoves = knightPossibleMoves(nodes.at(i), nodes);
-    } else if (nodes.at(i).altText === "White Bishop" || nodes.at(i).altText === "Black Bishop") {
+    } else if (
+      nodes.at(i).altText === "White Bishop" ||
+      nodes.at(i).altText === "Black Bishop"
+    ) {
       possibleMoves = bishopPossibleMoves(nodes.at(i), nodes);
-    } else if (nodes.at(i).altText === "White Queen" || nodes.at(i).altText === "Black Queen") {
+    } else if (
+      nodes.at(i).altText === "White Queen" ||
+      nodes.at(i).altText === "Black Queen"
+    ) {
       possibleMoves = queenPossibleMoves(nodes.at(i), nodes);
-    } else if (nodes.at(i).altText === "White King" || nodes.at(i).altText === "Black King") {
+    } else if (
+      nodes.at(i).altText === "White King" ||
+      nodes.at(i).altText === "Black King"
+    ) {
       possibleMoves = kingPossibleMoves(nodes.at(i), nodes);
     } else if (nodes.at(i).altText === "White Pawn") {
       possibleMoves = whitePawnPossibleMoves(nodes.at(i), nodes, false);
@@ -465,7 +628,7 @@ const generateEdges = (nodes) => {
   }
 
   return uniqueArray(updatedEdges);
-}
+};
 
 const ChessBoard = () => {
   //initialize graph that stores board data
@@ -488,15 +651,30 @@ const ChessBoard = () => {
     }
     //get all possible moves for the specific tile
     let possibleMoves = [];
-    if (currTile.altText === "White Rook" || currTile.altText === "Black Rook") {
+    if (
+      currTile.altText === "White Rook" ||
+      currTile.altText === "Black Rook"
+    ) {
       possibleMoves = rookPossibleMoves(currTile, nodes);
-    } else if (currTile.altText === "White Knight" || currTile.altText === "Black Knight") {
+    } else if (
+      currTile.altText === "White Knight" ||
+      currTile.altText === "Black Knight"
+    ) {
       possibleMoves = knightPossibleMoves(currTile, nodes);
-    } else if (currTile.altText === "White Bishop" || currTile.altText === "Black Bishop") {
+    } else if (
+      currTile.altText === "White Bishop" ||
+      currTile.altText === "Black Bishop"
+    ) {
       possibleMoves = bishopPossibleMoves(currTile, nodes);
-    } else if (currTile.altText === "White Queen" || currTile.altText === "Black Queen") {
+    } else if (
+      currTile.altText === "White Queen" ||
+      currTile.altText === "Black Queen"
+    ) {
       possibleMoves = queenPossibleMoves(currTile, nodes);
-    } else if (currTile.altText === "White King" || currTile.altText === "Black King") {
+    } else if (
+      currTile.altText === "White King" ||
+      currTile.altText === "Black King"
+    ) {
       possibleMoves = kingPossibleMoves(currTile, nodes);
     } else if (currTile.altText === "White Pawn") {
       possibleMoves = whitePawnPossibleMoves(currTile, nodes, false);
@@ -505,6 +683,18 @@ const ChessBoard = () => {
     } else {
       //empty tile, so unhighlight all current nodes
       const newNodes = nodes.map((node) => {
+        if (node.x === x && node.y === y) {
+          return {
+            svg: node.svg,
+            altText: node.altText,
+            x: node.x,
+            y: node.y,
+            hasPiece: node.hasPiece,
+            player: node.player,
+            isHighlighted: false,
+            isSelected: true,
+          };
+        }
         return {
           svg: node.svg,
           altText: node.altText,
@@ -512,7 +702,8 @@ const ChessBoard = () => {
           y: node.y,
           hasPiece: node.hasPiece,
           player: node.player,
-          isHighlighted: false
+          isHighlighted: false,
+          isSelected: false,
         };
       });
       setNodes(newNodes);
@@ -531,11 +722,24 @@ const ChessBoard = () => {
             y: node.y,
             hasPiece: node.hasPiece,
             player: node.player,
-            isHighlighted: true
-          }
+            isHighlighted: true,
+            isSelected: false,
+          };
         }
       }
       //if not, return isHighlighted = false;
+      if (x === node.x && y === node.y) {
+        return {
+          svg: node.svg,
+          altText: node.altText,
+          x: node.x,
+          y: node.y,
+          hasPiece: node.hasPiece,
+          player: node.player,
+          isHighlighted: false,
+          isSelected: true,
+        };
+      }
       return {
         svg: node.svg,
         altText: node.altText,
@@ -543,40 +747,52 @@ const ChessBoard = () => {
         y: node.y,
         hasPiece: node.hasPiece,
         player: node.player,
-        isHighlighted: false
+        isHighlighted: false,
+        isSelected: false,
       };
     });
 
     setNodes(newNodes); //rerender board based on new highlighted states
-  }
+  };
 
-  const movePiece = (e) => { //TODO: Implement this function
+  const movePiece = (e) => {
+    //TODO: Implement this function
     console.log("movePiece");
     console.log(e);
     //if piece is not a king, alter src, altText, hasPiece, player attributes of the source and destination tile
     //    and iterate through all tiles to make them not highlighted
-    
-    //HERE
-  }
 
-  return ( //TODO: export logic to multiple files
+    //HERE
+  };
+
+  return (
+    //TODO: export logic to multiple files
     <div className="ChessBoardContainer">
       {nodes.map((node) => {
-        let retVal;
-        //check here if tile has highlighted property, if so return Tile with highlighted CSS, if not then 
+        //check here if tile has highlighted property, if so return Tile with highlighted CSS, if not then
         //return normal one
-        if (node.isHighlighted) {
-          retVal = <Tile isHighlighted={node.isHighlighted} movePiece={movePiece} tileOnClick={tileOnClick} svg={node.svg} altText={node.altText}
-            x={node.x} y={node.y} hasPiece={node.hasPiece} key={Math.random()} />
-        } else {
-          retVal = <Tile isHighlighted={node.isHighlighted} tileOnClick={tileOnClick} svg={node.svg} altText={node.altText}
-            x={node.x} y={node.y} hasPiece={node.hasPiece} key={Math.random()} />
-        }
-        return retVal;
+        return (
+          <Tile
+            isHighlighted={node.isHighlighted}
+            isSelected={node.isSelected}
+            movePiece={movePiece}
+            tileOnClick={tileOnClick}
+            svg={node.svg}
+            altText={node.altText}
+            x={node.x}
+            y={node.y}
+            hasPiece={node.hasPiece}
+            key={Math.random()}
+          />
+        );
       })}
       <div>
         {edges.map((edge) => {
-          return <p key={Math.random()}>x: {edge.x}, y: {edge.y}</p>
+          return (
+            <p key={Math.random()}>
+              x: {edge.x}, y: {edge.y}
+            </p>
+          );
         })}
       </div>
     </div>
