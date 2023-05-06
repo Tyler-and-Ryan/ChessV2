@@ -3,6 +3,7 @@ import "./Tile.css";
 const Tile = (props) => {
   const isHighlighted = props.isHighlighted;
   const isSelected = props.isSelected;
+  // console.log("Tile: " + props.altText + " at (" + props.x + ", " + props.y + ")");
   return (
     <div className={isHighlighted ? "highlightedTile" : (isSelected ? "selectedTile" : "Tile")} onClick={props.tileOnClick} xlabel={props.x} ylabel={props.y}>
       {(props.altText !== "") && <img src={props.svg} alt={props.altText} xlabel={props.x} ylabel={props.y}/>}
