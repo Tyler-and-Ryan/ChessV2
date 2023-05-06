@@ -25,3 +25,30 @@
     bottom: 2px;
     right: 2px;
 }
+
+
+.highlightedTile {
+    position: relative;
+    /* background-color: #00FFD7; */
+    aspect-ratio: 1 / 1;
+    height: 100%;
+    border: 1px white solid;
+    /* border-radius: 50% */
+}
+
+.highlightedDot {
+    background-color: #FFD700;
+    height: 25%;
+    width: 25%;
+    margin-left: auto;
+    margin-right: auto;  
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    transform: translateY(150%);
+}
+
+.highlightedTile img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}

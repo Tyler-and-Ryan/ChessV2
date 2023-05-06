@@ -4,7 +4,7 @@ import Tile from "./Tile.js";
 //deprecate defaultEdges once edge generation process is completed and QA'd
 import { defaultNodes } from "./defaultPositions.js"
 import { uniqueArray } from "./helperFunctions/uniqueArray"
-/*
+/*  
  * isCheckMate pseudocode
  * isCheckMate(player before their turn starts)
  *      1) iterate through edges, see if any enemies have King as destination // same as isCheck(player)
@@ -39,7 +39,7 @@ const blackPawnPossibleMoves = (node, nodes, checkingForKing) => {
   //  (only if enemy pieces are there or if checkingForKing is true)
   //TODO: Implement En Passant
   //TODO: Implement Pawn Promotion
-  
+
   const currNodeIdx = nodes.indexOf(node);
   let possibleMoves = [];
   //checking down 1
@@ -58,7 +58,7 @@ const blackPawnPossibleMoves = (node, nodes, checkingForKing) => {
   }
 
   //checking down 1 right 1
-  if (node.x >= 7 && node.y <= 'g' &&(checkingForKing || nodes.at(currNodeIdx + 8 + 1).hasPiece)) {
+  if (node.x >= 7 && node.y <= 'g' && (checkingForKing || nodes.at(currNodeIdx + 8 + 1).hasPiece)) {
     possibleMoves.push({ x: node.x - 1, y: String.fromCharCode(node.y.charCodeAt(0) + 1) });
   }
 
@@ -99,7 +99,7 @@ const whitePawnPossibleMoves = (node, nodes, checkingForKing) => {
   }
 
   //checking up 1 right 1
-  if (node.x <= 7 && node.y <= 'g' &&(checkingForKing || nodes.at(currNodeIdx - 8 + 1).hasPiece)) {
+  if (node.x <= 7 && node.y <= 'g' && (checkingForKing || nodes.at(currNodeIdx - 8 + 1).hasPiece)) {
     possibleMoves.push({ x: node.x + 1, y: String.fromCharCode(node.y.charCodeAt(0) + 1) });
   }
 
@@ -137,7 +137,7 @@ const kingPossibleMoves = (node, nodes) => {
   //checking up 1, right 1 position
   if (node.x + 1 <= 8 && String.fromCharCode(node.y.charCodeAt(0) + 1) <= 'h' && !(Math.abs(otherKing.x - (node.x + 1)) <= 1 && Math.abs(otherKing.y.charCodeAt(0) - (node.y.charCodeAt(0) + 1)) <= 1)) {
     //if checked tile does not have a friendly piece, it is a possible move
-    if (nodes.at(currNodeIdx - (1 * 8)  + 1).player !== node.player) {
+    if (nodes.at(currNodeIdx - (1 * 8) + 1).player !== node.player) {
       possibleMoves.push({ x: node.x + 1, y: String.fromCharCode(node.y.charCodeAt(0) + 1) })
     }
   }
@@ -157,7 +157,7 @@ const kingPossibleMoves = (node, nodes) => {
       possibleMoves.push({ x: node.x - 1, y: String.fromCharCode(node.y.charCodeAt(0) + 1) })
     }
   }
-  
+
   //checking down 1
   if (node.x - 1 >= 1 && !(Math.abs(otherKing.x - (node.x - 1)) <= 1 && Math.abs(otherKing.y.charCodeAt(0) - node.y.charCodeAt(0)) <= 1)) {
     //if checked tile does not have a friendly piece, it is a possible move
@@ -185,7 +185,7 @@ const kingPossibleMoves = (node, nodes) => {
   //checking up 1, left 1 position
   if (node.x + 1 <= 8 && String.fromCharCode(node.y.charCodeAt(0) - 1) >= 'a' && !(Math.abs(otherKing.x - (node.x + 1)) <= 1 && Math.abs(otherKing.y.charCodeAt(0) - (node.y.charCodeAt(0) - 1)) <= 1)) {
     //if checked tile does not have a friendly piece, it is a possible move
-    if (nodes.at(currNodeIdx - (1 * 8)  - 1).player !== node.player) {
+    if (nodes.at(currNodeIdx - (1 * 8) - 1).player !== node.player) {
       possibleMoves.push({ x: node.x + 1, y: String.fromCharCode(node.y.charCodeAt(0) - 1) })
     }
   }
@@ -478,9 +478,76 @@ const ChessBoard = () => {
     let x;
     let y;
     //clicking on empty tile, img tag, or x/y axis label
-    x = e.target.attributes.xlabel.value;
+    x = Number(e.target.attributes.xlabel.value);
     y = e.target.attributes.ylabel.value;
-    
+    let currTile;
+    for (let i = 0; i < nodes.length; i++) {
+      if (nodes.at(i).x === x && nodes.at(i).y === y) {
+        currTile = nodes.at(i);
+      }
+    }
+    //get all possible moves for the specific tile
+    let possibleMoves = [];
+    if (currTile.altText === "White Rook" || currTile.altText === "Black Rook") {
+      possibleMoves = rookPossibleMoves(currTile, nodes);
+    } else if (currTile.altText === "White Knight" || currTile.altText === "Black Knight") {
+      possibleMoves = knightPossibleMoves(currTile, nodes);
+    } else if (currTile.altText === "White Bishop" || currTile.altText === "Black Bishop") {
+      possibleMoves = bishopPossibleMoves(currTile, nodes);
+    } else if (currTile.altText === "White Queen" || currTile.altText === "Black Queen") {
+      possibleMoves = queenPossibleMoves(currTile, nodes);
+    } else if (currTile.altText === "White King" || currTile.altText === "Black King") {
+      possibleMoves = kingPossibleMoves(currTile, nodes);
+    } else if (currTile.altText === "White Pawn") {
+      possibleMoves = whitePawnPossibleMoves(currTile, nodes, false);
+    } else if (currTile.altText === "Black Pawn") {
+      possibleMoves = blackPawnPossibleMoves(currTile, nodes, false);
+    } else {
+      //empty tile, so unhighlight all current nodes
+      const newNodes = nodes.map((node) => {
+        return {
+          svg: node.svg,
+          altText: node.altText,
+          x: node.x,
+          y: node.y,
+          hasPiece: node.hasPiece,
+          player: node.player,
+          isHighlighted: false
+        };
+      });
+      setNodes(newNodes);
+      return;
+    }
+
+    const newNodes = nodes.map((node) => {
+      //check if current node location is in the possibleMoves array
+      for (let k = 0; k < possibleMoves.length; k++) {
+        //if it is, return the same node but with isHighlighted = true
+        if (node.x === possibleMoves[k].x && node.y === possibleMoves[k].y) {
+          return {
+            svg: node.svg,
+            altText: node.altText,
+            x: node.x,
+            y: node.y,
+            hasPiece: node.hasPiece,
+            player: node.player,
+            isHighlighted: true
+          }
+        }
+      }
+      //if not, return isHighlighted = false;
+      return {
+        svg: node.svg,
+        altText: node.altText,
+        x: node.x,
+        y: node.y,
+        hasPiece: node.hasPiece,
+        player: node.player,
+        isHighlighted: false
+      };
+    });
+
+    setNodes(newNodes); //rerender board based on new highlighted states
   }
 
   return (
@@ -490,11 +557,11 @@ const ChessBoard = () => {
         //check here if tile has highlighted property, if so return Tile with highlighted CSS, if not then 
         //return normal one
         if (node.isHighlighted) {
-          retVal = <Tile className="highlightedTile" onClick={tileOnClick} svg={node.svg} altText={node.altText}
-                         x={node.x} y={node.y} hasPiece={node.hasPiece} key={Math.random()} />
+          retVal = <Tile isHighlighted={node.isHighlighted} onClick={tileOnClick} svg={node.svg} altText={node.altText}
+            x={node.x} y={node.y} hasPiece={node.hasPiece} key={Math.random()} />
         } else {
-          retVal = <Tile onClick={tileOnClick} svg={node.svg} altText={node.altText}
-                         x={node.x} y={node.y} hasPiece={node.hasPiece} key={Math.random()} />
+          retVal = <Tile isHighlighted={node.isHighlighted} onClick={tileOnClick} svg={node.svg} altText={node.altText}
+            x={node.x} y={node.y} hasPiece={node.hasPiece} key={Math.random()} />
         }
         return retVal;
       })}
