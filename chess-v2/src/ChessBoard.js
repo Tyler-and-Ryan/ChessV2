@@ -550,17 +550,26 @@ const ChessBoard = () => {
     setNodes(newNodes); //rerender board based on new highlighted states
   }
 
-  return (
+  const movePiece = (e) => { //TODO: Implement this function
+    console.log("movePiece");
+    console.log(e);
+    //if piece is not a king, alter src, altText, hasPiece, player attributes of the source and destination tile
+    //    and iterate through all tiles to make them not highlighted
+    
+    //HERE
+  }
+
+  return ( //TODO: export logic to multiple files
     <div className="ChessBoardContainer">
-      {nodes.map((node) => { //TODO: add onClick event to each tile, at first print out edges from that tile, next make it select the Tile
+      {nodes.map((node) => {
         let retVal;
         //check here if tile has highlighted property, if so return Tile with highlighted CSS, if not then 
         //return normal one
         if (node.isHighlighted) {
-          retVal = <Tile isHighlighted={node.isHighlighted} onClick={tileOnClick} svg={node.svg} altText={node.altText}
+          retVal = <Tile isHighlighted={node.isHighlighted} movePiece={movePiece} tileOnClick={tileOnClick} svg={node.svg} altText={node.altText}
             x={node.x} y={node.y} hasPiece={node.hasPiece} key={Math.random()} />
         } else {
-          retVal = <Tile isHighlighted={node.isHighlighted} onClick={tileOnClick} svg={node.svg} altText={node.altText}
+          retVal = <Tile isHighlighted={node.isHighlighted} tileOnClick={tileOnClick} svg={node.svg} altText={node.altText}
             x={node.x} y={node.y} hasPiece={node.hasPiece} key={Math.random()} />
         }
         return retVal;
