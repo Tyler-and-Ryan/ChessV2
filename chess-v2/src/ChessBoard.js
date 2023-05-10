@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./ChessBoard.css";
 import Tile from "./Tile.js";
 //deprecate defaultEdges once edge generation process is completed and QA'd
@@ -636,90 +636,10 @@ const ChessBoard = () => {
   const [nodes, setNodes] = useState(defaultNodes);
   const [edges, setEdges] = useState(generateEdges(nodes));
 
-  const movePiece = (e) => {
-    //Alter src, altText, hasPiece, player attributes of the source and destination tile
-    //    and iterate through all tiles to make them not highlighted and not selected
-
-    e.preventDefault();
-    //only one node should be selected, filter returns array of size 1
-    const sourceTile = nodes.filter((node) => node.isSelected)[0];
-    //only one node should have the correct coordinates, filter returns array of size 1
-    const destinationTile = nodes.filter(
-      (node) =>
-        node.x === Number(e.target.attributes.xlabel.value) &&
-        node.y === e.target.attributes.ylabel.value
-    )[0];
-    console.log(
-      "sourceTile.x: " + sourceTile.x + ", sourceTile.y: " + sourceTile.y
-    );
-    console.log(
-      "destinationTile.x: " +
-        destinationTile.x +
-        ", destinationTile.y: " +
-        destinationTile.y
-    );
-    const sourceTileSVG = sourceTile.svg;
-    const sourceTileAltText = sourceTile.altText;
-    const sourceTileHasPiece = sourceTile.hasPiece;
-    const sourceTilePlayer = sourceTile.player;
-    const newNodes = nodes.map((node) => {
-      //if destination tile, copy info from source tile and replace at destination
-      if (node.x === destinationTile.x && node.y === destinationTile.y) {
-        console.log("destination getting replaced");
-        return {
-          svg: sourceTileSVG,
-          altText: sourceTileAltText,
-          x: node.x,
-          y: node.y,
-          hasPiece: sourceTileHasPiece,
-          player: sourceTilePlayer,
-          isHighlighted: false,
-          isSelected: false,
-        };
-        //if source tile, reset to default settings, blank tile
-      } else if (node.x === sourceTile.x && node.y === sourceTile.y) {
-        console.log("source getting replaced");
-        return {
-          svg: {},
-          altText: "",
-          x: node.x,
-          y: node.y,
-          hasPiece: false,
-          player: 2,
-          isHighlighted: false,
-          isSelected: false,
-        };
-      }
-      //if not source or destination tile, stay the same
-      return {
-        svg: node.svg,
-        altText: node.altText,
-        x: node.x,
-        y: node.y,
-        hasPiece: node.hasPiece,
-        player: node.player,
-        isHighlighted: false,
-        isSelected: false,
-      };
-    });
-    console.log("Before State Update");
-    for (let i = 0; i < nodes.length; i++) {
-      console.log(
-        nodes[i].altText + " at (" + nodes[i].x + ", " + nodes[i].y + ")"
-      );
-    }
-    //newNodes is correct here
-    setNodes(newNodes); //rerender board based on new highlighted states
-    //testing
-    console.log("After State Update");
-    for (let i = 0; i < nodes.length; i++) {
-      console.log(
-        nodes[i].altText + " at (" + nodes[i].x + ", " + nodes[i].y + ")"
-      );
-    }
-  };
-
   const tileOnClick = (e) => {
+    if (e.target && e.target.classList && e.target.classList[0] === "highlightedDot") {
+      return; //if clicking on highlighted dot, don't also execute this event handler
+    }
     e.preventDefault();
     //alter nodes and give the correct ones a 'highlight' property
     let x;
@@ -839,42 +759,65 @@ const ChessBoard = () => {
     setNodes(newNodes); //rerender board based on new highlighted states
   };
 
-  let renderContent = nodes.map((node) => {
-    return (
-      <Tile
-        isHighlighted={node.isHighlighted}
-        isSelected={node.isSelected}
-        movePiece={movePiece}
-        tileOnClick={tileOnClick}
-        svg={node.svg}
-        altText={node.altText}
-        x={node.x}
-        y={node.y}
-        hasPiece={node.hasPiece}
-        key={Math.random()}
-      />
-    );
-  });
-  // useEffect(() => {
-  //   console.log("Use Effect Render Content Update");
-  //   renderContent = nodes.map((node) => {
-  //     console.log("UseEffect: " + node.altText + " at (" + node.x + ", " + node.y + ")");
-  //     return (
-  //       <Tile
-  //         isHighlighted={node.isHighlighted}
-  //         isSelected={node.isSelected}
-  //         movePiece={movePiece}
-  //         tileOnClick={tileOnClick}
-  //         svg={node.svg}
-  //         altText={node.altText}
-  //         x={node.x}
-  //         y={node.y}
-  //         hasPiece={node.hasPiece}
-  //         key={Math.random()}
-  //       />
-  //     );
-  //   });
-  // }, [nodes])
+  const movePiece = (e) => {
+    //Alter src, altText, hasPiece, player attributes of the source and destination tile
+    //    and iterate through all tiles to make them not highlighted and not selected
+
+    e.preventDefault();
+    //only one node should be selected, filter returns array of size 1
+    const sourceTile = nodes.filter((node) => node.isSelected)[0];
+    //only one node should have the correct coordinates, filter returns array of size 1
+    const destinationTile = nodes.filter(
+      (node) =>
+        node.x === Number(e.target.attributes.xlabel.value) &&
+        node.y === e.target.attributes.ylabel.value
+    )[0];
+    const sourceTileSVG = sourceTile.svg;
+    const sourceTileAltText = sourceTile.altText;
+    const sourceTileHasPiece = sourceTile.hasPiece;
+    const sourceTilePlayer = sourceTile.player;
+    const newNodes = nodes.map((node) => {
+      //if destination tile, copy info from source tile and replace at destination
+      if (node.x === destinationTile.x && node.y === destinationTile.y) {
+        return {
+          svg: sourceTileSVG,
+          altText: sourceTileAltText,
+          x: node.x,
+          y: node.y,
+          hasPiece: sourceTileHasPiece,
+          player: sourceTilePlayer,
+          isHighlighted: false,
+          isSelected: false,
+        };
+        //if source tile, reset to default settings, blank tile
+      } else if (node.x === sourceTile.x && node.y === sourceTile.y) {
+        return {
+          svg: {},
+          altText: "",
+          x: node.x,
+          y: node.y,
+          hasPiece: false,
+          player: 2,
+          isHighlighted: false,
+          isSelected: false,
+        };
+      }
+      //if not source or destination tile, stay the same
+      return {
+        svg: node.svg,
+        altText: node.altText,
+        x: node.x,
+        y: node.y,
+        hasPiece: node.hasPiece,
+        player: node.player,
+        isHighlighted: false,
+        isSelected: false,
+      };
+    });
+
+    //newNodes is correct here
+    setNodes(newNodes); //rerender board based on new highlighted states
+  };
 
   return (
     //TODO: export logic to multiple files
