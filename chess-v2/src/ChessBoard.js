@@ -59,7 +59,7 @@ const blackPawnPossibleMoves = (node, nodes, checkingForKing) => {
   if (
     node.x >= 2 &&
     node.y >= "b" &&
-    (checkingForKing || nodes.at(currNodeIdx + 8 - 1).hasPiece)
+    (checkingForKing || (nodes.at(currNodeIdx + 8 - 1).hasPiece && nodes.at(currNodeIdx + 8 - 1).player !== nodes.at(currNodeIdx).player))
   ) {
     possibleMoves.push({
       x: node.x - 1,
@@ -71,7 +71,7 @@ const blackPawnPossibleMoves = (node, nodes, checkingForKing) => {
   if (
     node.x >= 7 &&
     node.y <= "g" &&
-    (checkingForKing || nodes.at(currNodeIdx + 8 + 1).hasPiece)
+    (checkingForKing || (nodes.at(currNodeIdx + 8 + 1).hasPiece && nodes.at(currNodeIdx + 8 + 1).player !== nodes.at(currNodeIdx).player))
   ) {
     possibleMoves.push({
       x: node.x - 1,
@@ -118,7 +118,7 @@ const whitePawnPossibleMoves = (node, nodes, checkingForKing) => {
   if (
     node.x <= 7 &&
     node.y >= "b" &&
-    (checkingForKing || nodes.at(currNodeIdx - 8 - 1).hasPiece)
+    (checkingForKing || (nodes.at(currNodeIdx - 8 - 1).hasPiece && nodes.at(currNodeIdx - 8 - 1).player !== nodes.at(currNodeIdx).player))
   ) {
     possibleMoves.push({
       x: node.x + 1,
@@ -130,7 +130,7 @@ const whitePawnPossibleMoves = (node, nodes, checkingForKing) => {
   if (
     node.x <= 7 &&
     node.y <= "g" &&
-    (checkingForKing || nodes.at(currNodeIdx - 8 + 1).hasPiece)
+    (checkingForKing || (nodes.at(currNodeIdx - 8 + 1).hasPiece && nodes.at(currNodeIdx - 8 + 1).player !== nodes.at(currNodeIdx).player))
   ) {
     possibleMoves.push({
       x: node.x + 1,
