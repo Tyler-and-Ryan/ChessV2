@@ -319,7 +319,12 @@ const bishopPossibleMoves = (node, nodes) => {
   let startTileIdx = nodes.indexOf(node);
   let currTileIdx = startTileIdx;
   currTileIdx = currTileIdx - 8 + 1; //looking upright one tile
+  let rightBorder = startTileIdx % 8;
   while (currTileIdx >= 0 && currTileIdx < nodes.length) {
+    if (rightBorder === 7) { //if piece is at edge of map, don't look further
+      break;
+    }
+    rightBorder++;
     //looking upright
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
@@ -333,7 +338,12 @@ const bishopPossibleMoves = (node, nodes) => {
   }
   currTileIdx = startTileIdx;
   currTileIdx = currTileIdx - 8 - 1; //looking upleft one tile
+  let leftBorder = startTileIdx % 8;
   while (currTileIdx >= 0 && currTileIdx < nodes.length) {
+    if (leftBorder === 0) { //if piece is at edge of map, don't look further
+      break;
+    }
+    leftBorder--;
     //looking upleft
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
@@ -347,7 +357,12 @@ const bishopPossibleMoves = (node, nodes) => {
   }
   currTileIdx = startTileIdx;
   currTileIdx = currTileIdx + 8 + 1; //looking downright one tile
+  rightBorder = startTileIdx % 8;
   while (currTileIdx >= 0 && currTileIdx < nodes.length) {
+    if (rightBorder === 7) { //if piece is at edge of map, don't look further
+      break;
+    }
+    rightBorder++;
     //looking downright
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
@@ -361,7 +376,12 @@ const bishopPossibleMoves = (node, nodes) => {
   }
   currTileIdx = startTileIdx;
   currTileIdx = currTileIdx + 8 - 1; //looking downleft one tile
+  leftBorder = startTileIdx % 8;
   while (currTileIdx >= 0 && currTileIdx < nodes.length) {
+    if (leftBorder === 0) { //if piece is at edge of map, don't look further
+      break;
+    }
+    leftBorder--;
     //looking downleft
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
