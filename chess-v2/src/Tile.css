@@ -49,6 +49,7 @@
     aspect-ratio: 1 / 1;
     height: 100%;
     border: 2px white solid;
+    color: orange;
     /* border-radius: 50% */
 }
 
