@@ -1,4 +1,4 @@
-.ChessBoardContainer {
+.ChessBoardContainerWhitePlayer {
     background-color: #D700FF;
     display: grid;
     width: 100%;
@@ -8,4 +8,17 @@
     border: 2px white solid;
     min-width: 600px;
     min-height: 600px;
+}
+
+.ChessBoardContainerBlackPlayer {
+    background-color: #D700FF;
+    display: grid;
+    width: 100%;
+    height: 100%;
+    /* fr = take up available space */
+    grid-template-columns: repeat(8, 1fr);
+    border: 2px white solid;
+    min-width: 600px;
+    min-height: 600px;
+    /* transform: rotate(180deg); */
 }

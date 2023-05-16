@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "./ChessBoard.css";
 import Tile from "./Tile.js";
 //deprecate defaultEdges once edge generation process is completed and QA'd
@@ -11,6 +11,7 @@ import { kingPossibleMoves } from "./helperFunctions/kingPossibleMoves";
 import { knightPossibleMoves } from "./helperFunctions/knightPossibleMoves";
 import { rookPossibleMoves } from "./helperFunctions/rookPossibleMoves";
 import { queenPossibleMoves } from "./helperFunctions/queenPossibleMoves";
+import UserContext from "./store/user-context.js";
 
 /*
  * isCheckMate pseudocode
@@ -82,9 +83,14 @@ const ChessBoard = () => {
   //initialize graph that stores board data
   const [nodes, setNodes] = useState(defaultNodes);
   const [edges, setEdges] = useState(generateEdges(nodes));
+  const ctx = useContext(UserContext);
 
   const tileOnClick = (e) => {
-    if (e.target && e.target.classList && e.target.classList[0] === "highlightedDot") {
+    if (
+      e.target &&
+      e.target.classList &&
+      e.target.classList[0] === "highlightedDot"
+    ) {
       return; //if clicking on highlighted dot, don't also execute this event handler
     }
     e.preventDefault();
@@ -268,32 +274,48 @@ const ChessBoard = () => {
 
   return (
     //TODO: export logic to multiple files
-    <div className="ChessBoardContainer">
-      {nodes.map((node) => {
-        return (
-          <Tile
-            isHighlighted={node.isHighlighted}
-            isSelected={node.isSelected}
-            movePiece={movePiece}
-            tileOnClick={tileOnClick}
-            svg={node.svg}
-            altText={node.altText}
-            x={node.x}
-            y={node.y}
-            hasPiece={node.hasPiece}
-            key={Math.random()}
-          />
-        );
-      })}
-      <div>
-        {edges.map((edge) => {
-          return (
-            <p key={Math.random()}>
-              x: {edge.x}, y: {edge.y}
-            </p>
-          );
-        })}
-      </div>
+    <div
+      className={
+        ctx.playerColor === "White"
+          ? "ChessBoardContainerWhitePlayer"
+          : "ChessBoardContainerBlackPlayer"
+      }
+    >
+      {ctx.playerColor === "White"
+        ? nodes.map((node) => {
+            return (
+              <Tile
+                justifyLabel={ctx.playerColor} //adjusts the axis labels based on which player is playing
+                isHighlighted={node.isHighlighted}
+                isSelected={node.isSelected}
+                movePiece={movePiece}
+                tileOnClick={tileOnClick}
+                svg={node.svg}
+                altText={node.altText}
+                x={node.x}
+                y={node.y}
+                hasPiece={node.hasPiece}
+                key={Math.random()}
+              />
+            );
+          })
+        : nodes.slice().reverse().map((node) => { //flips the board if player is controlling black pieces
+            return (
+              <Tile
+                justifyLabel={ctx.playerColor} //adjusts the axis labels based on which player is playing
+                isHighlighted={node.isHighlighted}
+                isSelected={node.isSelected}
+                movePiece={movePiece}
+                tileOnClick={tileOnClick}
+                svg={node.svg}
+                altText={node.altText}
+                x={node.x}
+                y={node.y}
+                hasPiece={node.hasPiece}
+                key={Math.random()}
+              />
+            );
+          })}
     </div>
   );
 };

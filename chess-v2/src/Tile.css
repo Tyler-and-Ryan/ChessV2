@@ -28,19 +28,41 @@
     height: 100%;
 }
 
-.yLabel {
+.yLabelWhitePlayer {
     position: absolute;
     margin: 0;
     top: 2px;
-    left: 2px;
+    right: 125%;
+    transform: translate(100%, 100%);
 }
 
-.xLabel {
+.xLabelWhitePlayer {
     position: absolute;
     margin: 0;
+    top: 105%;
     bottom: 2px;
-    right: 2px;
+    right: 55%;
+    transform: translate(100%, 100%);
 }
+
+.yLabelBlackPlayer {
+    position: absolute;
+    margin: 0;
+    right: 100%;
+    top: 2px;
+    left: 110%;
+    transform: translate(100%, 100%);
+}
+
+.xLabelBlackPlayer {
+    position: absolute;
+    margin: 0;
+    bottom: 140%;
+    right: 55%;
+    transform: translate(100%, 100%);
+}
+
+
 
 
 .highlightedTile {

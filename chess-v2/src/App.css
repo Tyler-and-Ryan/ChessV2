@@ -7,8 +7,8 @@
   justify-content: space-between;
   font-size: calc(10px + 2vmin);
   color: white;
-  min-width: 600px;
-  padding: 10px;
+  min-width: 350px;
+  padding-bottom: 20px;
 }
 
 .App-body {
@@ -19,7 +19,7 @@
   align-items: center;
   justify-content: center;
   color: white;
-  min-width: 600px;
+  min-width: 350px;
 }
 
 .App-footer {
@@ -31,5 +31,5 @@
   justify-content: space-around;
   font-size: calc(10px + 1vmin);
   color: white;
-  min-width: 600px;
+  min-width: 350px;
 }
