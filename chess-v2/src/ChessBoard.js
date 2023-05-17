@@ -12,6 +12,7 @@ import { knightPossibleMoves } from "./helperFunctions/knightPossibleMoves";
 import { rookPossibleMoves } from "./helperFunctions/rookPossibleMoves";
 import { queenPossibleMoves } from "./helperFunctions/queenPossibleMoves";
 import UserContext from "./store/user-context.js";
+import { highlightCurrentNode } from "./helperFunctions/highlightCurrentNode";
 
 /*
  * isCheckMate pseudocode
@@ -106,6 +107,13 @@ const ChessBoard = () => {
         currTile = nodes.at(i);
       }
     }
+
+    if ((currTile.player === 1 && ctx.playerColor === "White") || (currTile.player === 0 && ctx.playerColor === "Black")) {
+      //tile piece belongs to opponent, so select current tile and deselect all others
+      const newNodes = highlightCurrentNode(nodes, x, y);
+      setNodes(newNodes);
+      return;
+    }
     //get all possible moves for the specific tile
     let possibleMoves = [];
     if (
@@ -139,30 +147,7 @@ const ChessBoard = () => {
       possibleMoves = blackPawnPossibleMoves(currTile, nodes, false);
     } else {
       //empty tile, so unhighlight all current nodes
-      const newNodes = nodes.map((node) => {
-        if (node.x === x && node.y === y) {
-          return {
-            svg: node.svg,
-            altText: node.altText,
-            x: node.x,
-            y: node.y,
-            hasPiece: node.hasPiece,
-            player: node.player,
-            isHighlighted: false,
-            isSelected: true,
-          };
-        }
-        return {
-          svg: node.svg,
-          altText: node.altText,
-          x: node.x,
-          y: node.y,
-          hasPiece: node.hasPiece,
-          player: node.player,
-          isHighlighted: false,
-          isSelected: false,
-        };
-      });
+      const newNodes = highlightCurrentNode(nodes, x, y);
       setNodes(newNodes);
       return;
     }
@@ -270,6 +255,7 @@ const ChessBoard = () => {
 
     //newNodes is correct here
     setNodes(newNodes); //rerender board based on new highlighted states
+    ctx.swapPlayerColor();
   };
 
   return (
