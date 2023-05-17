@@ -1,0 +1,29 @@
+.button {
+    margin: 12px 0px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'IBM Plex Mono', monospace
+}
+
+.primaryBtn {
+    background-color: darkblue;
+    border-radius: 8px;
+    padding: 12px 24px;
+    color: white;
+    font-weight: 500;
+    letter-spacing: 1.2px;
+}
+
+.primaryBtn:hover {
+    transform: scale(1.02);
+}
+
+.secondaryBtn:hover {
+    background-color: white;
+}
+
+.tertiaryBtn:hover {
+    transform: scale(1.02);
+}

@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import "./ChessBoard.css";
 import Tile from "./Tile.js";
 //deprecate defaultEdges once edge generation process is completed and QA'd
-import { defaultNodes } from "./defaultPositions.js";
+import { defaultNodes } from "./data/defaultPositions.js";
 import { uniqueArray } from "./helperFunctions/uniqueArray";
 import { whitePawnPossibleMoves } from "./helperFunctions/whitePawnPossibleMoves";
 import { blackPawnPossibleMoves } from "./helperFunctions/blackPawnPossibleMoves";

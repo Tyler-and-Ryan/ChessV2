@@ -1,15 +1,15 @@
-import blackKing from "./visualAssets/blackKing.svg";
-import whiteKing from "./visualAssets/whiteKing.svg";
-import blackBishop from "./visualAssets/blackBishop.svg";
-import whiteBishop from "./visualAssets/whiteBishop.svg";
-import blackKnight from "./visualAssets/blackKnight.svg";
-import whiteKnight from "./visualAssets/whiteKnight.svg";
-import blackPawn from "./visualAssets/blackPawn.svg";
-import whitePawn from "./visualAssets/whitePawn.svg";
-import blackQueen from "./visualAssets/blackQueen.svg";
-import whiteQueen from "./visualAssets/whiteQueen.svg";
-import blackRook from "./visualAssets/blackRook.svg";
-import whiteRook from "./visualAssets/whiteRook.svg";
+import blackKing from "../visualAssets/blackKing.svg";
+import whiteKing from "../visualAssets/whiteKing.svg";
+import blackBishop from "../visualAssets/blackBishop.svg";
+import whiteBishop from "../visualAssets/whiteBishop.svg";
+import blackKnight from "../visualAssets/blackKnight.svg";
+import whiteKnight from "../visualAssets/whiteKnight.svg";
+import blackPawn from "../visualAssets/blackPawn.svg";
+import whitePawn from "../visualAssets/whitePawn.svg";
+import blackQueen from "../visualAssets/blackQueen.svg";
+import whiteQueen from "../visualAssets/whiteQueen.svg";
+import blackRook from "../visualAssets/blackRook.svg";
+import whiteRook from "../visualAssets/whiteRook.svg";
 
 //the initial positions of all the pieces
 //player 1 = black, player 0 = white, player 2 = neutral

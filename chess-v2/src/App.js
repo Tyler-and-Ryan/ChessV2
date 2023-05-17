@@ -1,6 +1,8 @@
 import React, { Fragment, useContext } from "react";
 import ChessBoard from "./ChessBoard.js";
 import UserContext from "./store/user-context.js";
+import Button from "./uiComponents/Button.js";
+import { BUTTON_TYPES, STRINGS } from "./data/stringEnums.js";
 import "./App.css";
 
 const App = () => {
@@ -8,10 +10,19 @@ const App = () => {
   return (
     <Fragment>
       <header className="App-header">
-        {ctx.playerColor}
-        <button onClick={ctx.swapPlayerColor}>Start</button>
-        <div>Chess Version 2</div>
-        <div>Reset</div>
+        <div className="btn-wrapper">
+          <Button
+            type={BUTTON_TYPES.PRIMARY}
+            onClick={ctx.swapPlayerColor}
+            text={STRINGS.START}
+          ></Button>
+          <div>{STRINGS.TITLE}</div>
+          <Button
+            type={BUTTON_TYPES.PRIMARY}
+            onClick={() => {}}
+            text={STRINGS.RESET}
+          ></Button>
+        </div>
       </header>
       <div className="App-body">
         <div>
