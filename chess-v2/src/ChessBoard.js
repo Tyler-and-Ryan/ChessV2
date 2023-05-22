@@ -13,6 +13,7 @@ import { rookPossibleMoves } from "./helperFunctions/rookPossibleMoves";
 import { queenPossibleMoves } from "./helperFunctions/queenPossibleMoves";
 import UserContext from "./store/user-context.js";
 import { highlightCurrentNode } from "./helperFunctions/highlightCurrentNode";
+import { useChannelStateContext, useChatContext } from "stream-chat-react";
 
 /*
  * isCheckMate pseudocode
@@ -84,8 +85,14 @@ const ChessBoard = (props) => {
   //initialize graph that stores board data
   const [nodes, setNodes] = useState(defaultNodes);
   const [edges, setEdges] = useState(generateEdges(nodes));
-  const [playersJoined, setPlayersJoined] = useState(props.channel.state.watcher_count === 2);
+  const [playersJoined, setPlayersJoined] = useState(
+    props.channel.state.watcher_count === 2
+  );
+  const [player, setPlayer] = useState("White");
+  const [turn, setTurn] = useState("White");
   const ctx = useContext(UserContext);
+  const { channel } = useChannelStateContext();
+  const { client } = useChatContext();
 
   const tileOnClick = (e) => {
     if (
@@ -109,7 +116,10 @@ const ChessBoard = (props) => {
       }
     }
 
-    if ((currTile.player === 1 && ctx.playerColor === "White") || (currTile.player === 0 && ctx.playerColor === "Black")) {
+    if (
+      (currTile.player === 1 && ctx.playerColor === "White") ||
+      (currTile.player === 0 && ctx.playerColor === "Black")
+    ) {
       //tile piece belongs to opponent, so select current tile and deselect all others
       const newNodes = highlightCurrentNode(nodes, x, y);
       setNodes(newNodes);
@@ -198,73 +208,145 @@ const ChessBoard = (props) => {
     setNodes(newNodes); //rerender board based on new highlighted states
   };
 
-  const movePiece = (e) => {
+  const movePiece = async (e) => {
     //Alter src, altText, hasPiece, player attributes of the source and destination tile
     //    and iterate through all tiles to make them not highlighted and not selected
 
     e.preventDefault();
-    //only one node should be selected, filter returns array of size 1
-    const sourceTile = nodes.filter((node) => node.isSelected)[0];
-    //only one node should have the correct coordinates, filter returns array of size 1
-    const destinationTile = nodes.filter(
-      (node) =>
-        node.x === Number(e.target.attributes.xlabel.value) &&
-        node.y === e.target.attributes.ylabel.value
-    )[0];
-    const sourceTileSVG = sourceTile.svg;
-    const sourceTileAltText = sourceTile.altText;
-    const sourceTileHasPiece = sourceTile.hasPiece;
-    const sourceTilePlayer = sourceTile.player;
-    const newNodes = nodes.map((node) => {
-      //if destination tile, copy info from source tile and replace at destination
-      if (node.x === destinationTile.x && node.y === destinationTile.y) {
-        return {
-          svg: sourceTileSVG,
-          altText: sourceTileAltText,
-          x: node.x,
-          y: node.y,
-          hasPiece: sourceTileHasPiece,
-          player: sourceTilePlayer,
-          isHighlighted: false,
-          isSelected: false,
-        };
-        //if source tile, reset to default settings, blank tile
-      } else if (node.x === sourceTile.x && node.y === sourceTile.y) {
-        return {
-          svg: {},
-          altText: "",
-          x: node.x,
-          y: node.y,
-          hasPiece: false,
-          player: 2,
-          isHighlighted: false,
-          isSelected: false,
-        };
-      }
-      //if not source or destination tile, stay the same
-      return {
-        svg: node.svg,
-        altText: node.altText,
-        x: node.x,
-        y: node.y,
-        hasPiece: node.hasPiece,
-        player: node.player,
-        isHighlighted: false,
-        isSelected: false,
-      };
-    });
+    if (turn === player) {
+      setTurn(player === "White" ? "Black" : "White");
 
-    //newNodes is correct here
-    setNodes(newNodes); //rerender board based on new highlighted states
-    ctx.swapPlayerColor();
+      //only one node should be selected, filter returns array of size 1
+      const sourceTile = nodes.filter((node) => node.isSelected)[0];
+      //only one node should have the correct coordinates, filter returns array of size 1
+      const destinationTile = nodes.filter(
+        (node) =>
+          node.x === Number(e.target.attributes.xlabel.value) &&
+          node.y === e.target.attributes.ylabel.value
+      )[0];
+      const sourceTileSVG = sourceTile.svg;
+      const sourceTileAltText = sourceTile.altText;
+      const sourceTileHasPiece = sourceTile.hasPiece;
+      const sourceTilePlayer = sourceTile.player;
+      await channel.sendEvent({
+        type: "game-move",
+        data: {
+          sourceTile: sourceTile,
+          sourceTileSVG: sourceTileSVG,
+          sourceTileAltText: sourceTileAltText,
+          sourceTileHasPiece: sourceTileHasPiece,
+          sourceTilePlayer: sourceTilePlayer,
+          destinationTile: destinationTile,
+          player: player,
+        },
+      });
+
+      const newNodes = nodes.map((node) => {
+        //if destination tile, copy info from source tile and replace at destination
+        if (node.x === destinationTile.x && node.y === destinationTile.y) {
+          return {
+            svg: sourceTileSVG,
+            altText: sourceTileAltText,
+            x: node.x,
+            y: node.y,
+            hasPiece: sourceTileHasPiece,
+            player: sourceTilePlayer,
+            isHighlighted: false,
+            isSelected: false,
+          };
+          //if source tile, reset to default settings, blank tile
+        } else if (node.x === sourceTile.x && node.y === sourceTile.y) {
+          return {
+            svg: {},
+            altText: "",
+            x: node.x,
+            y: node.y,
+            hasPiece: false,
+            player: 2,
+            isHighlighted: false,
+            isSelected: false,
+          };
+        }
+        //if not source or destination tile, stay the same
+        return {
+          svg: node.svg,
+          altText: node.altText,
+          x: node.x,
+          y: node.y,
+          hasPiece: node.hasPiece,
+          player: node.player,
+          isHighlighted: false,
+          isSelected: false,
+        };
+      });
+
+      //newNodes is correct here
+      setNodes(newNodes); //rerender board based on new highlighted states
+      // ctx.swapPlayerColor();
+    }
   };
 
   //if another user joins (watches) the channel, execute the function
   props.channel.on("user.watching.start", (event) => {
     setPlayersJoined(event.watcher_count === 2);
-  })
+  });
+
+  //props.channel and channel are the same object, passed to this component different ways
+  channel.on((event) => {
+    if (event.type === "game-move" && event.user.id !== client.userID) {
+      const currentPlayer = event.data.player === "White" ? "Black" : "White";
+      setPlayer(currentPlayer);
+      if (ctx.playerColor !== currentPlayer) {
+        ctx.swapPlayerColor();
+      }
+      setTurn(currentPlayer);
+      const newNodes = nodes.map((node) => {
+        //if destination tile, copy info from source tile and replace at destination
+        if (node.x === event.data.destinationTile.x && node.y === event.data.destinationTile.y) {
+          return {
+            svg: event.data.sourceTileSVG,
+            altText: event.data.sourceTileAltText,
+            x: node.x,
+            y: node.y,
+            hasPiece: event.data.sourceTileHasPiece,
+            player: event.data.sourceTilePlayer,
+            isHighlighted: false,
+            isSelected: false,
+          };
+          //if source tile, reset to default settings, blank tile
+        } else if (node.x === event.data.sourceTile.x && node.y === event.data.sourceTile.y) {
+          return {
+            svg: {},
+            altText: "",
+            x: node.x,
+            y: node.y,
+            hasPiece: false,
+            player: 2,
+            isHighlighted: false,
+            isSelected: false,
+          };
+        }
+        //if not source or destination tile, stay the same
+        return {
+          svg: node.svg,
+          altText: node.altText,
+          x: node.x,
+          y: node.y,
+          hasPiece: node.hasPiece,
+          player: node.player,
+          isHighlighted: false,
+          isSelected: false,
+        };
+      });
+
+      //newNodes is correct here
+      setNodes(newNodes); //rerender board based on new highlighted states
+      // ctx.swapPlayerColor();
+    }
+  });
+
   if (!playersJoined) {
-    return <div> Waiting for other players to join... </div>
+    return <div> Waiting for other players to join... </div>;
   }
 
   return (
@@ -294,23 +376,27 @@ const ChessBoard = (props) => {
               />
             );
           })
-        : nodes.slice().reverse().map((node) => { //flips the board if player is controlling black pieces
-            return (
-              <Tile
-                justifyLabel={ctx.playerColor} //adjusts the axis labels based on which player is playing
-                isHighlighted={node.isHighlighted}
-                isSelected={node.isSelected}
-                movePiece={movePiece}
-                tileOnClick={tileOnClick}
-                svg={node.svg}
-                altText={node.altText}
-                x={node.x}
-                y={node.y}
-                hasPiece={node.hasPiece}
-                key={Math.random()}
-              />
-            );
-          })}
+        : nodes
+            .slice()
+            .reverse()
+            .map((node) => {
+              //flips the board if player is controlling black pieces
+              return (
+                <Tile
+                  justifyLabel={ctx.playerColor} //adjusts the axis labels based on which player is playing
+                  isHighlighted={node.isHighlighted}
+                  isSelected={node.isSelected}
+                  movePiece={movePiece}
+                  tileOnClick={tileOnClick}
+                  svg={node.svg}
+                  altText={node.altText}
+                  x={node.x}
+                  y={node.y}
+                  hasPiece={node.hasPiece}
+                  key={Math.random()}
+                />
+              );
+            })}
     </div>
   );
 };
