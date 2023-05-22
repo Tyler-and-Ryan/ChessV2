@@ -8,5 +8,6 @@ export const STRINGS = {
     START: 'Start',
     RESET: 'Reset',
     TITLE: 'Chess Version 2',
+    LOGOUT: 'Log Out',
     
 }

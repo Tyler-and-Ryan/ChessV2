@@ -80,10 +80,11 @@ const generateEdges = (nodes) => {
   return uniqueArray(updatedEdges);
 };
 
-const ChessBoard = () => {
+const ChessBoard = (props) => {
   //initialize graph that stores board data
   const [nodes, setNodes] = useState(defaultNodes);
   const [edges, setEdges] = useState(generateEdges(nodes));
+  const [playersJoined, setPlayersJoined] = useState(props.channel.state.watcher_count === 2);
   const ctx = useContext(UserContext);
 
   const tileOnClick = (e) => {
@@ -257,6 +258,14 @@ const ChessBoard = () => {
     setNodes(newNodes); //rerender board based on new highlighted states
     ctx.swapPlayerColor();
   };
+
+  //if another user joins (watches) the channel, execute the function
+  props.channel.on("user.watching.start", (event) => {
+    setPlayersJoined(event.watcher_count === 2);
+  })
+  if (!playersJoined) {
+    return <div> Waiting for other players to join... </div>
+  }
 
   return (
     //TODO: export logic to multiple files

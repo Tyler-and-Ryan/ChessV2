@@ -2,10 +2,10 @@ import { useState } from "react";
 import Axios from "axios";
 import Cookies from "universal-cookie";
 
-const Login = () => {
+const Login = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  
+
   const cookies = new Cookies();
   const login = () => {
     Axios.post("http://localhost:3001/login", { username, password }).then(
@@ -17,6 +17,7 @@ const Login = () => {
         cookies.set("firstName", firstName);
         cookies.set("lastName", lastName);
         cookies.set("username", username);
+        props.setIsAuth(true);
       }
     );
   };
