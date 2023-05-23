@@ -3,7 +3,7 @@ import "./ChessBoard.css";
 import Tile from "./Tile.js";
 //deprecate defaultEdges once edge generation process is completed and QA'd
 import { defaultNodes } from "./data/defaultPositions.js";
-import { uniqueArray } from "./helperFunctions/uniqueArray";
+import generatePossibleMoves from "./helperFunctions/generatePossibleMoves";
 import { whitePawnPossibleMoves } from "./helperFunctions/whitePawnPossibleMoves";
 import { blackPawnPossibleMoves } from "./helperFunctions/blackPawnPossibleMoves";
 import { bishopPossibleMoves } from "./helperFunctions/bishopPossibleMoves";
@@ -11,6 +11,7 @@ import { kingPossibleMoves } from "./helperFunctions/kingPossibleMoves";
 import { knightPossibleMoves } from "./helperFunctions/knightPossibleMoves";
 import { rookPossibleMoves } from "./helperFunctions/rookPossibleMoves";
 import { queenPossibleMoves } from "./helperFunctions/queenPossibleMoves";
+import adjustPiecePositions from "./helperFunctions/adjustPiecePositions";
 import UserContext from "./store/user-context.js";
 import { highlightCurrentNode } from "./helperFunctions/highlightCurrentNode";
 import { useChannelStateContext, useChatContext } from "stream-chat-react";
@@ -34,57 +35,10 @@ import { useChannelStateContext, useChatContext } from "stream-chat-react";
  * Time Complexity: O(E + N) where E < N(N - 1)
  */
 
-/* Assumption: Tiles/nodes have already been updated to reflect the
- *             move that just occurred
- * Goal: return new array with all edges - loop through all nodes and add on to edges array iteratively
- */
-const generateEdges = (nodes) => {
-  let updatedEdges = [];
-
-  for (let i = 0; i < nodes.length; i++) {
-    let possibleMoves = [];
-    if (
-      nodes.at(i).altText === "White Rook" ||
-      nodes.at(i).altText === "Black Rook"
-    ) {
-      possibleMoves = rookPossibleMoves(nodes.at(i), nodes);
-    } else if (
-      nodes.at(i).altText === "White Knight" ||
-      nodes.at(i).altText === "Black Knight"
-    ) {
-      possibleMoves = knightPossibleMoves(nodes.at(i), nodes);
-    } else if (
-      nodes.at(i).altText === "White Bishop" ||
-      nodes.at(i).altText === "Black Bishop"
-    ) {
-      possibleMoves = bishopPossibleMoves(nodes.at(i), nodes);
-    } else if (
-      nodes.at(i).altText === "White Queen" ||
-      nodes.at(i).altText === "Black Queen"
-    ) {
-      possibleMoves = queenPossibleMoves(nodes.at(i), nodes);
-    } else if (
-      nodes.at(i).altText === "White King" ||
-      nodes.at(i).altText === "Black King"
-    ) {
-      possibleMoves = kingPossibleMoves(nodes.at(i), nodes);
-    } else if (nodes.at(i).altText === "White Pawn") {
-      possibleMoves = whitePawnPossibleMoves(nodes.at(i), nodes, false);
-    } else if (nodes.at(i).altText === "Black Pawn") {
-      possibleMoves = blackPawnPossibleMoves(nodes.at(i), nodes, false);
-    }
-    possibleMoves.forEach((possibleMove) => {
-      updatedEdges.push(possibleMove);
-    });
-  }
-
-  return uniqueArray(updatedEdges);
-};
-
 const ChessBoard = (props) => {
   //initialize graph that stores board data
   const [nodes, setNodes] = useState(defaultNodes);
-  const [edges, setEdges] = useState(generateEdges(nodes));
+  const [edges, setEdges] = useState(generatePossibleMoves(nodes));
   const [playersJoined, setPlayersJoined] = useState(
     props.channel.state.watcher_count === 2
   );
@@ -174,7 +128,8 @@ const ChessBoard = (props) => {
       possibleMoves = whitePawnPossibleMoves(currTile, nodes, false);
     } else if (currTile.altText === "Black Pawn") {
       possibleMoves = blackPawnPossibleMoves(currTile, nodes, false);
-    } else {
+    } else 
+    if (currTile.altText === "") {
       //empty tile, so unhighlight all current nodes
       const newNodes = highlightCurrentNode(nodes, x, y);
       setNodes(newNodes);
@@ -248,64 +203,16 @@ const ChessBoard = (props) => {
           node.x === Number(e.target.attributes.xlabel.value) &&
           node.y === e.target.attributes.ylabel.value
       )[0];
-      const sourceTileSVG = sourceTile.svg;
-      const sourceTileAltText = sourceTile.altText;
-      const sourceTileHasPiece = sourceTile.hasPiece;
-      const sourceTilePlayer = sourceTile.player;
       await channel.sendEvent({
         type: "game-move",
         data: {
           sourceTile: sourceTile,
-          sourceTileSVG: sourceTileSVG,
-          sourceTileAltText: sourceTileAltText,
-          sourceTileHasPiece: sourceTileHasPiece,
-          sourceTilePlayer: sourceTilePlayer,
           destinationTile: destinationTile,
           player: player,
-          firstMoveComplete: true,
         },
       });
 
-      const newNodes = nodes.map((node) => {
-        //if destination tile, copy info from source tile and replace at destination
-        if (node.x === destinationTile.x && node.y === destinationTile.y) {
-          return {
-            svg: sourceTileSVG,
-            altText: sourceTileAltText,
-            x: node.x,
-            y: node.y,
-            hasPiece: sourceTileHasPiece,
-            player: sourceTilePlayer,
-            isHighlighted: false,
-            isSelected: false,
-          };
-          //if source tile, reset to default settings, blank tile
-        } else if (node.x === sourceTile.x && node.y === sourceTile.y) {
-          return {
-            svg: {},
-            altText: "",
-            x: node.x,
-            y: node.y,
-            hasPiece: false,
-            player: 2,
-            isHighlighted: false,
-            isSelected: false,
-          };
-        }
-        //if not source or destination tile, stay the same
-        return {
-          svg: node.svg,
-          altText: node.altText,
-          x: node.x,
-          y: node.y,
-          hasPiece: node.hasPiece,
-          player: node.player,
-          isHighlighted: false,
-          isSelected: false,
-        };
-      });
-
-      //newNodes is correct here
+      const newNodes = adjustPiecePositions(nodes, destinationTile, sourceTile);
       setNodes(newNodes); //rerender board based on new highlighted states
     }
   };
@@ -320,50 +227,11 @@ const ChessBoard = (props) => {
     if (event.type === "game-move" && event.user.id !== client.userID) {
       const currentPlayer = event.data.player === "White" ? "Black" : "White";
       setPlayer(currentPlayer);
-      if (!firstMoveDone && event.data.firstMoveComplete) {
+      if (!firstMoveDone) {
         setFirstMoveDone(true);
       }
       setTurn(currentPlayer);
-      const newNodes = nodes.map((node) => {
-        //if destination tile, copy info from source tile and replace at destination
-        if (node.x === event.data.destinationTile.x && node.y === event.data.destinationTile.y) {
-          return {
-            svg: event.data.sourceTileSVG,
-            altText: event.data.sourceTileAltText,
-            x: node.x,
-            y: node.y,
-            hasPiece: event.data.sourceTileHasPiece,
-            player: event.data.sourceTilePlayer,
-            isHighlighted: false,
-            isSelected: false,
-          };
-          //if source tile, reset to default settings, blank tile
-        } else if (node.x === event.data.sourceTile.x && node.y === event.data.sourceTile.y) {
-          return {
-            svg: {},
-            altText: "",
-            x: node.x,
-            y: node.y,
-            hasPiece: false,
-            player: 2,
-            isHighlighted: false,
-            isSelected: false,
-          };
-        }
-        //if not source or destination tile, stay the same
-        return {
-          svg: node.svg,
-          altText: node.altText,
-          x: node.x,
-          y: node.y,
-          hasPiece: node.hasPiece,
-          player: node.player,
-          isHighlighted: false,
-          isSelected: false,
-        };
-      });
-
-      //newNodes is correct here
+      const newNodes = adjustPiecePositions(nodes, event.data.destinationTile, event.data.sourceTile);
       setNodes(newNodes); //rerender board based on new highlighted states
     }
   });
@@ -373,7 +241,6 @@ const ChessBoard = (props) => {
   }
 
   return (
-    //TODO: export logic to multiple files
     <div
       className={
         ctx.playerColor === "White"
