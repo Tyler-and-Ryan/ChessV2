@@ -11,7 +11,7 @@ import { blackPawnPossibleMoves } from "./blackPawnPossibleMoves";
  *             move that just occurred
  * Goal: return new array with all edges - loop through all nodes and add on to edges array iteratively
  */
-const generatePossibleMoves = (nodes) => {
+const generatePossibleMoves = (nodes, checkingForKing = false) => {
   let updatedEdges = [];
 
   for (let i = 0; i < nodes.length; i++) {
@@ -42,9 +42,9 @@ const generatePossibleMoves = (nodes) => {
     ) {
       possibleMoves = kingPossibleMoves(nodes.at(i), nodes);
     } else if (nodes.at(i).altText === "White Pawn") {
-      possibleMoves = whitePawnPossibleMoves(nodes.at(i), nodes, false);
+      possibleMoves = whitePawnPossibleMoves(nodes.at(i), nodes, checkingForKing);
     } else if (nodes.at(i).altText === "Black Pawn") {
-      possibleMoves = blackPawnPossibleMoves(nodes.at(i), nodes, false);
+      possibleMoves = blackPawnPossibleMoves(nodes.at(i), nodes, checkingForKing);
     }
     possibleMoves.forEach((possibleMove) => {
       updatedEdges.push(possibleMove);

@@ -9,6 +9,7 @@ const rookPossibleMoves = (node, nodes) => {
   //if the edge of the board is found, do not include moves out of bounds, break out of the loop
   //if friendly unit is found, do not include that as a possible move, break out of the loop
   //if enemy unit is found, include that as a possible move, break out of the loop
+
   let possibleMoves = [];
   let rookPlayer = node.player;
   let startTileIdx = nodes.indexOf(node);
@@ -20,11 +21,17 @@ const rookPossibleMoves = (node, nodes) => {
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
       if (rookPlayer !== checkTile.player) {
-        possibleMoves.push({ x: checkTile.x, y: checkTile.y }); //enemy piece in the way, add to possibleMoves then break;
+        possibleMoves.push([
+          { x: startTile.x, y: startTile.y },
+          { x: checkTile.x, y: checkTile.y },
+        ]); //enemy piece in the way, add to possibleMoves then break;
       }
       break; //friendly piece in the way, don't add to possibleMoves
     }
-    possibleMoves.push({ x: checkTile.x, y: checkTile.y });
+    possibleMoves.push([
+      { x: startTile.x, y: startTile.y },
+      { x: checkTile.x, y: checkTile.y },
+    ]);
     currTileIdx -= 8; //looking at tile one row above
   }
   currTileIdx = startTileIdx;
@@ -34,11 +41,17 @@ const rookPossibleMoves = (node, nodes) => {
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
       if (rookPlayer !== checkTile.player) {
-        possibleMoves.push({ x: checkTile.x, y: checkTile.y }); //enemy piece in the way, add to possibleMoves then break;
+        possibleMoves.push([
+          { x: startTile.x, y: startTile.y },
+          { x: checkTile.x, y: checkTile.y },
+        ]); //enemy piece in the way, add to possibleMoves then break;
       }
       break; //friendly piece in the way, don't add to possibleMoves
     }
-    possibleMoves.push({ x: checkTile.x, y: checkTile.y });
+    possibleMoves.push([
+      { x: startTile.x, y: startTile.y },
+      { x: checkTile.x, y: checkTile.y },
+    ]);
     currTileIdx += 8; //looking at tile one row above
   }
   currTileIdx = startTileIdx;
@@ -52,11 +65,17 @@ const rookPossibleMoves = (node, nodes) => {
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
       if (rookPlayer !== checkTile.player) {
-        possibleMoves.push({ x: checkTile.x, y: checkTile.y }); //enemy piece in the way, add to possibleMoves then break;
+        possibleMoves.push([
+          { x: startTile.x, y: startTile.y },
+          { x: checkTile.x, y: checkTile.y },
+        ]); //enemy piece in the way, add to possibleMoves then break;
       }
       break; //friendly piece in the way, don't add to possibleMoves
     }
-    possibleMoves.push({ x: checkTile.x, y: checkTile.y });
+    possibleMoves.push([
+      { x: startTile.x, y: startTile.y },
+      { x: checkTile.x, y: checkTile.y },
+    ]);
     currTileIdx++; //looking at tile one row above
   }
   currTileIdx = startTileIdx;
@@ -70,11 +89,17 @@ const rookPossibleMoves = (node, nodes) => {
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
       if (rookPlayer !== checkTile.player) {
-        possibleMoves.push({ x: checkTile.x, y: checkTile.y }); //enemy piece in the way, add to possibleMoves then break;
+        possibleMoves.push([
+          { x: startTile.x, y: startTile.y },
+          { x: checkTile.x, y: checkTile.y },
+        ]); //enemy piece in the way, add to possibleMoves then break;
       }
       break; //friendly piece in the way, don't add to possibleMoves
     }
-    possibleMoves.push({ x: checkTile.x, y: checkTile.y });
+    possibleMoves.push([
+      { x: startTile.x, y: startTile.y },
+      { x: checkTile.x, y: checkTile.y },
+    ]);
     currTileIdx--; //looking at tile one row above
   }
 

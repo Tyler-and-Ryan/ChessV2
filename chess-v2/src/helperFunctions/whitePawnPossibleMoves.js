@@ -18,7 +18,10 @@ const whitePawnPossibleMoves = (node, nodes, checkingForKing) => {
   let possibleMoves = [];
   //checking up 1
   if (node.x <= 7 && !nodes.at(currNodeIdx - 8).hasPiece) {
-    possibleMoves.push({ x: node.x + 1, y: node.y });
+    possibleMoves.push([
+      { x: node.x, y: node.y },
+      { x: node.x + 1, y: node.y },
+    ]);
   }
 
   //checking up 2
@@ -27,7 +30,10 @@ const whitePawnPossibleMoves = (node, nodes, checkingForKing) => {
     !nodes.at(currNodeIdx - 8).hasPiece &&
     !nodes.at(currNodeIdx - 16).hasPiece
   ) {
-    possibleMoves.push({ x: node.x + 2, y: node.y });
+    possibleMoves.push([
+      { x: node.x, y: node.y },
+      { x: node.x + 2, y: node.y },
+    ]);
   }
 
   //checking up 1 left 1
@@ -38,10 +44,10 @@ const whitePawnPossibleMoves = (node, nodes, checkingForKing) => {
       (nodes.at(currNodeIdx - 8 - 1).hasPiece &&
         nodes.at(currNodeIdx - 8 - 1).player !== nodes.at(currNodeIdx).player))
   ) {
-    possibleMoves.push({
-      x: node.x + 1,
-      y: String.fromCharCode(node.y.charCodeAt(0) - 1),
-    });
+    possibleMoves.push([
+      { x: node.x, y: node.y },
+      { x: node.x + 1, y: String.fromCharCode(node.y.charCodeAt(0) - 1) },
+    ]);
   }
 
   //checking up 1 right 1
@@ -52,10 +58,10 @@ const whitePawnPossibleMoves = (node, nodes, checkingForKing) => {
       (nodes.at(currNodeIdx - 8 + 1).hasPiece &&
         nodes.at(currNodeIdx - 8 + 1).player !== nodes.at(currNodeIdx).player))
   ) {
-    possibleMoves.push({
-      x: node.x + 1,
-      y: String.fromCharCode(node.y.charCodeAt(0) + 1),
-    });
+    possibleMoves.push([
+      { x: node.x, y: node.y },
+      { x: node.x + 1, y: String.fromCharCode(node.y.charCodeAt(0) + 1) },
+    ]);
   }
 
   return possibleMoves;

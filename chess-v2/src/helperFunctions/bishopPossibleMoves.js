@@ -26,11 +26,17 @@ const bishopPossibleMoves = (node, nodes) => {
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
       if (bishopPlayer !== checkTile.player) {
-        possibleMoves.push({ x: checkTile.x, y: checkTile.y }); //enemy piece in the way, add to possibleMoves then break;
+        possibleMoves.push([
+          { x: node.x, y: node.y },
+          { x: checkTile.x, y: checkTile.y },
+        ]); //enemy piece in the way, add to possibleMoves then break;
       }
       break; //friendly piece in the way, don't add to possibleMoves
     }
-    possibleMoves.push({ x: checkTile.x, y: checkTile.y });
+    possibleMoves.push([
+      { x: node.x, y: node.y },
+      { x: checkTile.x, y: checkTile.y },
+    ]);
     currTileIdx = currTileIdx - 8 + 1; //looking upright one tile
   }
   currTileIdx = startTileIdx;
@@ -46,11 +52,17 @@ const bishopPossibleMoves = (node, nodes) => {
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
       if (bishopPlayer !== checkTile.player) {
-        possibleMoves.push({ x: checkTile.x, y: checkTile.y }); //enemy piece in the way, add to possibleMoves then break;
+        possibleMoves.push([
+          { x: node.x, y: node.y },
+          { x: checkTile.x, y: checkTile.y },
+        ]); //enemy piece in the way, add to possibleMoves then break;
       }
       break; //friendly piece in the way, don't add to possibleMoves
     }
-    possibleMoves.push({ x: checkTile.x, y: checkTile.y });
+    possibleMoves.push([
+      { x: node.x, y: node.y },
+      { x: checkTile.x, y: checkTile.y },
+    ]);
     currTileIdx = currTileIdx - 8 - 1; //looking upleft one tile
   }
   currTileIdx = startTileIdx;
@@ -66,11 +78,17 @@ const bishopPossibleMoves = (node, nodes) => {
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
       if (bishopPlayer !== checkTile.player) {
-        possibleMoves.push({ x: checkTile.x, y: checkTile.y }); //enemy piece in the way, add to possibleMoves then break;
+        possibleMoves.push([
+          { x: node.x, y: node.y },
+          { x: checkTile.x, y: checkTile.y },
+        ]); //enemy piece in the way, add to possibleMoves then break;
       }
       break; //friendly piece in the way, don't add to possibleMoves
     }
-    possibleMoves.push({ x: checkTile.x, y: checkTile.y });
+    possibleMoves.push([
+      { x: node.x, y: node.y },
+      { x: checkTile.x, y: checkTile.y },
+    ]);
     currTileIdx = currTileIdx + 8 + 1; //looking downright one tile
   }
   currTileIdx = startTileIdx;
@@ -86,11 +104,17 @@ const bishopPossibleMoves = (node, nodes) => {
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
       if (bishopPlayer !== checkTile.player) {
-        possibleMoves.push({ x: checkTile.x, y: checkTile.y }); //enemy piece in the way, add to possibleMoves then break;
+        possibleMoves.push([
+          { x: node.x, y: node.y },
+          { x: checkTile.x, y: checkTile.y },
+        ]); //enemy piece in the way, add to possibleMoves then break;
       }
       break; //friendly piece in the way, don't add to possibleMoves
     }
-    possibleMoves.push({ x: checkTile.x, y: checkTile.y });
+    possibleMoves.push([
+      { x: node.x, y: node.y },
+      { x: checkTile.x, y: checkTile.y },
+    ]);
     currTileIdx = currTileIdx + 8 - 1; //looking downleft one tile
   }
 

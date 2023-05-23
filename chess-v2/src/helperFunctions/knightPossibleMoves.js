@@ -12,10 +12,10 @@ const knightPossibleMoves = (node, nodes) => {
   if (node.x + 2 <= 8 && String.fromCharCode(node.y.charCodeAt(0) - 1) >= "a") {
     //if checked tile does not have a friendly piece, it is a possible move
     if (nodes.at(currNodeIdx - 2 * 8 - 1).player !== node.player) {
-      possibleMoves.push({
-        x: node.x + 2,
-        y: String.fromCharCode(node.y.charCodeAt(0) - 1),
-      });
+      possibleMoves.push([
+        { x: node.x, y: node.y },
+        { x: node.x + 2, y: String.fromCharCode(node.y.charCodeAt(0) - 1) },
+      ]);
     }
   }
 
@@ -23,10 +23,10 @@ const knightPossibleMoves = (node, nodes) => {
   if (node.x + 2 <= 8 && String.fromCharCode(node.y.charCodeAt(0) + 1) <= "h") {
     //if checked tile does not have a friendly piece, it is a possible move
     if (nodes.at(currNodeIdx - 2 * 8 + 1).player !== node.player) {
-      possibleMoves.push({
-        x: node.x + 2,
-        y: String.fromCharCode(node.y.charCodeAt(0) + 1),
-      });
+      possibleMoves.push([
+        { x: node.x, y: node.y },
+        { x: node.x + 2, y: String.fromCharCode(node.y.charCodeAt(0) + 1) },
+      ]);
     }
   }
 
@@ -34,10 +34,10 @@ const knightPossibleMoves = (node, nodes) => {
   if (node.x + 1 <= 8 && String.fromCharCode(node.y.charCodeAt(0) + 2) <= "h") {
     //if checked tile does not have a friendly piece, it is a possible move
     if (nodes.at(currNodeIdx - 1 * 8 + 2).player !== node.player) {
-      possibleMoves.push({
-        x: node.x + 1,
-        y: String.fromCharCode(node.y.charCodeAt(0) + 2),
-      });
+      possibleMoves.push([
+        { x: node.x, y: node.y },
+        { x: node.x + 1, y: String.fromCharCode(node.y.charCodeAt(0) + 2) },
+      ]);
     }
   }
 
@@ -45,10 +45,10 @@ const knightPossibleMoves = (node, nodes) => {
   if (node.x - 1 >= 1 && String.fromCharCode(node.y.charCodeAt(0) + 2) <= "h") {
     //if checked tile does not have a friendly piece, it is a possible move
     if (nodes.at(currNodeIdx + 1 * 8 + 2).player !== node.player) {
-      possibleMoves.push({
-        x: node.x - 1,
-        y: String.fromCharCode(node.y.charCodeAt(0) + 2),
-      });
+      possibleMoves.push([
+        { x: node.x, y: node.y },
+        { x: node.x - 1, y: String.fromCharCode(node.y.charCodeAt(0) + 2) },
+      ]);
     }
   }
 
@@ -56,10 +56,10 @@ const knightPossibleMoves = (node, nodes) => {
   if (node.x - 2 >= 1 && String.fromCharCode(node.y.charCodeAt(0) + 1) <= "h") {
     //if checked tile does not have a friendly piece, it is a possible move
     if (nodes.at(currNodeIdx + 2 * 8 + 1).player !== node.player) {
-      possibleMoves.push({
-        x: node.x - 2,
-        y: String.fromCharCode(node.y.charCodeAt(0) + 1),
-      });
+      possibleMoves.push([
+        { x: node.x, y: node.y },
+        { x: node.x - 2, y: String.fromCharCode(node.y.charCodeAt(0) + 1) },
+      ]);
     }
   }
 
@@ -67,10 +67,10 @@ const knightPossibleMoves = (node, nodes) => {
   if (node.x - 2 >= 1 && String.fromCharCode(node.y.charCodeAt(0) - 1) >= "a") {
     //if checked tile does not have a friendly piece, it is a possible move
     if (nodes.at(currNodeIdx + 2 * 8 - 1).player !== node.player) {
-      possibleMoves.push({
-        x: node.x - 2,
-        y: String.fromCharCode(node.y.charCodeAt(0) - 1),
-      });
+      possibleMoves.push([
+        { x: node.x, y: node.y },
+        { x: node.x - 2, y: String.fromCharCode(node.y.charCodeAt(0) - 1) },
+      ]);
     }
   }
 
@@ -78,10 +78,10 @@ const knightPossibleMoves = (node, nodes) => {
   if (node.x - 1 >= 1 && String.fromCharCode(node.y.charCodeAt(0) - 2) >= "a") {
     //if checked tile does not have a friendly piece, it is a possible move
     if (nodes.at(currNodeIdx + 1 * 8 - 2).player !== node.player) {
-      possibleMoves.push({
-        x: node.x - 1,
-        y: String.fromCharCode(node.y.charCodeAt(0) - 2),
-      });
+      possibleMoves.push([
+        { x: node.x, y: node.y },
+        { x: node.x - 1, y: String.fromCharCode(node.y.charCodeAt(0) - 2) },
+      ]);
     }
   }
 
@@ -89,10 +89,10 @@ const knightPossibleMoves = (node, nodes) => {
   if (node.x + 1 <= 8 && String.fromCharCode(node.y.charCodeAt(0) - 2) >= "a") {
     //if checked tile does not have a friendly piece, it is a possible move
     if (nodes.at(currNodeIdx - 1 * 8 - 2).player !== node.player) {
-      possibleMoves.push({
-        x: node.x + 1,
-        y: String.fromCharCode(node.y.charCodeAt(0) - 2),
-      });
+      possibleMoves.push([
+        { x: node.x, y: node.y },
+        { x: node.x + 1, y: String.fromCharCode(node.y.charCodeAt(0) - 2) },
+      ]);
     }
   }
 
