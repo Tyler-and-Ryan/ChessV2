@@ -90,9 +90,27 @@ const ChessBoard = (props) => {
   );
   const [player, setPlayer] = useState("White");
   const [turn, setTurn] = useState("White");
+  const [firstMoveDone, setFirstMoveDone] = useState(false);
+  //TODO: put result state in parent component, pass setResult through props to here. 
+  //call setResult in the gamewin function when that is implemented
+  const [result, setResult] = useState({winner: "none", state: "none"});
   const ctx = useContext(UserContext);
   const { channel } = useChannelStateContext();
   const { client } = useChatContext();
+
+  useEffect(() => {
+    //generate all edges again
+    //check if someone won or tied
+  }, [nodes]);
+
+  useEffect(() => {
+    if (channel.state.watcher_count === 1) {
+      ctx.swapPlayerColor();
+      setPlayer("Black");
+    } else {
+      setPlayer("White");
+    }
+  }, [channel.state.watcher_count]);
 
   const tileOnClick = (e) => {
     if (
@@ -211,13 +229,19 @@ const ChessBoard = (props) => {
   const movePiece = async (e) => {
     //Alter src, altText, hasPiece, player attributes of the source and destination tile
     //    and iterate through all tiles to make them not highlighted and not selected
-
     e.preventDefault();
     if (turn === player) {
-      setTurn(player === "White" ? "Black" : "White");
-
       //only one node should be selected, filter returns array of size 1
       const sourceTile = nodes.filter((node) => node.isSelected)[0];
+      if (!firstMoveDone) {
+        if (sourceTile.player === 1) {
+          return; //don't let black have first move
+        } else {
+          setFirstMoveDone(true);
+        }
+      }
+      setTurn(player === "White" ? "Black" : "White");
+
       //only one node should have the correct coordinates, filter returns array of size 1
       const destinationTile = nodes.filter(
         (node) =>
@@ -238,6 +262,7 @@ const ChessBoard = (props) => {
           sourceTilePlayer: sourceTilePlayer,
           destinationTile: destinationTile,
           player: player,
+          firstMoveComplete: true,
         },
       });
 
@@ -282,7 +307,6 @@ const ChessBoard = (props) => {
 
       //newNodes is correct here
       setNodes(newNodes); //rerender board based on new highlighted states
-      // ctx.swapPlayerColor();
     }
   };
 
@@ -296,8 +320,8 @@ const ChessBoard = (props) => {
     if (event.type === "game-move" && event.user.id !== client.userID) {
       const currentPlayer = event.data.player === "White" ? "Black" : "White";
       setPlayer(currentPlayer);
-      if (ctx.playerColor !== currentPlayer) {
-        ctx.swapPlayerColor();
+      if (!firstMoveDone && event.data.firstMoveComplete) {
+        setFirstMoveDone(true);
       }
       setTurn(currentPlayer);
       const newNodes = nodes.map((node) => {
@@ -341,7 +365,6 @@ const ChessBoard = (props) => {
 
       //newNodes is correct here
       setNodes(newNodes); //rerender board based on new highlighted states
-      // ctx.swapPlayerColor();
     }
   });
 
