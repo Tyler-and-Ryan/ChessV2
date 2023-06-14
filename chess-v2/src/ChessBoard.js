@@ -33,10 +33,11 @@ const ChessBoard = (props) => {
   const { channel } = useChannelStateContext();
   const { client } = useChatContext();
 
-  useEffect(() => {
-    //generate all edges again
-    //check if someone won or tied
-  }, [nodes]);
+
+  // useEffect(() => {
+  //   //generate all edges again
+  //   //check if someone won or tied
+  // }, [nodes]);
 
   useEffect(() => {
     if (channel.state.watcher_count === 1) {
@@ -68,7 +69,6 @@ const ChessBoard = (props) => {
         currTile = nodes.at(i);
       }
     }
-
     if (
       (currTile.player === 1 && ctx.playerColor === "White") ||
       (currTile.player === 0 && ctx.playerColor === "Black")
@@ -117,11 +117,14 @@ const ChessBoard = (props) => {
       return;
     }
 
+
+    console.log("possibleMoves: " + JSON.stringify(possibleMoves));
     const newNodes = nodes.map((node) => {
       //check if current node location is in the possibleMoves array
       for (let k = 0; k < possibleMoves.length; k++) {
         //if it is, return the same node but with isHighlighted = true
-        if (node.x === possibleMoves[k].x && node.y === possibleMoves[k].y) {
+        if (node.x === possibleMoves[k][1].x && node.y === possibleMoves[k][1].y) {
+          console.log("Tile: [" + node.x + ", " + node.y + "] should be highlighted");
           return {
             svg: node.svg,
             altText: node.altText,
