@@ -55,7 +55,7 @@ const App = () => {
             <div className="btn-wrapper">
               <Button
                 type={BUTTON_TYPES.PRIMARY}
-                onClick={ctx.swapPlayerColor}
+                onClick={() => {}}
                 text={STRINGS.START}
               ></Button>
               <div>{STRINGS.TITLE}</div>
