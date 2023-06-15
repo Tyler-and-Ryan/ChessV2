@@ -117,14 +117,11 @@ const ChessBoard = (props) => {
       return;
     }
 
-
-    console.log("possibleMoves: " + JSON.stringify(possibleMoves));
     const newNodes = nodes.map((node) => {
       //check if current node location is in the possibleMoves array
       for (let k = 0; k < possibleMoves.length; k++) {
         //if it is, return the same node but with isHighlighted = true
         if (node.x === possibleMoves[k][1].x && node.y === possibleMoves[k][1].y) {
-          console.log("Tile: [" + node.x + ", " + node.y + "] should be highlighted");
           return {
             svg: node.svg,
             altText: node.altText,
@@ -174,6 +171,10 @@ const ChessBoard = (props) => {
       const sourceTile = nodes.filter((node) => node.isSelected)[0];
       if (!firstMoveDone) {
         if (sourceTile.player === 1) {
+          props.showPopUp(0); //player tried to move when it wasn't their turn
+          setTimeout(() => {
+            props.closePopUp();
+          }, 3400);
           return; //don't let black have first move
         } else {
           setFirstMoveDone(true);
@@ -198,6 +199,12 @@ const ChessBoard = (props) => {
 
       const newNodes = adjustPiecePositions(nodes, destinationTile, sourceTile);
       setNodes(newNodes); //rerender board based on new highlighted states
+    } else {
+      props.showPopUp(0); //player tried to move when it wasn't their turn
+      setTimeout(() => {
+        props.closePopUp();
+      }, 3400);
+      return;
     }
   };
 

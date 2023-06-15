@@ -1,6 +1,6 @@
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useContext, useState, useEffect } from "react";
 import { StreamChat } from "stream-chat";
-import { Chat } from 'stream-chat-react';
+import { Chat } from "stream-chat-react";
 import Cookies from "universal-cookie";
 import ChessBoard from "./ChessBoard.js";
 import JoinGame from "./JoinGame.js";
@@ -10,6 +10,7 @@ import { BUTTON_TYPES, STRINGS } from "./data/stringEnums.js";
 import "./App.css";
 import SignUp from "./SignUp.js";
 import Login from "./Login.js";
+import PopUp from "./uiComponents/PopUp.js";
 
 const App = () => {
   const [isAuth, setIsAuth] = useState(false);
@@ -17,6 +18,28 @@ const App = () => {
   const cookies = new Cookies();
   const token = cookies.get("token");
   const ctx = useContext(UserContext);
+  const [popUpOpen, setPopUpOpen] = useState(false);
+  let isWrongTurn = false;
+  let isIllegalMove = false;
+
+  useEffect(() => {
+    if (token) {
+      client
+        .connectUser(
+          {
+            id: cookies.get("userId"),
+            name: cookies.get("username"),
+            firstName: cookies.get("firstName"),
+            lastName: cookies.get("lastName"),
+            hashedPassword: cookies.get("hashedPassword"),
+          },
+          token
+        )
+        .then((user) => {
+          setIsAuth(true);
+        });
+    }
+  }, []);
 
   const logOut = () => {
     cookies.remove("token");
@@ -25,29 +48,38 @@ const App = () => {
     cookies.remove("lastName");
     cookies.remove("hashedPassword");
     cookies.remove("channelName");
-    cookies.remove("userName");
+    cookies.remove("username");
     client.disconnectUser();
     setIsAuth(false);
   };
 
-  if (token) {
-    client
-      .connectUser(
-        {
-          id: cookies.get("userId"),
-          name: cookies.get("username"),
-          firstName: cookies.get("firstName"),
-          lastName: cookies.get("lastName"),
-          hashedPassword: cookies.get("hashedPassword"),
-        },
-        token
-      )
-      .then((user) => {
-        setIsAuth(true);
-      });
+  /*
+   * 0 = Player tried to move when it wasn't their turn
+   * 1 = Player tried to perform a move that is illegal
+   */
+  const showPopUp = (popUpCode) => {
+    switch(popUpCode) {
+      case 0:
+        isWrongTurn = true;
+        setPopUpOpen(true);
+        break;
+      case 1:
+        isIllegalMove = true;
+        setPopUpOpen(true);
+        break;
+      default: 
+        console.log("something went wrong");
+    }
+  };
+
+  const closePopUp = () => {
+    setPopUpOpen(false);
+    isWrongTurn = false;
+    isIllegalMove = false;
   }
 
-  return ( //TODO: compartimentalize this JSX into Components
+  return (
+    //TODO: compartimentalize this JSX into Components
     <div>
       {isAuth ? (
         <Fragment>
@@ -70,12 +102,17 @@ const App = () => {
                 text={STRINGS.LOGOUT}
               ></Button>
             </div>
+            {popUpOpen && <PopUp
+              WRONG_TURN={isWrongTurn}
+              ILLEGAL_MOVE={isIllegalMove}
+              closePopUp={closePopUp}
+            />}
           </header>
           <div className="App-body">
             <div>
-              <Chat client={ client }>
+              <Chat client={client}>
                 {/* <ChessBoard /> */}
-                <JoinGame />
+                <JoinGame showPopUp={showPopUp} closePopUp={closePopUp} />
               </Chat>
             </div>
           </div>

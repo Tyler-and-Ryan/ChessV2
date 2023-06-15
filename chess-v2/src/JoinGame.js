@@ -2,7 +2,7 @@ import { React, Fragment, useState } from "react";
 import { useChatContext, Channel } from "stream-chat-react";
 import ChessBoard from "./ChessBoard.js";
 
-const JoinGame = () => {
+const JoinGame = (props) => {
   const [opponentUsername, setOpponentUsername] = useState("");
   const [channel, setChannel] = useState(null);
   const { client } = useChatContext();
@@ -28,7 +28,7 @@ const JoinGame = () => {
     <Fragment>
       {channel ? (
         <Channel channel={channel}>
-            <ChessBoard channel={channel} />
+            <ChessBoard channel={channel} showPopUp={props.showPopUp} closePopUp={props.closePopUp} />
         </Channel>
       ) : (
         <div>
