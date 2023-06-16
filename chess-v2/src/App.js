@@ -73,9 +73,9 @@ const App = () => {
   };
 
   const closePopUp = () => {
-    setPopUpOpen(false);
     isWrongTurn = false;
     isIllegalMove = false;
+    setPopUpOpen(false);
   }
 
   return (

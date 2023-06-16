@@ -11,7 +11,6 @@ const whitePawnPossibleMoves = (node, nodes, checkingForKing) => {
   //If pawn.x == 2, then check one tile and two tiles above for possible moves
   //also check up 1 right 1 and up 1 left 1 for moves
   //  (only if enemy pieces are there or if checkingForKing is true)
-  //TODO: Implement En Passant
   //TODO: Implement Pawn Promotion
 
   const currNodeIdx = nodes.indexOf(node);
@@ -41,8 +40,12 @@ const whitePawnPossibleMoves = (node, nodes, checkingForKing) => {
     node.x <= 7 &&
     node.y >= "b" &&
     (checkingForKing ||
-      (nodes.at(currNodeIdx - 8 - 1).hasPiece &&
-        nodes.at(currNodeIdx - 8 - 1).player !== nodes.at(currNodeIdx).player))
+      (nodes.at(currNodeIdx - 8 - 1).hasPiece && //if up 1 left 1 doesn't have a piece or has enemy piece
+        nodes.at(currNodeIdx - 8 - 1).player !==
+          nodes.at(currNodeIdx).player) ||
+      (node.x === 5 && //check if en passant possible
+        nodes.at(currNodeIdx - 1).justMovedTwice &&
+        !nodes.at(currNodeIdx - 8 - 1).hasPiece))
   ) {
     possibleMoves.push([
       { x: node.x, y: node.y },
@@ -56,7 +59,11 @@ const whitePawnPossibleMoves = (node, nodes, checkingForKing) => {
     node.y <= "g" &&
     (checkingForKing ||
       (nodes.at(currNodeIdx - 8 + 1).hasPiece &&
-        nodes.at(currNodeIdx - 8 + 1).player !== nodes.at(currNodeIdx).player))
+        nodes.at(currNodeIdx - 8 + 1).player !==
+          nodes.at(currNodeIdx).player) ||
+      (node.x === 5 && //check if en passant possible
+        nodes.at(currNodeIdx + 1).justMovedTwice &&
+        !nodes.at(currNodeIdx - 8 + 1).hasPiece))
   ) {
     possibleMoves.push([
       { x: node.x, y: node.y },

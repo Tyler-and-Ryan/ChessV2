@@ -263,6 +263,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    justMovedTwice: false,
   },
   {
     svg: {},
@@ -273,6 +274,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    justMovedTwice: false,
   },
   {
     svg: {},
@@ -283,6 +285,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    justMovedTwice: false,
   },
   {
     svg: {},
@@ -293,6 +296,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    justMovedTwice: false,
   },
   {
     svg: {},
@@ -303,6 +307,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    justMovedTwice: false,
   },
   {
     svg: {},
@@ -313,6 +318,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    justMovedTwice: false,
   },
   {
     svg: {},
@@ -323,6 +329,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    justMovedTwice: false,
   },
   {
     svg: {},
@@ -333,6 +340,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    justMovedTwice: false,
   },
   {
     svg: {},
@@ -343,6 +351,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    justMovedTwice: false,
   },
   {
     svg: {},
@@ -353,6 +362,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    justMovedTwice: false,
   },
   {
     svg: {},
@@ -363,6 +373,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    justMovedTwice: false,
   },
   {
     svg: {},
@@ -373,6 +384,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    justMovedTwice: false,
   },
   {
     svg: {},
@@ -383,6 +395,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    justMovedTwice: false,
   },
   {
     svg: {},
@@ -393,6 +406,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    justMovedTwice: false,
   },
   {
     svg: {},
@@ -403,6 +417,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    justMovedTwice: false,
   },
   {
     svg: {},
@@ -413,6 +428,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    justMovedTwice: false,
   },
   {
     svg: {},

@@ -26,13 +26,12 @@ const ChessBoard = (props) => {
   const [player, setPlayer] = useState("White");
   const [turn, setTurn] = useState("White");
   const [firstMoveDone, setFirstMoveDone] = useState(false);
-  //TODO: put result state in parent component, pass setResult through props to here. 
+  //TODO: put result state in parent component, pass setResult through props to here.
   //call setResult in the gamewin function when that is implemented
-  const [result, setResult] = useState({winner: "none", state: "none"});
+  const [result, setResult] = useState({ winner: "none", state: "none" });
   const ctx = useContext(UserContext);
   const { channel } = useChannelStateContext();
   const { client } = useChatContext();
-
 
   // useEffect(() => {
   //   //generate all edges again
@@ -109,8 +108,7 @@ const ChessBoard = (props) => {
       possibleMoves = whitePawnPossibleMoves(currTile, nodes, false);
     } else if (currTile.altText === "Black Pawn") {
       possibleMoves = blackPawnPossibleMoves(currTile, nodes, false);
-    } else 
-    if (currTile.altText === "") {
+    } else if (currTile.altText === "") {
       //empty tile, so unhighlight all current nodes
       const newNodes = highlightCurrentNode(nodes, x, y);
       setNodes(newNodes);
@@ -121,42 +119,18 @@ const ChessBoard = (props) => {
       //check if current node location is in the possibleMoves array
       for (let k = 0; k < possibleMoves.length; k++) {
         //if it is, return the same node but with isHighlighted = true
-        if (node.x === possibleMoves[k][1].x && node.y === possibleMoves[k][1].y) {
-          return {
-            svg: node.svg,
-            altText: node.altText,
-            x: node.x,
-            y: node.y,
-            hasPiece: node.hasPiece,
-            player: node.player,
-            isHighlighted: true,
-            isSelected: false,
-          };
+        if (
+          node.x === possibleMoves[k][1].x &&
+          node.y === possibleMoves[k][1].y
+        ) {
+          return { ...node, isHighlighted: true, isSelected: false };
         }
       }
       //if not, return isHighlighted = false;
       if (x === node.x && y === node.y) {
-        return {
-          svg: node.svg,
-          altText: node.altText,
-          x: node.x,
-          y: node.y,
-          hasPiece: node.hasPiece,
-          player: node.player,
-          isHighlighted: false,
-          isSelected: true,
-        };
+        return { ...node, isHighlighted: false, isSelected: true };
       }
-      return {
-        svg: node.svg,
-        altText: node.altText,
-        x: node.x,
-        y: node.y,
-        hasPiece: node.hasPiece,
-        player: node.player,
-        isHighlighted: false,
-        isSelected: false,
-      };
+      return { ...node, isHighlighted: false, isSelected: false };
     });
 
     setNodes(newNodes); //rerender board based on new highlighted states
@@ -197,6 +171,19 @@ const ChessBoard = (props) => {
         },
       });
 
+      //check for possibility of En Passant, mark the tile if so
+      if (
+        (sourceTile.altText === "White Pawn" &&
+          sourceTile.x === 2 &&
+          destinationTile.x === 4) ||
+        (sourceTile.altText === "Black Pawn" &&
+          sourceTile.x === 7 &&
+          destinationTile.x === 5)
+      ) {
+        destinationTile.justMovedTwice = true;
+        //TODO: figure out why en passant doesn't show up as a possible move
+        console.log("[" + destinationTile.x + ", " + destinationTile.y + "] can be captured by en passant");
+      }
       const newNodes = adjustPiecePositions(nodes, destinationTile, sourceTile);
       setNodes(newNodes); //rerender board based on new highlighted states
     } else {
@@ -222,7 +209,11 @@ const ChessBoard = (props) => {
         setFirstMoveDone(true);
       }
       setTurn(currentPlayer);
-      const newNodes = adjustPiecePositions(nodes, event.data.destinationTile, event.data.sourceTile);
+      const newNodes = adjustPiecePositions(
+        nodes,
+        event.data.destinationTile,
+        event.data.sourceTile
+      );
       setNodes(newNodes); //rerender board based on new highlighted states
     }
   });
