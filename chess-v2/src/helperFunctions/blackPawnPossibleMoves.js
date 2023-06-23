@@ -11,7 +11,6 @@ const blackPawnPossibleMoves = (node, nodes, checkingForKing) => {
   //If pawn.x == 7, then check one tile and two tiles above for possible moves
   //also check up 1 right 1 and up 1 left 1 for moves
   //  (only if enemy pieces are there or if checkingForKing is true)
-  //TODO: Implement En Passant
   //TODO: Implement Pawn Promotion
 
   const currNodeIdx = nodes.indexOf(node);

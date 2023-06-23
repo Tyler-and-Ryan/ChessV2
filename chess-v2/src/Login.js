@@ -10,6 +10,7 @@ const Login = (props) => {
   const login = () => {
     Axios.post("http://localhost:3001/login", { username, password }).then(
       (res) => {
+        console.log("res: " + res);
         const { token, userId, firstName, lastName, username } =
           res.data;
         cookies.set("token", token);
@@ -19,8 +20,9 @@ const Login = (props) => {
         cookies.set("username", username);
         props.setIsAuth(true);
       }
-    );
-  };
+    ).catch((error) => {
+      console.log("Login Error: " + error);
+    })};
   return (
     <div>
       <label>Login</label>

@@ -182,9 +182,18 @@ const ChessBoard = (props) => {
       ) {
         destinationTile.justMovedTwice = true;
         //TODO: figure out why en passant doesn't show up as a possible move
-        console.log("[" + destinationTile.x + ", " + destinationTile.y + "] can be captured by en passant");
+        console.log(
+          "[" +
+            destinationTile.x +
+            ", " +
+            destinationTile.y +
+            "] can be captured by en passant"
+        );
       }
       const newNodes = adjustPiecePositions(nodes, destinationTile, sourceTile);
+      // newNodes.forEach((node) => {
+      //   console.log("[" + node.x + ", " + node.y + "] - justMovedTwice: " + node.justMovedTwice);
+      // });
       setNodes(newNodes); //rerender board based on new highlighted states
     } else {
       props.showPopUp(0); //player tried to move when it wasn't their turn
@@ -209,11 +218,32 @@ const ChessBoard = (props) => {
         setFirstMoveDone(true);
       }
       setTurn(currentPlayer);
-      const newNodes = adjustPiecePositions(
+      let newNodes = adjustPiecePositions(
         nodes,
         event.data.destinationTile,
         event.data.sourceTile
       );
+
+      //check for possibility of En Passant, mark the tile if so
+      if (
+        (event.data.sourceTile.altText === "White Pawn" &&
+          event.data.sourceTile.x === 2 &&
+          event.data.destinationTile.x === 4) ||
+        (event.data.sourceTile.altText === "Black Pawn" &&
+          event.data.sourceTile.x === 7 &&
+          event.data.destinationTile.x === 5)
+      ) {
+          newNodes = newNodes.map((node) => {
+            if (node.x === event.data.destinationTile.x && node.y === event.data.destinationTile.y) {
+              return {
+                ...node,
+                justMovedTwice: true
+              }
+            } else {
+              return node;
+            }
+          });
+      }
       setNodes(newNodes); //rerender board based on new highlighted states
     }
   });

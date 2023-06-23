@@ -16,7 +16,7 @@ const adjustPiecePositions = (nodes, destinationTile, sourceTile) => {
     isPawnMoving &&
     !destinationTile.hasPiece &&
     ((sourceTile.x === 5 && destinationTile.x === 6) ||
-      (sourceTile.x === 4 && destinationTile === 3))
+      (sourceTile.x === 4 && destinationTile.x === 3))
   ) {
     if (destinationTile.y < sourceTile.y) {
       isEnPassant = true; //white or black pawn en passant left
