@@ -23,6 +23,7 @@ const defaultNodes = [
     player: 1,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: false,
   },
   {
     svg: blackKnight,
@@ -33,6 +34,7 @@ const defaultNodes = [
     player: 1,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: blackBishop,
@@ -43,6 +45,7 @@ const defaultNodes = [
     player: 1,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: blackQueen,
@@ -53,6 +56,7 @@ const defaultNodes = [
     player: 1,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: blackKing,
@@ -63,6 +67,7 @@ const defaultNodes = [
     player: 1,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: false,
   },
   {
     svg: blackBishop,
@@ -73,6 +78,7 @@ const defaultNodes = [
     player: 1,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: blackKnight,
@@ -83,6 +89,7 @@ const defaultNodes = [
     player: 1,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: blackRook,
@@ -93,6 +100,7 @@ const defaultNodes = [
     player: 1,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: false,
   },
   {
     svg: blackPawn,
@@ -103,6 +111,7 @@ const defaultNodes = [
     player: 1,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: blackPawn,
@@ -113,6 +122,7 @@ const defaultNodes = [
     player: 1,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: blackPawn,
@@ -123,6 +133,7 @@ const defaultNodes = [
     player: 1,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: blackPawn,
@@ -133,6 +144,7 @@ const defaultNodes = [
     player: 1,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: blackPawn,
@@ -143,6 +155,7 @@ const defaultNodes = [
     player: 1,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: blackPawn,
@@ -153,6 +166,7 @@ const defaultNodes = [
     player: 1,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: blackPawn,
@@ -163,6 +177,7 @@ const defaultNodes = [
     player: 1,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: blackPawn,
@@ -173,6 +188,7 @@ const defaultNodes = [
     player: 1,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -183,6 +199,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -193,6 +210,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -203,6 +221,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -213,6 +232,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -223,6 +243,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -233,6 +254,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -243,6 +265,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -253,6 +276,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -264,6 +288,7 @@ const defaultNodes = [
     isHighlighted: false,
     isSelected: false,
     justMovedTwice: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -275,6 +300,7 @@ const defaultNodes = [
     isHighlighted: false,
     isSelected: false,
     justMovedTwice: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -286,6 +312,7 @@ const defaultNodes = [
     isHighlighted: false,
     isSelected: false,
     justMovedTwice: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -297,6 +324,7 @@ const defaultNodes = [
     isHighlighted: false,
     isSelected: false,
     justMovedTwice: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -308,6 +336,7 @@ const defaultNodes = [
     isHighlighted: false,
     isSelected: false,
     justMovedTwice: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -319,6 +348,7 @@ const defaultNodes = [
     isHighlighted: false,
     isSelected: false,
     justMovedTwice: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -330,6 +360,7 @@ const defaultNodes = [
     isHighlighted: false,
     isSelected: false,
     justMovedTwice: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -341,6 +372,7 @@ const defaultNodes = [
     isHighlighted: false,
     isSelected: false,
     justMovedTwice: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -352,6 +384,7 @@ const defaultNodes = [
     isHighlighted: false,
     isSelected: false,
     justMovedTwice: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -363,6 +396,7 @@ const defaultNodes = [
     isHighlighted: false,
     isSelected: false,
     justMovedTwice: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -374,6 +408,7 @@ const defaultNodes = [
     isHighlighted: false,
     isSelected: false,
     justMovedTwice: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -385,6 +420,7 @@ const defaultNodes = [
     isHighlighted: false,
     isSelected: false,
     justMovedTwice: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -396,6 +432,7 @@ const defaultNodes = [
     isHighlighted: false,
     isSelected: false,
     justMovedTwice: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -407,6 +444,7 @@ const defaultNodes = [
     isHighlighted: false,
     isSelected: false,
     justMovedTwice: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -418,6 +456,7 @@ const defaultNodes = [
     isHighlighted: false,
     isSelected: false,
     justMovedTwice: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -429,6 +468,7 @@ const defaultNodes = [
     isHighlighted: false,
     isSelected: false,
     justMovedTwice: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -439,6 +479,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -449,6 +490,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -459,6 +501,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -469,6 +512,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -479,6 +523,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -489,6 +534,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -499,6 +545,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: {},
@@ -509,6 +556,7 @@ const defaultNodes = [
     player: 2,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: whitePawn,
@@ -519,6 +567,7 @@ const defaultNodes = [
     player: 0,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: whitePawn,
@@ -529,6 +578,7 @@ const defaultNodes = [
     player: 0,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: whitePawn,
@@ -539,6 +589,7 @@ const defaultNodes = [
     player: 0,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     // svg: {},
@@ -557,6 +608,7 @@ const defaultNodes = [
     player: 0,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: whitePawn,
@@ -567,6 +619,7 @@ const defaultNodes = [
     player: 0,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: whitePawn,
@@ -577,6 +630,7 @@ const defaultNodes = [
     player: 0,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: whitePawn,
@@ -587,6 +641,7 @@ const defaultNodes = [
     player: 0,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: whitePawn,
@@ -597,6 +652,7 @@ const defaultNodes = [
     player: 0,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: whiteRook,
@@ -607,6 +663,7 @@ const defaultNodes = [
     player: 0,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: false,
   },
   {
     svg: whiteKnight,
@@ -617,6 +674,7 @@ const defaultNodes = [
     player: 0,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: whiteBishop,
@@ -627,6 +685,7 @@ const defaultNodes = [
     player: 0,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: whiteQueen,
@@ -637,6 +696,7 @@ const defaultNodes = [
     player: 0,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: whiteKing,
@@ -647,6 +707,7 @@ const defaultNodes = [
     player: 0,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: false,
   },
   {
     svg: whiteBishop,
@@ -657,6 +718,7 @@ const defaultNodes = [
     player: 0,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: whiteKnight,
@@ -667,6 +729,7 @@ const defaultNodes = [
     player: 0,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: true,
   },
   {
     svg: whiteRook,
@@ -677,6 +740,7 @@ const defaultNodes = [
     player: 0,
     isHighlighted: false,
     isSelected: false,
+    hasKingMoved: false,
   },
 ];
 

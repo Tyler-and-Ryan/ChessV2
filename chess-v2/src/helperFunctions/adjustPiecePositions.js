@@ -5,7 +5,6 @@
  * empty
  */
 const adjustPiecePositions = (nodes, destinationTile, sourceTile) => {
-  //TODO: Figure out how to remove pawn from adjacent tile after en passant
   const isPawnMoving =
     sourceTile.altText === "White Pawn" || sourceTile.altText === "Black Pawn";
   let isEnPassant = false;
@@ -41,6 +40,7 @@ const adjustPiecePositions = (nodes, destinationTile, sourceTile) => {
           isHighlighted: false,
           isSelected: false,
           justMovedTwice: false,
+          hasKingMoved: true,
         };
       }
       return {
@@ -75,6 +75,7 @@ const adjustPiecePositions = (nodes, destinationTile, sourceTile) => {
         player: 2,
         isHighlighted: false,
         isSelected: false,
+        hasKingMoved: true,
       };
     } else if ( //reset tile being captured by en passant
       isEnPassant &&

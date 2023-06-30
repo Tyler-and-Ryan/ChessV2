@@ -23,7 +23,7 @@ import { kingPossibleMoves } from "./kingPossibleMoves";
 import generatePossibleMoves from "./generatePossibleMoves";
 
 //if there are 2 or more attackers, the king must move or checkmate
-const checkGameStatus = (nodes, edges) => {
+const checkGameStatus = (nodes, edges) => { //TODO: Rethink whether this function should change/how to use it
   let attackingWhiteKing = [];
   let attackingBlackKing = [];
   let whiteKingPossibleMoves = [];
@@ -56,9 +56,9 @@ const checkGameStatus = (nodes, edges) => {
   }
   if (!isWhiteInCheck && !isBlackInCheck) return "ongoing"; //neither player in check
 
-  const edgesForCheckmate = generatePossibleMoves(nodes, true);
+  const edgesForCheckmate = generatePossibleMoves(nodes, edges, true);
   if (isWhiteInCheck) {
-    whiteKingPossibleMoves = kingPossibleMoves(whiteKing, nodes);
+    whiteKingPossibleMoves = kingPossibleMoves(whiteKing, nodes, edges);
     for (let i = 0; i < whiteKingPossibleMoves.length; i++) {
         let isMoveInCheck = false;
         for (let j = 0; j < edgesForCheckmate; j++) {

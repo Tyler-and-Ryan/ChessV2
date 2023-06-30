@@ -1,9 +1,11 @@
+import { isCheck } from './isCheck.js';
+
 /*
  * param: node - a tile on the board that contains a rook
  *        nodes - the list of all tiles on the board
  * return: an array of objects where each object is an x,y pair that represents all possible legal move
  */
-const kingPossibleMoves = (node, nodes) => {
+const kingPossibleMoves = (node, nodes, edges = null) => {
   //TODO: Add a function call to isCheck before adding possible move
   //look one tile in each direction around the King
   //if tile is in bounds and not within 1 tile of the other King
@@ -160,6 +162,63 @@ const kingPossibleMoves = (node, nodes) => {
         { x: node.x + 1, y: String.fromCharCode(node.y.charCodeAt(0) - 1) },
       ]);
     }
+  }
+
+  const leftCastleIdx = nodes.at(currNodeIdx).player === 1 ? 0 : 56;
+  const rightCastleIdx = nodes.at(currNodeIdx).player === 1 ? 7 : 63;
+
+  //checking for castling opportunity with left rook
+  if (
+    //if left castle has not moved
+    !nodes.at(leftCastleIdx).hasKingMoved &&
+    //if left castle + 1 does not have a piece
+    !nodes.at(leftCastleIdx + 1).hasPiece &&
+    edges &&
+    //if left castle + 1 is not under attack (check)
+    !isCheck(nodes, leftCastleIdx + 1, edges) &&
+    //if left castle + 2 does not have a piece
+    !nodes.at(leftCastleIdx + 2).hasPiece &&
+    //if left castle + 2 is not under attack (check)
+    !isCheck(nodes, leftCastleIdx + 2, edges) &&
+    //if left castle + 3 does not have a piece
+    !nodes.at(leftCastleIdx + 3).hasPiece &&
+    //if left castle + 3 is not under attack (check)
+    !isCheck(nodes, leftCastleIdx + 3, edges) &&
+    //if king has not moved
+    !nodes.at(leftCastleIdx + 4).hasKingMoved &&
+    //if king is not under attack (check)
+    !isCheck(nodes, leftCastleIdx + 4, edges)
+  ) {
+    //add space two to the left of the king as possible move
+    possibleMoves.push([
+      { x: node.x, y: node.y },
+      { x: node.x, y: String.fromCharCode(node.y.charCodeAt(0) - 2) },
+    ]);
+  }
+
+   //checking for castling opportunity with right rook
+   if (
+    //if right castle has not moved
+    !nodes.at(rightCastleIdx).hasKingMoved &&
+    //if right castle - 1 does not have a piece
+    !nodes.at(rightCastleIdx - 1).hasPiece &&
+    edges &&
+    //if right castle - 1 is not under attack (check)
+    !isCheck(nodes, rightCastleIdx - 1, edges) &&
+    //if right castle - 2 does not have a piece
+    !nodes.at(rightCastleIdx - 2).hasPiece &&
+    //if right castle - 2 is not under attack (check)
+    !isCheck(nodes, rightCastleIdx - 2, edges) &&
+    //if king has not moved
+    !nodes.at(rightCastleIdx - 3).hasKingMoved &&
+    //if king is not under attack (check)
+    !isCheck(nodes, rightCastleIdx - 3, edges)
+  ) {
+    //add space two to the right of the king as possible move 
+    possibleMoves.push([
+      { x: node.x, y: node.y },
+      { x: node.x, y: String.fromCharCode(node.y.charCodeAt(0) + 2) },
+    ]);
   }
 
   return possibleMoves;

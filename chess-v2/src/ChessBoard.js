@@ -19,7 +19,10 @@ import { useChannelStateContext, useChatContext } from "stream-chat-react";
 const ChessBoard = (props) => {
   //initialize graph that stores board data
   const [nodes, setNodes] = useState(defaultNodes);
-  const [edges, setEdges] = useState(generatePossibleMoves(nodes));
+  const [edges, setEdges] = useState(generatePossibleMoves(defaultNodes, []));
+  const [edgesForKing, setEdgesForKing] = useState(
+    generatePossibleMoves(defaultNodes, [], true)
+  );
   const [playersJoined, setPlayersJoined] = useState(
     props.channel.state.watcher_count === 2
   );
@@ -32,11 +35,6 @@ const ChessBoard = (props) => {
   const ctx = useContext(UserContext);
   const { channel } = useChannelStateContext();
   const { client } = useChatContext();
-
-  // useEffect(() => {
-  //   //generate all edges again
-  //   //check if someone won or tied
-  // }, [nodes]);
 
   useEffect(() => {
     if (channel.state.watcher_count === 1) {
@@ -103,7 +101,7 @@ const ChessBoard = (props) => {
       currTile.altText === "White King" ||
       currTile.altText === "Black King"
     ) {
-      possibleMoves = kingPossibleMoves(currTile, nodes);
+      possibleMoves = kingPossibleMoves(currTile, nodes, edgesForKing);
     } else if (currTile.altText === "White Pawn") {
       possibleMoves = whitePawnPossibleMoves(currTile, nodes, false);
     } else if (currTile.altText === "Black Pawn") {
@@ -162,14 +160,14 @@ const ChessBoard = (props) => {
           node.x === Number(e.target.attributes.xlabel.value) &&
           node.y === e.target.attributes.ylabel.value
       )[0];
-      await channel.sendEvent({
-        type: "game-move",
-        data: {
-          sourceTile: sourceTile,
-          destinationTile: destinationTile,
-          player: player,
-        },
-      });
+      // await channel.sendEvent({
+      //   type: "game-move",
+      //   data: {
+      //     sourceTile: sourceTile,
+      //     destinationTile: destinationTile,
+      //     player: player,
+      //   },
+      // });
 
       //check for possibility of En Passant, mark the tile if so
       if (
@@ -181,20 +179,84 @@ const ChessBoard = (props) => {
           destinationTile.x === 5)
       ) {
         destinationTile.justMovedTwice = true;
-        //TODO: figure out why en passant doesn't show up as a possible move
-        console.log(
-          "[" +
-            destinationTile.x +
-            ", " +
-            destinationTile.y +
-            "] can be captured by en passant"
-        );
       }
-      const newNodes = adjustPiecePositions(nodes, destinationTile, sourceTile);
-      // newNodes.forEach((node) => {
-      //   console.log("[" + node.x + ", " + node.y + "] - justMovedTwice: " + node.justMovedTwice);
-      // });
+      let newNodes = adjustPiecePositions(nodes, destinationTile, sourceTile);
+      //check for possibility of a castle
+      //if king is moving two tiles, you know castling is occuring,
+      //so move the rook here
+      let sourceTileCastle = -1;
+      let destinationTileCastle = -1;
+      if (sourceTile.altText === "Black King") {
+        if (
+          Math.abs(sourceTile.y.charCodeAt(0) - destinationTile.y.charCodeAt(0)) >
+          1
+        ) {
+          if (sourceTile.y > destinationTile.y) {
+            //black castling left
+            newNodes.at(0).hasKingMoved = true;
+            sourceTileCastle = newNodes.at(0);
+            destinationTileCastle = newNodes.at(3);
+            newNodes = adjustPiecePositions(
+              newNodes,
+              newNodes.at(3),
+              newNodes.at(0)
+            );
+            
+          } else if (sourceTile.y < destinationTile.y) {
+            //black castling right
+            newNodes.at(7).hasKingMoved = true;
+            sourceTileCastle = newNodes.at(7);
+            destinationTileCastle = newNodes.at(5);
+            newNodes = adjustPiecePositions(
+              newNodes,
+              newNodes.at(5),
+              newNodes.at(7)
+            );
+          }
+        }
+      } else if (sourceTile.altText === "White King") {
+        if (
+          Math.abs(sourceTile.y.charCodeAt(0) - destinationTile.y.charCodeAt(0)) >
+          1
+        ) {
+          if (sourceTile.y > destinationTile.y) {
+            //white castling left
+            newNodes.at(56).hasKingMoved = true;
+            sourceTileCastle = newNodes.at(56);
+            destinationTileCastle = newNodes.at(59);
+            newNodes = adjustPiecePositions(
+              newNodes,
+              newNodes.at(59),
+              newNodes.at(56)
+            );
+          } else if (sourceTile.y < destinationTile.y) {
+            //white castling right
+            newNodes.at(63).hasKingMoved = true;
+            sourceTileCastle = newNodes.at(63);
+            destinationTileCastle = newNodes.at(61);
+            newNodes = adjustPiecePositions(
+              newNodes,
+              newNodes.at(61),
+              newNodes.at(63)
+            );
+          }
+        }
+      }
+
+      await channel.sendEvent({
+        type: "game-move",
+        data: {
+          sourceTile: sourceTile,
+          destinationTile: destinationTile,
+          player: player,
+          sourceTileCastle: sourceTileCastle,
+          destinationTileCastle: destinationTileCastle,
+        },
+      });
+
       setNodes(newNodes); //rerender board based on new highlighted states
+      setEdges(generatePossibleMoves(newNodes, edgesForKing));
+      setEdgesForKing(generatePossibleMoves(newNodes, edgesForKing, true));
     } else {
       props.showPopUp(0); //player tried to move when it wasn't their turn
       setTimeout(() => {
@@ -218,8 +280,17 @@ const ChessBoard = (props) => {
         setFirstMoveDone(true);
       }
       setTurn(currentPlayer);
-      let newNodes = adjustPiecePositions(
-        nodes,
+      let newNodes = nodes;
+      //moves the rook if other player just performed a castle
+      if (event.data.sourceTileCastle !== -1 && event.data.destinationTileCastle !== -1) {
+        newNodes = adjustPiecePositions(
+          newNodes,
+          event.data.destinationTileCastle,
+          event.data.sourceTileCastle
+        );
+      }
+      newNodes = adjustPiecePositions(
+        newNodes,
         event.data.destinationTile,
         event.data.sourceTile
       );
@@ -233,18 +304,79 @@ const ChessBoard = (props) => {
           event.data.sourceTile.x === 7 &&
           event.data.destinationTile.x === 5)
       ) {
-          newNodes = newNodes.map((node) => {
-            if (node.x === event.data.destinationTile.x && node.y === event.data.destinationTile.y) {
-              return {
-                ...node,
-                justMovedTwice: true
-              }
-            } else {
-              return node;
-            }
-          });
+        newNodes = newNodes.map((node) => {
+          if (
+            node.x === event.data.destinationTile.x &&
+            node.y === event.data.destinationTile.y
+          ) {
+            return {
+              ...node,
+              justMovedTwice: true,
+            };
+          } else {
+            return node;
+          }
+        });
       }
+
+      //check for possibility of a castle
+      //if king is moving two tiles, you know castling is occuring,
+      //so move the rook here
+      // if (event.data.sourceTile.altText === "Black King") {
+      //   if (
+      //     (Math.abs(event.data.sourceTile.y.charCodeAt(0) - event.data.destinationTile.y.charCodeAt(0))) >
+      //     1
+      //   ) {
+      //     if (event.data.sourceTile.y > event.data.destinationTile.y) {
+      //       console.log("black castling left");
+      //       //black castling left
+      //       newNodes.at(0).hasKingMoved = true;
+      //       newNodes = adjustPiecePositions(
+      //         newNodes,
+      //         newNodes.at(3),
+      //         newNodes.at(0)
+      //       );
+      //     } else if (event.data.sourceTile.y < event.data.destinationTile.y) {
+      //       console.log("black castling right");
+      //       //black castling right
+      //       newNodes.at(7).hasKingMoved = true;
+      //       newNodes = adjustPiecePositions(
+      //         newNodes,
+      //         newNodes.at(5),
+      //         newNodes.at(7)
+      //       );
+      //     }
+      //   }
+      // } else if (event.data.sourceTile.altText === "White King") {
+      //   if (
+      //     (Math.abs(event.data.sourceTile.y.charCodeAt(0) - event.data.destinationTile.y.charCodeAt(0))) >
+      //     1
+      //   ) {
+      //     if (event.data.sourceTile.y > event.data.destinationTile.y) {
+      //       console.log("white castling left");
+      //       //white castling left
+      //       newNodes.at(56).hasKingMoved = true;
+      //       newNodes = adjustPiecePositions(
+      //         newNodes,
+      //         newNodes.at(59),
+      //         newNodes.at(56)
+      //       );
+      //     } else if (event.data.sourceTile.y < event.data.destinationTile.y) {
+      //       console.log("white castling right");
+      //       //white castling right
+      //       newNodes.at(63).hasKingMoved = true;
+      //       newNodes = adjustPiecePositions(
+      //         newNodes,
+      //         newNodes.at(61),
+      //         newNodes.at(63)
+      //       );
+      //     }
+      //   }
+      // }
+
       setNodes(newNodes); //rerender board based on new highlighted states
+      setEdges(generatePossibleMoves(newNodes, edgesForKing));
+      setEdgesForKing(generatePossibleMoves(newNodes, edgesForKing, true));
     }
   });
 
