@@ -160,14 +160,6 @@ const ChessBoard = (props) => {
           node.x === Number(e.target.attributes.xlabel.value) &&
           node.y === e.target.attributes.ylabel.value
       )[0];
-      // await channel.sendEvent({
-      //   type: "game-move",
-      //   data: {
-      //     sourceTile: sourceTile,
-      //     destinationTile: destinationTile,
-      //     player: player,
-      //   },
-      // });
 
       //check for possibility of En Passant, mark the tile if so
       if (
@@ -254,9 +246,9 @@ const ChessBoard = (props) => {
         },
       });
 
-      setNodes(newNodes); //rerender board based on new highlighted states
-      setEdges(generatePossibleMoves(newNodes, edgesForKing));
-      setEdgesForKing(generatePossibleMoves(newNodes, edgesForKing, true));
+      setNodes(() => {return newNodes});
+      setEdges(() => {return generatePossibleMoves(newNodes, edgesForKing)});
+      setEdgesForKing(() => {return generatePossibleMoves(newNodes, edgesForKing, true)});
     } else {
       props.showPopUp(0); //player tried to move when it wasn't their turn
       setTimeout(() => {
@@ -374,9 +366,10 @@ const ChessBoard = (props) => {
       //   }
       // }
 
-      setNodes(newNodes); //rerender board based on new highlighted states
-      setEdges(generatePossibleMoves(newNodes, edgesForKing));
-      setEdgesForKing(generatePossibleMoves(newNodes, edgesForKing, true));
+      setNodes(() => {return newNodes}); //rerender board based on new highlighted states
+      console.log("Tile [7, a]: " + JSON.stringify(newNodes.at(8)));
+      setEdges(() => {return generatePossibleMoves(newNodes, edgesForKing)});
+      setEdgesForKing(() => {return generatePossibleMoves(newNodes, edgesForKing, true)});
     }
   });
 

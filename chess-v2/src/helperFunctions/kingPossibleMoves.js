@@ -6,7 +6,6 @@ import { isCheck } from './isCheck.js';
  * return: an array of objects where each object is an x,y pair that represents all possible legal move
  */
 const kingPossibleMoves = (node, nodes, edges = null) => {
-  //TODO: Add a function call to isCheck before adding possible move
   //look one tile in each direction around the King
   //if tile is in bounds and not within 1 tile of the other King
   //if it does not have a friendly piece, add it to possible moves
@@ -30,7 +29,9 @@ const kingPossibleMoves = (node, nodes, edges = null) => {
     !(
       Math.abs(otherKing.x - (node.x + 1)) <= 1 &&
       Math.abs(otherKing.y.charCodeAt(0) - node.y.charCodeAt(0)) <= 1
-    )
+    ) &&
+    edges &&
+    !isCheck(nodes, currNodeIdx - 1 * 8, edges)
   ) {
     //if checked tile does not have a friendly piece, it is a possible move
     if (nodes.at(currNodeIdx - 1 * 8).player !== node.player) {
@@ -48,7 +49,9 @@ const kingPossibleMoves = (node, nodes, edges = null) => {
     !(
       Math.abs(otherKing.x - (node.x + 1)) <= 1 &&
       Math.abs(otherKing.y.charCodeAt(0) - (node.y.charCodeAt(0) + 1)) <= 1
-    )
+    ) && 
+    edges &&
+    !isCheck(nodes, currNodeIdx - 1 * 8 + 1, edges)
   ) {
     //if checked tile does not have a friendly piece, it is a possible move
     if (nodes.at(currNodeIdx - 1 * 8 + 1).player !== node.player) {
@@ -65,7 +68,9 @@ const kingPossibleMoves = (node, nodes, edges = null) => {
     !(
       Math.abs(otherKing.x - node.x) <= 1 &&
       Math.abs(otherKing.y.charCodeAt(0) - (node.y.charCodeAt(0) + 1)) <= 1
-    )
+    ) &&
+    edges &&
+    !isCheck(nodes, currNodeIdx + 1, edges)
   ) {
     //if checked tile does not have a friendly piece, it is a possible move
     if (nodes.at(currNodeIdx + 1).player !== node.player) {
@@ -83,7 +88,9 @@ const kingPossibleMoves = (node, nodes, edges = null) => {
     !(
       Math.abs(otherKing.x - (node.x - 1)) <= 1 &&
       Math.abs(otherKing.y.charCodeAt(0) - (node.y.charCodeAt(0) + 1)) <= 1
-    )
+    ) &&
+    edges &&
+    !isCheck(nodes, currNodeIdx - 1 * 8 + 1, edges)
   ) {
     //if checked tile does not have a friendly piece, it is a possible move
     if (nodes.at(currNodeIdx + 1 * 8 + 1).player !== node.player) {
@@ -100,7 +107,9 @@ const kingPossibleMoves = (node, nodes, edges = null) => {
     !(
       Math.abs(otherKing.x - (node.x - 1)) <= 1 &&
       Math.abs(otherKing.y.charCodeAt(0) - node.y.charCodeAt(0)) <= 1
-    )
+    ) &&
+    edges &&
+    !isCheck(nodes, currNodeIdx + 1 * 8, edges)
   ) {
     //if checked tile does not have a friendly piece, it is a possible move
     if (nodes.at(currNodeIdx + 1 * 8).player !== node.player) {
@@ -118,7 +127,9 @@ const kingPossibleMoves = (node, nodes, edges = null) => {
     !(
       Math.abs(otherKing.x - (node.x - 1)) <= 1 &&
       Math.abs(otherKing.y.charCodeAt(0) - (node.y.charCodeAt(0) - 1)) <= 1
-    )
+    ) &&
+    edges &&
+    !isCheck(nodes, currNodeIdx + 1 * 8 - 1, edges)
   ) {
     //if checked tile does not have a friendly piece, it is a possible move
     if (nodes.at(currNodeIdx + 1 * 8 - 1).player !== node.player) {
@@ -135,7 +146,9 @@ const kingPossibleMoves = (node, nodes, edges = null) => {
     !(
       Math.abs(otherKing.x - node.x) <= 1 &&
       Math.abs(otherKing.y.charCodeAt(0) - (node.y.charCodeAt(0) - 1)) <= 1
-    )
+    ) &&
+    edges &&
+    !isCheck(nodes, currNodeIdx - 1, edges)
   ) {
     //if checked tile does not have a friendly piece, it is a possible move
     if (nodes.at(currNodeIdx - 1).player !== node.player) {
@@ -153,7 +166,9 @@ const kingPossibleMoves = (node, nodes, edges = null) => {
     !(
       Math.abs(otherKing.x - (node.x + 1)) <= 1 &&
       Math.abs(otherKing.y.charCodeAt(0) - (node.y.charCodeAt(0) - 1)) <= 1
-    )
+    ) &&
+    edges &&
+    !isCheck(nodes, currNodeIdx - 1 * 8 - 1, edges)
   ) {
     //if checked tile does not have a friendly piece, it is a possible move
     if (nodes.at(currNodeIdx - 1 * 8 - 1).player !== node.player) {

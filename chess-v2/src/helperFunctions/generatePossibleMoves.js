@@ -51,6 +51,11 @@ const generatePossibleMoves = (nodes, currentEdges, checkingForKing = false) => 
     });
   }
 
+  if (!checkingForKing) {
+    // console.log("updatedEdges.length: " + updatedEdges.length);
+    // console.log("updatedEdges: " + JSON.stringify(updatedEdges));
+  }
+
   return uniqueArray(updatedEdges);
 };
 
