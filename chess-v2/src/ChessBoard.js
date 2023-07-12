@@ -173,6 +173,15 @@ const ChessBoard = (props) => {
         destinationTile.justMovedTwice = true;
       }
       let newNodes = adjustPiecePositions(nodes, destinationTile, sourceTile);
+
+      //check if pawn promotion should be prompted
+      if ((sourceTile.altText === "White Pawn" && destinationTile.x === 8) || (sourceTile.altText === "Black Pawn" && destinationTile.x === 1)) {
+        //trigger a pop up prompt for the user to select which piece they want
+        //change the sourceTile according to what the user chooses 
+        //The sourceTile will then be moved to the destination tile by the following "game-move" event
+        
+    }
+
       //check for possibility of a castle
       //if king is moving two tiles, you know castling is occuring,
       //so move the rook here
@@ -249,6 +258,9 @@ const ChessBoard = (props) => {
       setNodes(() => {return newNodes});
       setEdges(() => {return generatePossibleMoves(newNodes, edgesForKing)});
       setEdgesForKing(() => {return generatePossibleMoves(newNodes, edgesForKing, true)});
+
+
+      
     } else {
       props.showPopUp(0); //player tried to move when it wasn't their turn
       setTimeout(() => {
