@@ -1,6 +1,7 @@
 import { React, Fragment, useState } from "react";
 import { useChatContext, Channel } from "stream-chat-react";
 import ChessBoard from "./ChessBoard.js";
+import Modal from "./uiComponents/Modal.js" //TODO: Remove after testing
 
 const JoinGame = (props) => {
   const [opponentUsername, setOpponentUsername] = useState("");
@@ -26,6 +27,7 @@ const JoinGame = (props) => {
   };
   return (
     <Fragment>
+      <Modal player={"White"} onImageClick={(e) => console.log(e.target)} />
       {channel ? (
         <Channel channel={channel}>
             <ChessBoard channel={channel} showPopUp={props.showPopUp} closePopUp={props.closePopUp} />

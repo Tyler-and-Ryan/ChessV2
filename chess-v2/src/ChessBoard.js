@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import "./ChessBoard.css";
+import Modal from "./uiComponents/Modal.js";
 import Tile from "./Tile.js";
 //deprecate defaultEdges once edge generation process is completed and QA'd
 import { defaultNodes } from "./data/defaultPositions.js";
@@ -29,6 +30,8 @@ const ChessBoard = (props) => {
   const [player, setPlayer] = useState("White");
   const [turn, setTurn] = useState("White");
   const [firstMoveDone, setFirstMoveDone] = useState(false);
+  const [showingPawnPromotionModal, setShowingPawnPromotionModal] =
+    useState(false);
   //TODO: put result state in parent component, pass setResult through props to here.
   //call setResult in the gamewin function when that is implemented
   const [result, setResult] = useState({ winner: "none", state: "none" });
@@ -44,6 +47,12 @@ const ChessBoard = (props) => {
       setPlayer("White");
     }
   }, [channel.state.watcher_count]);
+
+  const onImageClick = (e) => {
+    e.preventDefault();
+    console.log("e.target: " + e.target);
+    setShowingPawnPromotionModal(false);
+  };
 
   const tileOnClick = (e) => {
     if (
@@ -175,12 +184,15 @@ const ChessBoard = (props) => {
       let newNodes = adjustPiecePositions(nodes, destinationTile, sourceTile);
 
       //check if pawn promotion should be prompted
-      if ((sourceTile.altText === "White Pawn" && destinationTile.x === 8) || (sourceTile.altText === "Black Pawn" && destinationTile.x === 1)) {
+      if (
+        (sourceTile.altText === "White Pawn" && destinationTile.x === 8) ||
+        (sourceTile.altText === "Black Pawn" && destinationTile.x === 1)
+      ) {
         //trigger a pop up prompt for the user to select which piece they want
-        //change the sourceTile according to what the user chooses 
+        //change the sourceTile according to what the user chooses
         //The sourceTile will then be moved to the destination tile by the following "game-move" event
-        
-    }
+        setShowingPawnPromotionModal(true);
+      }
 
       //check for possibility of a castle
       //if king is moving two tiles, you know castling is occuring,
@@ -189,8 +201,9 @@ const ChessBoard = (props) => {
       let destinationTileCastle = -1;
       if (sourceTile.altText === "Black King") {
         if (
-          Math.abs(sourceTile.y.charCodeAt(0) - destinationTile.y.charCodeAt(0)) >
-          1
+          Math.abs(
+            sourceTile.y.charCodeAt(0) - destinationTile.y.charCodeAt(0)
+          ) > 1
         ) {
           if (sourceTile.y > destinationTile.y) {
             //black castling left
@@ -202,7 +215,6 @@ const ChessBoard = (props) => {
               newNodes.at(3),
               newNodes.at(0)
             );
-            
           } else if (sourceTile.y < destinationTile.y) {
             //black castling right
             newNodes.at(7).hasKingMoved = true;
@@ -217,8 +229,9 @@ const ChessBoard = (props) => {
         }
       } else if (sourceTile.altText === "White King") {
         if (
-          Math.abs(sourceTile.y.charCodeAt(0) - destinationTile.y.charCodeAt(0)) >
-          1
+          Math.abs(
+            sourceTile.y.charCodeAt(0) - destinationTile.y.charCodeAt(0)
+          ) > 1
         ) {
           if (sourceTile.y > destinationTile.y) {
             //white castling left
@@ -255,12 +268,15 @@ const ChessBoard = (props) => {
         },
       });
 
-      setNodes(() => {return newNodes});
-      setEdges(() => {return generatePossibleMoves(newNodes, edgesForKing)});
-      setEdgesForKing(() => {return generatePossibleMoves(newNodes, edgesForKing, true)});
-
-
-      
+      setNodes(() => {
+        return newNodes;
+      });
+      setEdges(() => {
+        return generatePossibleMoves(newNodes, edgesForKing);
+      });
+      setEdgesForKing(() => {
+        return generatePossibleMoves(newNodes, edgesForKing, true);
+      });
     } else {
       props.showPopUp(0); //player tried to move when it wasn't their turn
       setTimeout(() => {
@@ -286,7 +302,10 @@ const ChessBoard = (props) => {
       setTurn(currentPlayer);
       let newNodes = nodes;
       //moves the rook if other player just performed a castle
-      if (event.data.sourceTileCastle !== -1 && event.data.destinationTileCastle !== -1) {
+      if (
+        event.data.sourceTileCastle !== -1 &&
+        event.data.destinationTileCastle !== -1
+      ) {
         newNodes = adjustPiecePositions(
           newNodes,
           event.data.destinationTileCastle,
@@ -378,10 +397,16 @@ const ChessBoard = (props) => {
       //   }
       // }
 
-      setNodes(() => {return newNodes}); //rerender board based on new highlighted states
+      setNodes(() => {
+        return newNodes;
+      }); //rerender board based on new highlighted states
       console.log("Tile [7, a]: " + JSON.stringify(newNodes.at(8)));
-      setEdges(() => {return generatePossibleMoves(newNodes, edgesForKing)});
-      setEdgesForKing(() => {return generatePossibleMoves(newNodes, edgesForKing, true)});
+      setEdges(() => {
+        return generatePossibleMoves(newNodes, edgesForKing);
+      });
+      setEdgesForKing(() => {
+        return generatePossibleMoves(newNodes, edgesForKing, true);
+      });
     }
   });
 
@@ -390,36 +415,17 @@ const ChessBoard = (props) => {
   }
 
   return (
-    <div
-      className={
-        ctx.playerColor === "White"
-          ? "ChessBoardContainerWhitePlayer"
-          : "ChessBoardContainerBlackPlayer"
-      }
-    >
-      {ctx.playerColor === "White"
-        ? nodes.map((node) => {
-            return (
-              <Tile
-                justifyLabel={ctx.playerColor} //adjusts the axis labels based on which player is playing
-                isHighlighted={node.isHighlighted}
-                isSelected={node.isSelected}
-                movePiece={movePiece}
-                tileOnClick={tileOnClick}
-                svg={node.svg}
-                altText={node.altText}
-                x={node.x}
-                y={node.y}
-                hasPiece={node.hasPiece}
-                key={Math.random()}
-              />
-            );
-          })
-        : nodes
-            .slice()
-            .reverse()
-            .map((node) => {
-              //flips the board if player is controlling black pieces
+    <>
+      {showingPawnPromotionModal && <Modal player={ctx.playerColor} onImageClick={onImageClick} />}
+      <div
+        className={
+          ctx.playerColor === "White"
+            ? "ChessBoardContainerWhitePlayer"
+            : "ChessBoardContainerBlackPlayer"
+        }
+      >
+        {ctx.playerColor === "White"
+          ? nodes.map((node) => {
               return (
                 <Tile
                   justifyLabel={ctx.playerColor} //adjusts the axis labels based on which player is playing
@@ -435,8 +441,30 @@ const ChessBoard = (props) => {
                   key={Math.random()}
                 />
               );
-            })}
-    </div>
+            })
+          : nodes
+              .slice()
+              .reverse()
+              .map((node) => {
+                //flips the board if player is controlling black pieces
+                return (
+                  <Tile
+                    justifyLabel={ctx.playerColor} //adjusts the axis labels based on which player is playing
+                    isHighlighted={node.isHighlighted}
+                    isSelected={node.isSelected}
+                    movePiece={movePiece}
+                    tileOnClick={tileOnClick}
+                    svg={node.svg}
+                    altText={node.altText}
+                    x={node.x}
+                    y={node.y}
+                    hasPiece={node.hasPiece}
+                    key={Math.random()}
+                  />
+                );
+              })}
+      </div>
+    </>
   );
 };
 
