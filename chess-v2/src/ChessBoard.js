@@ -16,6 +16,14 @@ import adjustPiecePositions from "./helperFunctions/adjustPiecePositions";
 import UserContext from "./store/user-context.js";
 import { highlightCurrentNode } from "./helperFunctions/highlightCurrentNode";
 import { useChannelStateContext, useChatContext } from "stream-chat-react";
+import blackBishop from "./visualAssets/blackBishop.svg";
+import whiteBishop from "./visualAssets/whiteBishop.svg";
+import blackKnight from "./visualAssets/blackKnight.svg";
+import whiteKnight from "./visualAssets/whiteKnight.svg";
+import blackQueen from "./visualAssets/blackQueen.svg";
+import whiteQueen from "./visualAssets/whiteQueen.svg";
+import blackRook from "./visualAssets/blackRook.svg";
+import whiteRook from "./visualAssets/whiteRook.svg";
 
 const ChessBoard = (props) => {
   //initialize graph that stores board data
@@ -38,6 +46,7 @@ const ChessBoard = (props) => {
   const ctx = useContext(UserContext);
   const { channel } = useChannelStateContext();
   const { client } = useChatContext();
+  let pawnPromotionTile = null;
 
   useEffect(() => {
     if (channel.state.watcher_count === 1) {
@@ -48,9 +57,90 @@ const ChessBoard = (props) => {
     }
   }, [channel.state.watcher_count]);
 
-  const onImageClick = (e) => {
+  const onImageClick = async (e) => {
     e.preventDefault();
-    console.log("e.target: " + e.target);
+    if (pawnPromotionTile === null) {
+      const pawnPromotionTileArr = nodes.filter(node => (node.x === 8 && node.altText === "White Pawn") || (node.x === 1 && node.altText === "Black Pawn"));
+      pawnPromotionTile = pawnPromotionTileArr[0];
+    }
+    let newNodes = nodes;
+    if (e.target.alt === "White Queen") {
+      newNodes = nodes.map((node) => {
+        if (node.x === pawnPromotionTile.x && node.y === pawnPromotionTile.y) {
+          return {...node, altText: "White Queen", svg: whiteQueen}
+        }
+        return node;
+      });
+    } else if (e.target.alt === "Black Queen") {
+      newNodes = nodes.map((node) => {
+        if (node.x === pawnPromotionTile.x && node.y === pawnPromotionTile.y) {
+          return {...node, altText: "Black Queen", svg: blackQueen}
+        }
+        return node;
+      });
+    } else if (e.target.alt === "White Bishop") {
+      newNodes = nodes.map((node) => {
+        if (node.x === pawnPromotionTile.x && node.y === pawnPromotionTile.y) {
+          return {...node, altText: "White Bishop", svg: whiteBishop}
+        }
+        return node;
+      });
+    } else if (e.target.alt === "Black Bishop") {
+      newNodes = nodes.map((node) => {
+        if (node.x === pawnPromotionTile.x && node.y === pawnPromotionTile.y) {
+          return {...node, altText: "Black Bishop", svg: blackBishop}
+        }
+        return node;
+      });
+    } else if (e.target.alt === "White Knight") {
+      newNodes = nodes.map((node) => {
+        if (node.x === e.target.alt.x && node.y === e.target.alt.y) {
+          return {...node, altText: "White Knight", svg: whiteKnight}
+        }
+        return node;
+      });
+    } else if (e.target.alt === "Black Knight") {
+      newNodes = nodes.map((node) => {
+        if (node.x === e.target.alt.x && node.y === e.target.alt.y) {
+          return {...node, altText: "Black Knight", svg: blackKnight}
+        }
+        return node;
+      });
+    } else if (e.target.alt === "White Rook") {
+      newNodes = nodes.map((node) => {
+        if (node.x === e.target.alt.x && node.y === e.target.alt.y) {
+          return {...node, altText: "White Rook", svg: whiteRook}
+        }
+        return node;
+      });
+    } else if (e.target.alt === "Black Rook") {
+      newNodes = nodes.map((node) => {
+        if (node.x === e.target.alt.x && node.y === e.target.alt.y) {
+          return {...node, altText: "Black Rook", svg: blackRook}
+        }
+        return node;
+      });
+    }
+
+    //send signal to opponent so they update their boardstate
+    await channel.sendEvent({
+      type: "pawn-promotion",
+      data: {
+        player: player,
+        promotionPiece: e.target.alt,
+      },
+    });
+
+    setNodes(() => {
+      return newNodes;
+    }); //rerender board based on new highlighted states
+    setEdges(() => {
+      return generatePossibleMoves(newNodes, edgesForKing);
+    });
+    setEdgesForKing(() => {
+      return generatePossibleMoves(newNodes, edgesForKing, true);
+    });
+    pawnPromotionTile = null; //reset the pawn promotion tile
     setShowingPawnPromotionModal(false);
   };
 
@@ -181,18 +271,23 @@ const ChessBoard = (props) => {
       ) {
         destinationTile.justMovedTwice = true;
       }
-      let newNodes = adjustPiecePositions(nodes, destinationTile, sourceTile);
-
+      
       //check if pawn promotion should be prompted
       if (
         (sourceTile.altText === "White Pawn" && destinationTile.x === 8) ||
-        (sourceTile.altText === "Black Pawn" && destinationTile.x === 1)
+        (sourceTile.altText === "Black Pawn" && destinationTile.x === 1) //TODO: figure out if turn/player is set properly
       ) {
         //trigger a pop up prompt for the user to select which piece they want
         //change the sourceTile according to what the user chooses
         //The sourceTile will then be moved to the destination tile by the following "game-move" event
+        pawnPromotionTile = {
+          x: destinationTile.x,
+          y: destinationTile.y,
+        };
         setShowingPawnPromotionModal(true);
       }
+
+      let newNodes = adjustPiecePositions(nodes, destinationTile, sourceTile);
 
       //check for possibility of a castle
       //if king is moving two tiles, you know castling is occuring,
@@ -293,120 +388,155 @@ const ChessBoard = (props) => {
 
   //props.channel and channel are the same object, passed to this component different ways
   channel.on((event) => {
-    if (event.type === "game-move" && event.user.id !== client.userID) {
-      const currentPlayer = event.data.player === "White" ? "Black" : "White";
-      setPlayer(currentPlayer);
-      if (!firstMoveDone) {
-        setFirstMoveDone(true);
-      }
-      setTurn(currentPlayer);
-      let newNodes = nodes;
-      //moves the rook if other player just performed a castle
-      if (
-        event.data.sourceTileCastle !== -1 &&
-        event.data.destinationTileCastle !== -1
-      ) {
+    if (event.user.id !== client.userID) {
+      if (event.type === "game-move") {
+        if (!firstMoveDone) {
+          setFirstMoveDone(true);
+        }
+        //check if pawn promotion is occuring
+        if (
+          (event.data.sourceTile.altText === "White Pawn" &&
+            event.data.destinationTile.x === 8) ||
+          (event.data.sourceTile.altText === "Black Pawn" &&
+            event.data.destinationTile.x === 1)
+        ) {
+          //if pawn promotion is occuring, wait for pawn-promotion event to change turn
+          pawnPromotionTile = {
+            x: event.data.destinationTile.x,
+            y: event.data.destinationTile.y,
+          };
+        } else {
+          //if not pawn promotion, change turns
+          const currentPlayer = event.data.player === "White" ? "Black" : "White";
+          setPlayer(currentPlayer);
+          setTurn(currentPlayer);
+        }
+        let newNodes = nodes;
+        //moves the rook if other player just performed a castle
+        if (
+          event.data.sourceTileCastle !== -1 &&
+          event.data.destinationTileCastle !== -1
+        ) {
+          newNodes = adjustPiecePositions(
+            newNodes,
+            event.data.destinationTileCastle,
+            event.data.sourceTileCastle
+          );
+        }
         newNodes = adjustPiecePositions(
           newNodes,
-          event.data.destinationTileCastle,
-          event.data.sourceTileCastle
+          event.data.destinationTile,
+          event.data.sourceTile
         );
-      }
-      newNodes = adjustPiecePositions(
-        newNodes,
-        event.data.destinationTile,
-        event.data.sourceTile
-      );
 
-      //check for possibility of En Passant, mark the tile if so
-      if (
-        (event.data.sourceTile.altText === "White Pawn" &&
-          event.data.sourceTile.x === 2 &&
-          event.data.destinationTile.x === 4) ||
-        (event.data.sourceTile.altText === "Black Pawn" &&
-          event.data.sourceTile.x === 7 &&
-          event.data.destinationTile.x === 5)
-      ) {
-        newNodes = newNodes.map((node) => {
-          if (
-            node.x === event.data.destinationTile.x &&
-            node.y === event.data.destinationTile.y
-          ) {
-            return {
-              ...node,
-              justMovedTwice: true,
-            };
-          } else {
-            return node;
-          }
+        //check for possibility of En Passant, mark the tile if so
+        if (
+          (event.data.sourceTile.altText === "White Pawn" &&
+            event.data.sourceTile.x === 2 &&
+            event.data.destinationTile.x === 4) ||
+          (event.data.sourceTile.altText === "Black Pawn" &&
+            event.data.sourceTile.x === 7 &&
+            event.data.destinationTile.x === 5)
+        ) {
+          newNodes = newNodes.map((node) => {
+            if (
+              node.x === event.data.destinationTile.x &&
+              node.y === event.data.destinationTile.y
+            ) {
+              return {
+                ...node,
+                justMovedTwice: true,
+              };
+            } else {
+              return node;
+            }
+          });
+        }
+
+        setNodes(() => {
+          return newNodes;
+        }); //rerender board based on new highlighted states
+        setEdges(() => {
+          return generatePossibleMoves(newNodes, edgesForKing);
         });
+        setEdgesForKing(() => {
+          return generatePossibleMoves(newNodes, edgesForKing, true);
+        });
+      } else if (event.type === "pawn-promotion") {
+        //now that opponent has selected which piece they want to promote to, the turn can be changed
+        const currentPlayer = event.data.player === "White" ? "Black" : "White";
+        setPlayer(currentPlayer);
+        setTurn(currentPlayer);
+        if (pawnPromotionTile == null) return;
+        let newNodes = nodes;
+        if (event.data.promotionPiece === "White Queen") {
+          newNodes = nodes.map((node) => {
+            if (node.x === pawnPromotionTile.x && node.y === pawnPromotionTile.y) {
+              return {...node, altText: "White Queen", svg: whiteQueen}
+            }
+            return node;
+          });
+        } else if (event.data.promotionPiece === "Black Queen") {
+          newNodes = nodes.map((node) => {
+            if (node.x === pawnPromotionTile.x && node.y === pawnPromotionTile.y) {
+              return {...node, altText: "Black Queen", svg: blackQueen}
+            }
+            return node;
+          });
+        } else if (event.data.promotionPiece === "White Bishop") {
+          newNodes = nodes.map((node) => {
+            if (node.x === pawnPromotionTile.x && node.y === pawnPromotionTile.y) {
+              return {...node, altText: "White Bishop", svg: whiteBishop}
+            }
+            return node;
+          });
+        } else if (event.data.promotionPiece === "Black Bishop") {
+          newNodes = nodes.map((node) => {
+            if (node.x === pawnPromotionTile.x && node.y === pawnPromotionTile.y) {
+              return {...node, altText: "Black Bishop", svg: blackBishop}
+            }
+            return node;
+          });
+        } else if (event.data.promotionPiece === "White Knight") {
+          newNodes = nodes.map((node) => {
+            if (node.x === pawnPromotionTile.x && node.y === pawnPromotionTile.y) {
+              return {...node, altText: "White Knight", svg: whiteKnight}
+            }
+            return node;
+          });
+        } else if (event.data.promotionPiece === "Black Knight") {
+          newNodes = nodes.map((node) => {
+            if (node.x === pawnPromotionTile.x && node.y === pawnPromotionTile.y) {
+              return {...node, altText: "Black Knight", svg: blackKnight}
+            }
+            return node;
+          });
+        } else if (event.data.promotionPiece === "White Rook") {
+          newNodes = nodes.map((node) => {
+            if (node.x === pawnPromotionTile.x && node.y === pawnPromotionTile.y) {
+              return {...node, altText: "White Rook", svg: whiteRook}
+            }
+            return node;
+          });
+        } else if (event.data.promotionPiece === "Black Rook") {
+          newNodes = nodes.map((node) => {
+            if (node.x === pawnPromotionTile.x && node.y === pawnPromotionTile.y) {
+              return {...node, altText: "Black Rook", svg: blackRook}
+            }
+            return node;
+          });
+        }
+        setNodes(() => {
+          return newNodes;
+        }); //rerender board based on new highlighted states
+        setEdges(() => {
+          return generatePossibleMoves(newNodes, edgesForKing);
+        });
+        setEdgesForKing(() => {
+          return generatePossibleMoves(newNodes, edgesForKing, true);
+        });
+        pawnPromotionTile = null; //reset the pawn promotion tile
       }
-
-      //check for possibility of a castle
-      //if king is moving two tiles, you know castling is occuring,
-      //so move the rook here
-      // if (event.data.sourceTile.altText === "Black King") {
-      //   if (
-      //     (Math.abs(event.data.sourceTile.y.charCodeAt(0) - event.data.destinationTile.y.charCodeAt(0))) >
-      //     1
-      //   ) {
-      //     if (event.data.sourceTile.y > event.data.destinationTile.y) {
-      //       console.log("black castling left");
-      //       //black castling left
-      //       newNodes.at(0).hasKingMoved = true;
-      //       newNodes = adjustPiecePositions(
-      //         newNodes,
-      //         newNodes.at(3),
-      //         newNodes.at(0)
-      //       );
-      //     } else if (event.data.sourceTile.y < event.data.destinationTile.y) {
-      //       console.log("black castling right");
-      //       //black castling right
-      //       newNodes.at(7).hasKingMoved = true;
-      //       newNodes = adjustPiecePositions(
-      //         newNodes,
-      //         newNodes.at(5),
-      //         newNodes.at(7)
-      //       );
-      //     }
-      //   }
-      // } else if (event.data.sourceTile.altText === "White King") {
-      //   if (
-      //     (Math.abs(event.data.sourceTile.y.charCodeAt(0) - event.data.destinationTile.y.charCodeAt(0))) >
-      //     1
-      //   ) {
-      //     if (event.data.sourceTile.y > event.data.destinationTile.y) {
-      //       console.log("white castling left");
-      //       //white castling left
-      //       newNodes.at(56).hasKingMoved = true;
-      //       newNodes = adjustPiecePositions(
-      //         newNodes,
-      //         newNodes.at(59),
-      //         newNodes.at(56)
-      //       );
-      //     } else if (event.data.sourceTile.y < event.data.destinationTile.y) {
-      //       console.log("white castling right");
-      //       //white castling right
-      //       newNodes.at(63).hasKingMoved = true;
-      //       newNodes = adjustPiecePositions(
-      //         newNodes,
-      //         newNodes.at(61),
-      //         newNodes.at(63)
-      //       );
-      //     }
-      //   }
-      // }
-
-      setNodes(() => {
-        return newNodes;
-      }); //rerender board based on new highlighted states
-      console.log("Tile [7, a]: " + JSON.stringify(newNodes.at(8)));
-      setEdges(() => {
-        return generatePossibleMoves(newNodes, edgesForKing);
-      });
-      setEdgesForKing(() => {
-        return generatePossibleMoves(newNodes, edgesForKing, true);
-      });
     }
   });
 
@@ -416,7 +546,9 @@ const ChessBoard = (props) => {
 
   return (
     <>
-      {showingPawnPromotionModal && <Modal player={ctx.playerColor} onImageClick={onImageClick} />}
+      {showingPawnPromotionModal && (
+        <Modal player={ctx.playerColor} onImageClick={onImageClick} />
+      )}
       <div
         className={
           ctx.playerColor === "White"
