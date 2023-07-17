@@ -19,8 +19,10 @@ const App = () => {
   const token = cookies.get("token");
   const ctx = useContext(UserContext);
   const [popUpOpen, setPopUpOpen] = useState(false);
-  let isWrongTurn = false;
-  let isIllegalMove = false;
+  const [isWrongTurn, setIsWrongTurn] = useState(false);
+  const [isIllegalMove, setIsIllegalMove] = useState(false);
+  const [whoInCheck, setWhoInCheck] = useState("");
+  const [gameWon, setGameWon] = useState("");
 
   useEffect(() => {
     if (token) {
@@ -60,21 +62,39 @@ const App = () => {
   const showPopUp = (popUpCode) => {
     switch(popUpCode) {
       case 0:
-        isWrongTurn = true;
+        setIsWrongTurn(true);
         setPopUpOpen(true);
         break;
       case 1:
-        isIllegalMove = true;
+        setIsIllegalMove(true);
+        setPopUpOpen(true);
+        break;
+      case 2:
+        setWhoInCheck("whiteInCheck");
+        setPopUpOpen(true);
+        break;
+      case 3: 
+        setWhoInCheck("blackInCheck");
+        setPopUpOpen(true);
+        break;
+      case 4:
+        setGameWon("whiteWon");
+        setPopUpOpen(true);
+        break;
+      case 5:
+        setGameWon("blackWon");
         setPopUpOpen(true);
         break;
       default: 
-        console.log("something went wrong");
+        console.log("something went wrong when showing the pop up");
     }
   };
 
   const closePopUp = () => {
-    isWrongTurn = false;
-    isIllegalMove = false;
+    setIsWrongTurn(false);
+    setIsIllegalMove(false);
+    setWhoInCheck("");
+    setGameWon("");
     setPopUpOpen(false);
   }
 
@@ -105,6 +125,8 @@ const App = () => {
             {popUpOpen && <PopUp
               WRONG_TURN={isWrongTurn}
               ILLEGAL_MOVE={isIllegalMove}
+              IN_CHECK={whoInCheck}
+              GAME_WON={gameWon}
               closePopUp={closePopUp}
             />}
           </header>

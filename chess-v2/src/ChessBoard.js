@@ -24,6 +24,8 @@ import blackQueen from "./visualAssets/blackQueen.svg";
 import whiteQueen from "./visualAssets/whiteQueen.svg";
 import blackRook from "./visualAssets/blackRook.svg";
 import whiteRook from "./visualAssets/whiteRook.svg";
+import checkGameStatus from "./helperFunctions/checkGameStatus";
+import { isCheck } from "./helperFunctions/isCheck";
 
 const ChessBoard = (props) => {
   //initialize graph that stores board data
@@ -275,7 +277,7 @@ const ChessBoard = (props) => {
       //check if pawn promotion should be prompted
       if (
         (sourceTile.altText === "White Pawn" && destinationTile.x === 8) ||
-        (sourceTile.altText === "Black Pawn" && destinationTile.x === 1) //TODO: figure out if turn/player is set properly
+        (sourceTile.altText === "Black Pawn" && destinationTile.x === 1)
       ) {
         //trigger a pop up prompt for the user to select which piece they want
         //change the sourceTile according to what the user chooses
@@ -365,13 +367,44 @@ const ChessBoard = (props) => {
 
       setNodes(() => {
         return newNodes;
-      });
+      }); //rerender board based on new highlighted states
+      const newEdges = generatePossibleMoves(newNodes, edgesForKing);
       setEdges(() => {
-        return generatePossibleMoves(newNodes, edgesForKing);
+        return newEdges;
       });
+      const newEdgesForKing = generatePossibleMoves(newNodes, edgesForKing, true);
       setEdgesForKing(() => {
-        return generatePossibleMoves(newNodes, edgesForKing, true);
+        return newEdgesForKing;
       });
+      const gameStatus = checkGameStatus(newNodes, newEdges, newEdgesForKing);
+      await channel.sendEvent({
+        type: "game-status",
+        data: {
+          gameStatus: gameStatus
+        },
+      });
+      if (gameStatus === "whiteInCheck") {
+        props.showPopUp(2); //alerting player of check
+        setTimeout(() => {
+          props.closePopUp();
+        }, 3400);
+      } else if (gameStatus === "blackInCheck") {
+        props.showPopUp(3); //alerting player of check
+        setTimeout(() => {
+          props.closePopUp();
+        }, 3400);
+      } else if (gameStatus === "whiteWon") {
+        props.showPopUp(4); //alerting player that game has been won
+        setTimeout(() => {
+          props.closePopUp();
+        }, 3400);
+      } else if (gameStatus === "blackWon") {
+        props.showPopUp(5); //alerting player that game has been won
+        setTimeout(() => {
+          props.closePopUp();
+        }, 3400);
+      }
+      console.log("gameStatus: " + gameStatus);
     } else {
       props.showPopUp(0); //player tried to move when it wasn't their turn
       setTimeout(() => {
@@ -456,11 +489,13 @@ const ChessBoard = (props) => {
         setNodes(() => {
           return newNodes;
         }); //rerender board based on new highlighted states
+        const newEdges = generatePossibleMoves(newNodes, edgesForKing);
         setEdges(() => {
-          return generatePossibleMoves(newNodes, edgesForKing);
+          return newEdges;
         });
+        const newEdgesForKing = generatePossibleMoves(newNodes, edgesForKing, true);
         setEdgesForKing(() => {
-          return generatePossibleMoves(newNodes, edgesForKing, true);
+          return newEdgesForKing;
         });
       } else if (event.type === "pawn-promotion") {
         //now that opponent has selected which piece they want to promote to, the turn can be changed
@@ -529,13 +564,39 @@ const ChessBoard = (props) => {
         setNodes(() => {
           return newNodes;
         }); //rerender board based on new highlighted states
+        const newEdges = generatePossibleMoves(newNodes, edgesForKing);
         setEdges(() => {
-          return generatePossibleMoves(newNodes, edgesForKing);
+          return newEdges;
         });
+        const newEdgesForKing = generatePossibleMoves(newNodes, edgesForKing, true);
         setEdgesForKing(() => {
-          return generatePossibleMoves(newNodes, edgesForKing, true);
+          return newEdgesForKing;
         });
+
         pawnPromotionTile = null; //reset the pawn promotion tile
+      } else if (event.type === "game-status") {
+        if (event.data.gameStatus === "whiteInCheck") {
+          props.showPopUp(2); //alerting player of check
+          setTimeout(() => {
+            props.closePopUp();
+          }, 3400);
+        } else if (event.data.gameStatus === "blackInCheck") {
+          props.showPopUp(3); //alerting player of check
+          setTimeout(() => {
+            props.closePopUp();
+          }, 3400);
+        } else if (event.data.gameStatus === "whiteWon") {
+          props.showPopUp(4); //alerting player that game has been won
+          setTimeout(() => {
+            props.closePopUp();
+          }, 3400);
+        } else if (event.data.gameStatus === "blackWon") {
+          props.showPopUp(5); //alerting player that game has been won
+          setTimeout(() => {
+            props.closePopUp();
+          }, 3400);
+        }
+        console.log("gameStatus: " + event.data.gameStatus);
       }
     }
   });

@@ -1,9 +1,10 @@
 /*
  * param: node - a tile on the board that contains a rook
  *        nodes - the list of all tiles on the board
+ *        checkingForKing - consider friendly pieces as possible to be taken. This is useful for seeing which pieces the King can take or not
  * return: an array of objects where each object is an x,y pair that represents all possible legal move
  */
-const bishopPossibleMoves = (node, nodes) => {
+const bishopPossibleMoves = (node, nodes, checkingForKing = false) => {
   //look in each diagonal (upright, upleft, downright, downleft) until the edge of the board or a friendly/enemy tile is reached
   //while looking in each direction, add empty tiles to the possible moves list
   //if the edge of the board is found, do not include moves out of bounds, break out of the loop
@@ -25,11 +26,13 @@ const bishopPossibleMoves = (node, nodes) => {
     //looking upright
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
-      if (bishopPlayer !== checkTile.player) {
+      if (bishopPlayer !== checkTile.player || checkingForKing) {
+        //enemy piece in the way, add to possibleMoves then break
+        //also add if it is a friendly piece and checkingForKing
         possibleMoves.push([
           { x: node.x, y: node.y },
           { x: checkTile.x, y: checkTile.y },
-        ]); //enemy piece in the way, add to possibleMoves then break;
+        ]);
       }
       break; //friendly piece in the way, don't add to possibleMoves
     }
@@ -51,11 +54,13 @@ const bishopPossibleMoves = (node, nodes) => {
     //looking upleft
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
-      if (bishopPlayer !== checkTile.player) {
+      if (bishopPlayer !== checkTile.player  || checkingForKing) {
+        //enemy piece in the way, add to possibleMoves then break
+        //also add if it is a friendly piece and checkingForKing
         possibleMoves.push([
           { x: node.x, y: node.y },
           { x: checkTile.x, y: checkTile.y },
-        ]); //enemy piece in the way, add to possibleMoves then break;
+        ]);
       }
       break; //friendly piece in the way, don't add to possibleMoves
     }
@@ -77,11 +82,13 @@ const bishopPossibleMoves = (node, nodes) => {
     //looking downright
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
-      if (bishopPlayer !== checkTile.player) {
+      if (bishopPlayer !== checkTile.player || checkingForKing) {
+        //enemy piece in the way, add to possibleMoves then break
+        //also add if it is a friendly piece and checkingForKing
         possibleMoves.push([
           { x: node.x, y: node.y },
           { x: checkTile.x, y: checkTile.y },
-        ]); //enemy piece in the way, add to possibleMoves then break;
+        ]);
       }
       break; //friendly piece in the way, don't add to possibleMoves
     }
@@ -103,11 +110,13 @@ const bishopPossibleMoves = (node, nodes) => {
     //looking downleft
     let checkTile = nodes.at(currTileIdx);
     if (checkTile.hasPiece) {
-      if (bishopPlayer !== checkTile.player) {
+      if (bishopPlayer !== checkTile.player || checkingForKing) {
+        //enemy piece in the way, add to possibleMoves then break
+        //also add if it is a friendly piece and checkingForKing
         possibleMoves.push([
           { x: node.x, y: node.y },
           { x: checkTile.x, y: checkTile.y },
-        ]); //enemy piece in the way, add to possibleMoves then break;
+        ]);
       }
       break; //friendly piece in the way, don't add to possibleMoves
     }

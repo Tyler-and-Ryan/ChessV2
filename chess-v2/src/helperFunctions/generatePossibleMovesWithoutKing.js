@@ -2,15 +2,14 @@ import { rookPossibleMoves } from "./rookPossibleMoves";
 import { knightPossibleMoves } from "./knightPossibleMoves";
 import { bishopPossibleMoves } from "./bishopPossibleMoves";
 import { queenPossibleMoves } from "./queenPossibleMoves";
-import { kingPossibleMoves } from "./kingPossibleMoves";
 import { whitePawnPossibleMoves } from "./whitePawnPossibleMoves";
 import { blackPawnPossibleMoves } from "./blackPawnPossibleMoves";
 
 /* Assumption: Tiles/nodes have already been updated to reflect the
  *             move that just occurred
- * Goal: return new array with all edges - loop through all nodes and add on to edges array iteratively
+ * Goal: return new array with all edges - loop through all nodes and add on to edges array iteratively. Exclude the king from this function so no infinite loops occur
  */
-const generatePossibleMoves = (nodes, currentEdges, checkingForKing = false) => {
+const generatePossibleMovesWithoutKing = (nodes, checkingForKing = false) => {
   let updatedEdges = [];
 
   for (let i = 0; i < nodes.length; i++) {
@@ -39,7 +38,7 @@ const generatePossibleMoves = (nodes, currentEdges, checkingForKing = false) => 
       nodes.at(i).altText === "White King" ||
       nodes.at(i).altText === "Black King"
     ) {
-      possibleMoves = kingPossibleMoves(nodes.at(i), nodes, currentEdges);
+        //do nothing
     } else if (nodes.at(i).altText === "White Pawn") {
       possibleMoves = whitePawnPossibleMoves(nodes.at(i), nodes, checkingForKing);
     } else if (nodes.at(i).altText === "Black Pawn") {
@@ -53,4 +52,4 @@ const generatePossibleMoves = (nodes, currentEdges, checkingForKing = false) => 
   return updatedEdges;
 };
 
-export default generatePossibleMoves;
+export default generatePossibleMovesWithoutKing;
