@@ -1,6 +1,7 @@
 import { React, Fragment, useState } from "react";
 import { useChatContext, Channel } from "stream-chat-react";
 import ChessBoard from "./ChessBoard.js";
+import "./JoinGame.css";
 
 const JoinGame = (props) => {
   const [opponentUsername, setOpponentUsername] = useState("");
@@ -31,7 +32,7 @@ const JoinGame = (props) => {
             <ChessBoard channel={channel} showPopUp={props.showPopUp} closePopUp={props.closePopUp} />
         </Channel>
       ) : (
-        <div>
+        <div className="joinGameHeader">
           <h4>Create Game</h4>
           <input
             placeholder="Username of opponent..."

@@ -60,7 +60,7 @@ const App = () => {
    * 1 = Player tried to perform a move that is illegal
    */
   const showPopUp = (popUpCode) => {
-    switch(popUpCode) {
+    switch (popUpCode) {
       case 0:
         setIsWrongTurn(true);
         setPopUpOpen(true);
@@ -73,7 +73,7 @@ const App = () => {
         setWhoInCheck("whiteInCheck");
         setPopUpOpen(true);
         break;
-      case 3: 
+      case 3:
         setWhoInCheck("blackInCheck");
         setPopUpOpen(true);
         break;
@@ -85,7 +85,7 @@ const App = () => {
         setGameWon("blackWon");
         setPopUpOpen(true);
         break;
-      default: 
+      default:
         console.log("something went wrong when showing the pop up");
     }
   };
@@ -96,7 +96,7 @@ const App = () => {
     setWhoInCheck("");
     setGameWon("");
     setPopUpOpen(false);
-  }
+  };
 
   return (
     //TODO: compartimentalize this JSX into Components
@@ -105,32 +105,38 @@ const App = () => {
         <Fragment>
           <header className="App-header">
             <div className="btn-wrapper">
-              <Button
-                type={BUTTON_TYPES.PRIMARY}
-                onClick={() => {}}
-                text={STRINGS.START}
-              ></Button>
-              <div>{STRINGS.TITLE}</div>
-              <Button
-                type={BUTTON_TYPES.PRIMARY}
-                onClick={() => {}}
-                text={STRINGS.RESET}
-              ></Button>
-              <Button
-                type={BUTTON_TYPES.PRIMARY}
-                onClick={logOut}
-                text={STRINGS.LOGOUT}
-              ></Button>
+              <div>
+                <Button
+                  type={BUTTON_TYPES.PRIMARY}
+                  onClick={() => {}}
+                  text={STRINGS.START}
+                ></Button>
+              </div>
+              <div>
+                <Button
+                  type={BUTTON_TYPES.PRIMARY}
+                  onClick={() => {}}
+                  text={STRINGS.RESET}
+                ></Button>
+                <Button
+                  type={BUTTON_TYPES.PRIMARY}
+                  onClick={logOut}
+                  text={STRINGS.LOGOUT}
+                ></Button>
+              </div>
             </div>
-            {popUpOpen && <PopUp
-              WRONG_TURN={isWrongTurn}
-              ILLEGAL_MOVE={isIllegalMove}
-              IN_CHECK={whoInCheck}
-              GAME_WON={gameWon}
-              closePopUp={closePopUp}
-            />}
+            {popUpOpen && (
+              <PopUp
+                WRONG_TURN={isWrongTurn}
+                ILLEGAL_MOVE={isIllegalMove}
+                IN_CHECK={whoInCheck}
+                GAME_WON={gameWon}
+                closePopUp={closePopUp}
+              />
+            )}
           </header>
           <div className="App-body">
+            <h1>{STRINGS.TITLE}</h1>
             <div>
               <Chat client={client}>
                 {/* <ChessBoard /> */}

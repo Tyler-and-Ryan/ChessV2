@@ -4,7 +4,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'IBM Plex Mono', monospace
+    font-family: 'IBM Plex Mono', monospace;
+    padding: 8px;
 }
 
 .primaryBtn {

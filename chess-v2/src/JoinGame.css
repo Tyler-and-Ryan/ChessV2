@@ -1,0 +1,9 @@
+.joinGameHeader {
+    font-style: normal;
+    margin: 40px;
+
+}
+
+.joinGameHeader input {
+    margin: 5px;
+}
