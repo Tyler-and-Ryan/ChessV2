@@ -18,11 +18,13 @@ const App = () => {
   const cookies = new Cookies();
   const token = cookies.get("token");
   const ctx = useContext(UserContext);
+  const [gameDisconnectFunc, setGameDisconnectFunc] = useState(() => { return () => {console.log("gameDisconnectFunction has not been set")}});
   const [popUpOpen, setPopUpOpen] = useState(false);
   const [isWrongTurn, setIsWrongTurn] = useState(false);
   const [isIllegalMove, setIsIllegalMove] = useState(false);
   const [whoInCheck, setWhoInCheck] = useState("");
   const [gameWon, setGameWon] = useState("");
+  const [gameLost, setGameLost] = useState(false);
 
   useEffect(() => {
     if (token) {
@@ -59,7 +61,7 @@ const App = () => {
    * 0 = Player tried to move when it wasn't their turn
    * 1 = Player tried to perform a move that is illegal
    */
-  const showPopUp = (popUpCode) => {
+  const showPopUp = (popUpCode, player = "White") => {
     switch (popUpCode) {
       case 0:
         setIsWrongTurn(true);
@@ -80,10 +82,20 @@ const App = () => {
       case 4:
         setGameWon("whiteWon");
         setPopUpOpen(true);
+        if (player === "Black") {
+          setGameLost(true);
+        } else {
+          setGameLost(false);
+        }
         break;
       case 5:
         setGameWon("blackWon");
         setPopUpOpen(true);
+        if (player === "White") {
+          setGameLost(true);
+        } else {
+          setGameLost(false);
+        }
         break;
       default:
         console.log("something went wrong when showing the pop up");
@@ -95,8 +107,14 @@ const App = () => {
     setIsIllegalMove(false);
     setWhoInCheck("");
     setGameWon("");
+    setGameLost(false);
     setPopUpOpen(false);
   };
+
+  const leaveGame = () => {
+    closePopUp();
+    gameDisconnectFunc();
+  }
 
   return (
     //TODO: compartimentalize this JSX into Components
@@ -131,6 +149,8 @@ const App = () => {
                 ILLEGAL_MOVE={isIllegalMove}
                 IN_CHECK={whoInCheck}
                 GAME_WON={gameWon}
+                GAME_LOST={gameLost}
+                leaveGame={leaveGame}
                 closePopUp={closePopUp}
               />
             )}
@@ -140,7 +160,7 @@ const App = () => {
             <div>
               <Chat client={client}>
                 {/* <ChessBoard /> */}
-                <JoinGame showPopUp={showPopUp} closePopUp={closePopUp} />
+                <JoinGame showPopUp={showPopUp} closePopUp={closePopUp} leaveGame={leaveGame} setGameDisconnectFunc={setGameDisconnectFunc}/>
               </Chat>
             </div>
           </div>

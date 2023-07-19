@@ -23,8 +23,13 @@ const JoinGame = (props) => {
     });
 
     await newChannel.watch();
+    props.setGameDisconnectFunc( () => {return () => { //TODO: Figure out how to disconnect both users properly
+      console.log("JoinGame - Setting Channel to NULL");
+      setChannel(null);
+    }})
     setChannel(newChannel);
   };
+
   return (
     <Fragment>
       {channel ? (

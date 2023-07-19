@@ -394,12 +394,12 @@ const ChessBoard = (props) => {
           props.closePopUp();
         }, 3400);
       } else if (gameStatus === "whiteWon") {
-        props.showPopUp(4); //alerting player that game has been won
+        props.showPopUp(4, player); //alerting player that game has been won
         setTimeout(() => {
           props.closePopUp();
         }, 3400);
       } else if (gameStatus === "blackWon") {
-        props.showPopUp(5); //alerting player that game has been won
+        props.showPopUp(5, player); //alerting player that game has been won
         setTimeout(() => {
           props.closePopUp();
         }, 3400);
@@ -586,12 +586,12 @@ const ChessBoard = (props) => {
             props.closePopUp();
           }, 3400);
         } else if (event.data.gameStatus === "whiteWon") {
-          props.showPopUp(4); //alerting player that game has been won
+          props.showPopUp(4, player); //alerting player that game has been won
           setTimeout(() => {
             props.closePopUp();
           }, 3400);
         } else if (event.data.gameStatus === "blackWon") {
-          props.showPopUp(5); //alerting player that game has been won
+          props.showPopUp(5, player); //alerting player that game has been won
           setTimeout(() => {
             props.closePopUp();
           }, 3400);

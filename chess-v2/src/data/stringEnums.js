@@ -14,5 +14,7 @@ export const STRINGS = {
     WHITE_IN_CHECK: 'White is in check!',
     BLACK_IN_CHECK: 'Black is in check!',
     WHITE_WON: 'White has won the game!',
-    BLACK_WON: 'Black has won the game!'
+    BLACK_WON: 'Black has won the game!',
+    GAME_LOST: 'You have lost the game',
+    GAME_WON: 'Congratulations! You have won the game!'
 }
