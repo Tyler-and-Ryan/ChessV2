@@ -32,7 +32,7 @@ const PopUp = (props) => {
       <div className="PopUp">
         {gameResultText !== "" ? gameResultText : popUpText}
         {gameResultText !== "" && (
-          <div>
+          <div className="buttonContainer">
             <Button
               type={BUTTON_TYPES.SECONDARY}
               onClick={props.leaveGame}

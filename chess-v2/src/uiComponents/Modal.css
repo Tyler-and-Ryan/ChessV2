@@ -38,6 +38,16 @@ body.active-modal {
     font-size: small;
 }
 
+.modal-images {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.modal-images img {
+    margin: 5px;
+}
+
 .close-modal {
     position: absolute;
     top: 10px;

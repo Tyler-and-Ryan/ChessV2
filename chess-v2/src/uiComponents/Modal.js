@@ -14,9 +14,9 @@ const Modal = (props) => {
     <div className="modal">
       <div className="overlay">
         <div className="modal-content">
-          <h2>Select a piece to transform your pawn into</h2>
+          <h3>Select a piece to transform your pawn into</h3>
           {props.player === "White" ? (
-            <div>
+            <div className="modal-images">
               <img
                 src={whiteBishop}
                 alt="White Bishop"
@@ -39,7 +39,7 @@ const Modal = (props) => {
               />
             </div>
           ) : (
-            <div>
+            <div className="modal-images">
               <img
                 src={blackBishop}
                 alt="Black Bishop"

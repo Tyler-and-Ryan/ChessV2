@@ -6,6 +6,7 @@
     align-items: center;
     font-family: 'IBM Plex Mono', monospace;
     padding: 8px;
+    z-index: 101;
 }
 
 .primaryBtn {
@@ -21,8 +22,18 @@
     transform: scale(1.02);
 }
 
+.secondaryBtn {
+    background-color: rgba(38, 38, 142, 0.832);
+    border-radius: 8px;
+    padding: 12px 24px;
+    color: white;
+    font-weight: 300;
+    letter-spacing: 1.2px;
+}
+
 .secondaryBtn:hover {
-    background-color: white;
+    background-color: blue;
+    transform: scale(1.02);
 }
 
 .tertiaryBtn:hover {
