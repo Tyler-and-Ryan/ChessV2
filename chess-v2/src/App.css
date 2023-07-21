@@ -42,6 +42,19 @@
   min-width: 350px;
 }
 
+.App-footer div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .App-footer-links {
   color: white;
+}
+
+.App-footer-image {
+  width: 7%;
+  object-fit: contain;
+  margin-left: 5px;
+  padding: 5px;
 }

@@ -18,7 +18,11 @@ const App = () => {
   const cookies = new Cookies();
   const token = cookies.get("token");
   const ctx = useContext(UserContext);
-  const [gameDisconnectFunc, setGameDisconnectFunc] = useState(() => { return () => {console.log("gameDisconnectFunction has not been set")}});
+  const [gameDisconnectFunc, setGameDisconnectFunc] = useState(() => {
+    return () => {
+      console.log("gameDisconnectFunction has not been set");
+    };
+  });
   const [popUpOpen, setPopUpOpen] = useState(false);
   const [isWrongTurn, setIsWrongTurn] = useState(false);
   const [isIllegalMove, setIsIllegalMove] = useState(false);
@@ -134,11 +138,13 @@ const App = () => {
                 ></Button>
               </div>
               <div>
-                {gameActive && <Button
-                  type={BUTTON_TYPES.PRIMARY}
-                  onClick={leaveGame}
-                  text={STRINGS.RESET}
-                ></Button>}
+                {gameActive && (
+                  <Button
+                    type={BUTTON_TYPES.PRIMARY}
+                    onClick={leaveGame}
+                    text={STRINGS.RESET}
+                  ></Button>
+                )}
                 <Button
                   type={BUTTON_TYPES.PRIMARY}
                   onClick={logOut}
@@ -162,32 +168,55 @@ const App = () => {
             <h1>{STRINGS.TITLE}</h1>
             <div>
               <Chat client={client}>
-                <JoinGame showPopUp={showPopUp} closePopUp={closePopUp} leaveGame={leaveGame} setGameDisconnectFunc={setGameDisconnectFunc} gameActive={gameActive} setGameActive={setGameActive}/>
+                <JoinGame
+                  showPopUp={showPopUp}
+                  closePopUp={closePopUp}
+                  leaveGame={leaveGame}
+                  setGameDisconnectFunc={setGameDisconnectFunc}
+                  gameActive={gameActive}
+                  setGameActive={setGameActive}
+                />
               </Chat>
             </div>
           </div>
           <footer className="App-footer">
-            <p>
-              Developed by{" "}
-              <a className="App-footer-links"
+            <div>
+              <p>
+                Developed by{" "}
+                <a
+                  className="App-footer-links"
+                  href="https://linkedin.com/in/ryan-watson-4a8690213"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Ryan Watson
+                </a>
+              </p>
+              <a
                 href="https://linkedin.com/in/ryan-watson-4a8690213"
                 target="_blank"
                 rel="noreferrer"
               >
-                Ryan Watson
-                <img src={LinkedInLogo} altText="LinkedIn Logo"/>
+                <img
+                  className="App-footer-image"
+                  src={LinkedInLogo}
+                  altText="LinkedIn Logo"
+                />
               </a>
-            </p>
-            <p>
-              Chess Board Piece Images from{" "}
-              <a className="App-footer-links"
-                href="https://commons.wikimedia.org/wiki/Template:SVG_chess_pieces"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Wikimedia Commons
-              </a>
-            </p>
+            </div>
+            <div>
+              <p>
+                Chess Board Piece Images from{" "}
+                <a
+                  className="App-footer-links"
+                  href="https://commons.wikimedia.org/wiki/Template:SVG_chess_pieces"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Wikimedia Commons
+                </a>
+              </p>
+            </div>
           </footer>
         </Fragment>
       ) : (
