@@ -9,6 +9,7 @@ export const STRINGS = {
     RESET: 'Reset',
     TITLE: 'Chess Version 2',
     LOGOUT: 'Log Out',
+    HOME: 'Home',
     ILLEGAL_MOVE: 'You cannot move there. Select a location with a green dot',
     WRONG_TURN: 'It is not your turn. Wait until your opponent has made a move',
     WHITE_IN_CHECK: 'White is in check!',

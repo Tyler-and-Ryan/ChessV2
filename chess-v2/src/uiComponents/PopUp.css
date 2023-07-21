@@ -13,6 +13,18 @@
   animation-name: fadeOut;
 }
 
+.PopUpContainerNoAnimation {
+  position: absolute;
+  left: 25%;
+  right: 25%;
+  z-index: 100;
+  border-style: solid;
+  border-width: 3px;
+  border-color: rgb(198, 8, 8);
+  min-width: 175px;
+  opacity: 1;
+}
+
 .PopUp {
   background-color: yellow;
   text-align: center;

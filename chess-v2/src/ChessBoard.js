@@ -25,7 +25,6 @@ import whiteQueen from "./visualAssets/whiteQueen.svg";
 import blackRook from "./visualAssets/blackRook.svg";
 import whiteRook from "./visualAssets/whiteRook.svg";
 import checkGameStatus from "./helperFunctions/checkGameStatus";
-import { isCheck } from "./helperFunctions/isCheck";
 
 const ChessBoard = (props) => {
   //initialize graph that stores board data

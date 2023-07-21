@@ -2,7 +2,6 @@ import React, { Fragment, useContext, useState, useEffect } from "react";
 import { StreamChat } from "stream-chat";
 import { Chat } from "stream-chat-react";
 import Cookies from "universal-cookie";
-import ChessBoard from "./ChessBoard.js";
 import JoinGame from "./JoinGame.js";
 import UserContext from "./store/user-context.js";
 import Button from "./uiComponents/Button.js";
@@ -11,6 +10,7 @@ import "./App.css";
 import SignUp from "./SignUp.js";
 import Login from "./Login.js";
 import PopUp from "./uiComponents/PopUp.js";
+import LinkedInLogo from "./visualAssets/LinkedInLogo.png";
 
 const App = () => {
   const [isAuth, setIsAuth] = useState(false);
@@ -25,6 +25,7 @@ const App = () => {
   const [whoInCheck, setWhoInCheck] = useState("");
   const [gameWon, setGameWon] = useState("");
   const [gameLost, setGameLost] = useState(false);
+  const [gameActive, setGameActive] = useState(false);
 
   useEffect(() => {
     if (token) {
@@ -113,8 +114,10 @@ const App = () => {
 
   const leaveGame = () => {
     closePopUp();
-    gameDisconnectFunc();
-  }
+    setGameActive(false);
+    console.log("leaveGame - setGameActive is false");
+    // await gameDisconnectFunc();
+  };
 
   return (
     //TODO: compartimentalize this JSX into Components
@@ -127,15 +130,15 @@ const App = () => {
                 <Button
                   type={BUTTON_TYPES.PRIMARY}
                   onClick={() => {}}
-                  text={STRINGS.START}
+                  text={STRINGS.HOME}
                 ></Button>
               </div>
               <div>
-                <Button
+                {gameActive && <Button
                   type={BUTTON_TYPES.PRIMARY}
-                  onClick={() => {}}
+                  onClick={leaveGame}
                   text={STRINGS.RESET}
-                ></Button>
+                ></Button>}
                 <Button
                   type={BUTTON_TYPES.PRIMARY}
                   onClick={logOut}
@@ -159,25 +162,25 @@ const App = () => {
             <h1>{STRINGS.TITLE}</h1>
             <div>
               <Chat client={client}>
-                {/* <ChessBoard /> */}
-                <JoinGame showPopUp={showPopUp} closePopUp={closePopUp} leaveGame={leaveGame} setGameDisconnectFunc={setGameDisconnectFunc}/>
+                <JoinGame showPopUp={showPopUp} closePopUp={closePopUp} leaveGame={leaveGame} setGameDisconnectFunc={setGameDisconnectFunc} gameActive={gameActive} setGameActive={setGameActive}/>
               </Chat>
             </div>
           </div>
           <footer className="App-footer">
             <p>
               Developed by{" "}
-              <a
+              <a className="App-footer-links"
                 href="https://linkedin.com/in/ryan-watson-4a8690213"
                 target="_blank"
                 rel="noreferrer"
               >
                 Ryan Watson
+                <img src={LinkedInLogo} altText="LinkedIn Logo"/>
               </a>
             </p>
             <p>
               Chess Board Piece Images from{" "}
-              <a
+              <a className="App-footer-links"
                 href="https://commons.wikimedia.org/wiki/Template:SVG_chess_pieces"
                 target="_blank"
                 rel="noreferrer"

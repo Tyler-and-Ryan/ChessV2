@@ -28,9 +28,9 @@ const PopUp = (props) => {
   }
 
   return (
-    <span className="PopUpContainer">
+    <span className={gameResultText === "" ? "PopUpContainer" : "PopUpContainerNoAnimation"}>
       <div className="PopUp">
-        {gameResultText !== "" ? gameResultText : popUpText}
+        <h3>{gameResultText !== "" ? gameResultText : popUpText}</h3>
         {gameResultText !== "" && (
           <div className="buttonContainer">
             <Button

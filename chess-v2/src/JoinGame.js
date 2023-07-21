@@ -1,12 +1,49 @@
-import { React, Fragment, useState } from "react";
+import { React, Fragment, useState, useEffect } from "react";
 import { useChatContext, Channel } from "stream-chat-react";
 import ChessBoard from "./ChessBoard.js";
 import "./JoinGame.css";
 
 const JoinGame = (props) => {
   const [opponentUsername, setOpponentUsername] = useState("");
-  const [channel, setChannel] = useState(null);
+  const [channel, setChannel] = useState(null); //channel object
   const { client } = useChatContext();
+  useEffect(() => {
+      // props.setGameDisconnectFunc(deleteChannel);
+      const deleteChannel = async () => {
+        console.log("JoinGame - Setting Channel to NULL");
+        const response = await client.queryUsers({
+          name: { $eq: opponentUsername },
+        });
+    
+        if (response.users.length === 0) {
+          console.log("User not found, channel delete aborted");
+          return;
+        }
+    
+        console.log("response.users[0].id: " + response.users[0].id);
+        console.log("client.userID: " + client.userID);
+        const currChannel = await client.queryChannels({
+          members: { $in: [client.userID] }
+        });
+        if (currChannel && currChannel[0]) { //if opponent hasn't already deleted the channel, then do so
+          console.log("currChannel[0]: " + currChannel[0]);
+          currChannel[0].removeMembers([client.userID]); //removes user from channel
+          currChannel[0].stopWatching();
+          //if members length === 0, then delete the channel
+          const currentChannelMembers = await currChannel[0].queryMembers({}, {}, {}) //no filters, no options, no sorting. Trying to see all members in channel
+          console.log("currentChannelMembers.members: " + JSON.stringify(currentChannelMembers.members));
+          if (currentChannelMembers.members.length === 0) {
+            currChannel[0].delete();
+          }
+        }
+        setChannel(null);
+      };
+    
+      if (!props.gameActive) {
+        deleteChannel();
+      }
+  }, [props.gameActive]);
+
   const createChannel = async () => {
     //$eq means equal to (opponentUsername)
     const response = await client.queryUsers({
@@ -22,17 +59,18 @@ const JoinGame = (props) => {
       members: [client.userID, response.users[0].id],
     });
 
+    //setting user permission to admin allows each client to delete the channel when the game is finished
+    // const assignRolesResponse = await newChannel.assignRoles([{user_id: client.userID, channel_role:"admin"}]);
+    await client.partialUpdateUser({id: client.userID, set: {channel_role: "admin"}, unset: []});
+    await client.partialUpdateUser({id: response.users[0].id, set: {channel_role: "admin"}, unset: []});
+    console.log(client.userID + " assigned role of \"admin\" ");
+
     await newChannel.watch();
-    props.setGameDisconnectFunc( () => {return () => {
-      console.log("JoinGame - Setting Channel to NULL");
-      if (channel === null) { //TODO: figure out better way to disconnect user from game channel
-        channel.stopWatching();
-        channel.hide(client.userID);
-      }
-      setChannel(null);
-    }})
     setChannel(newChannel);
+    props.setGameActive(true);
+    // props.setGameDisconnectFunc(deleteChannel);
   };
+  
 
   return (
     <Fragment>
