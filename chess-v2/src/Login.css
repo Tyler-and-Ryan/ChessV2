@@ -1,0 +1,22 @@
+.logInContainer {
+    position: fixed;
+    margin-top: 50vh;
+    height: 50%;
+    width: 100%;
+    background-color: #3c3cd0;
+    color: white;
+    font-size: calc(10px + 4vmin);
+    font-weight: bold;
+}
+
+.loginLabel {
+    transform: translate(50%, 0%);
+    color: white;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    transform: translate(100%, 50%);
+    width: 30vw;
+}

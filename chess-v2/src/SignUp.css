@@ -1,0 +1,10 @@
+.signUpContainer {
+    position: fixed;
+    margin-bottom: 50vh;
+    height: 50%;
+    width: 100%;
+    background-color: #3c3cd0;
+    color: white;
+    font-size: calc(10px + 2vmin);
+    font-weight: bold;
+}
