@@ -11,7 +11,7 @@ const SignUp = (props) => {
   const [showSignIn, setShowSignIn] = useState(false);
 
   const signUp = () => {
-    Axios.post("http://localhost:3001/signup", user).then((res) => {
+    Axios.post("https://checkmate-the-king.onrender.com/signup", user).then((res) => {
       const { token, userId, firstName, lastName, username, hashedPassword } =
         res.data;
       cookies.set("token", token);

@@ -4,7 +4,7 @@ import express from "express";
 import cors from "cors";
 import { StreamChat } from "stream-chat";
 import { v4 as uuidv4 } from "uuid";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
@@ -20,6 +20,7 @@ const app = express();
 app.use(express.static(publicDir))
 app.use(cors());
 app.use(express.json());
+const port = process.env.PORT || 3001;
 
 //instance of our connection to the server
 const serverClient = StreamChat.getInstance(
@@ -62,7 +63,7 @@ app.post("/login", async (req, res) => {
     }
 });
 
-app.listen(3001, () => {
+app.listen(port, () => {
   //use port 3001 since react localhost is using 3000
   console.log("Server alive on port 3001");
 });

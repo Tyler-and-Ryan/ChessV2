@@ -12,7 +12,7 @@ const Login = (props) => {
 
   const cookies = new Cookies();
   const login = () => {
-    Axios.post("http://localhost:3001/login", { username, password })
+    Axios.post("https://checkmate-the-king.onrender.com/login", { username, password })
       .then((res) => {
         console.log("res: " + res);
         const { token, userId, firstName, lastName, username } = res.data;
