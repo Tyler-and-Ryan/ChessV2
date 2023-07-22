@@ -1,7 +1,9 @@
 import { useState } from "react";
 import Axios from "axios";
 import Cookies from "universal-cookie";
+import Button from "./uiComponents/Button.js";
 import "./SignUp.css";
+import { BUTTON_TYPES } from "./data/stringEnums";
 
 const SignUp = (props) => {
   const cookies = new Cookies();
@@ -30,9 +32,11 @@ const SignUp = (props) => {
 
   return (
     <div className="signUpContainer">
-      <label onClick={handleSignInOptions}>Sign Up</label>
+      <div className="signUpLabelContainer">
+        <label className="signUpLabel" onClick={handleSignInOptions}>Sign Up</label>
+      </div>
       {showSignIn && (
-        <div>
+        <div className="signUpForm">
           <input
             placeholder="First Name"
             onChange={(event) => {
@@ -58,7 +62,7 @@ const SignUp = (props) => {
               setUser({ ...user, password: event.target.value });
             }}
           />
-          <button onClick={signUp}>Sign Up</button>
+          <Button onClick={signUp} type={BUTTON_TYPES.TERTIARY} text="Sign Up" />
         </div>
       )}
     </div>

@@ -1,7 +1,9 @@
 import { useState } from "react";
 import Axios from "axios";
 import Cookies from "universal-cookie";
+import Button from "./uiComponents/Button.js";
 import "./Login.css";
+import { BUTTON_TYPES } from "./data/stringEnums.js";
 
 const Login = (props) => {
   const [username, setUsername] = useState("");
@@ -34,8 +36,8 @@ const Login = (props) => {
 
   return (
     <div className="logInContainer">
-      <div className="loginLabel">
-        <label onClick={handleLogInOptions}>Login</label>
+      <div className="loginLabelContainer">
+        <label className="loginLabel" onClick={handleLogInOptions}>Log In</label>
       </div>
       {showLogIn && (
         <div className="loginForm">
@@ -52,7 +54,7 @@ const Login = (props) => {
               setPassword(event.target.value);
             }}
           />
-          <button onClick={login}>Login</button>
+          <Button onClick={login} text="Submit" type={BUTTON_TYPES.TERTIARY}/>
         </div>
       )}
     </div>

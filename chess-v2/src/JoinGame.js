@@ -8,25 +8,19 @@ const JoinGame = (props) => {
   const [channel, setChannel] = useState(null); //channel object
   const { client } = useChatContext();
   useEffect(() => {
-      // props.setGameDisconnectFunc(deleteChannel);
       const deleteChannel = async () => {
-        console.log("JoinGame - Setting Channel to NULL");
         const response = await client.queryUsers({
           name: { $eq: opponentUsername },
         });
     
         if (response.users.length === 0) {
-          console.log("User not found, channel delete aborted");
           return;
         }
     
-        console.log("response.users[0].id: " + response.users[0].id);
-        console.log("client.userID: " + client.userID);
         const currChannel = await client.queryChannels({
           members: { $in: [client.userID] }
         });
         if (currChannel && currChannel[0]) { //if opponent hasn't already deleted the channel, then do so
-          console.log("currChannel[0]: " + currChannel[0]);
           currChannel[0].removeMembers([client.userID]); //removes user from channel
           currChannel[0].stopWatching();
           //if members length === 0, then delete the channel
@@ -68,7 +62,6 @@ const JoinGame = (props) => {
     await newChannel.watch();
     setChannel(newChannel);
     props.setGameActive(true);
-    // props.setGameDisconnectFunc(deleteChannel);
   };
   
 

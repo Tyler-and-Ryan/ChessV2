@@ -29,7 +29,7 @@ import checkGameStatus from "./helperFunctions/checkGameStatus";
 const ChessBoard = (props) => {
   //initialize graph that stores board data
   const [nodes, setNodes] = useState(defaultNodes);
-  const [edges, setEdges] = useState(generatePossibleMoves(defaultNodes, []));
+  // const [edges, setEdges] = useState(generatePossibleMoves(defaultNodes, []));
   const [edgesForKing, setEdgesForKing] = useState(
     generatePossibleMoves(defaultNodes, [], true)
   );
@@ -43,7 +43,7 @@ const ChessBoard = (props) => {
     useState(false);
   //TODO: put result state in parent component, pass setResult through props to here.
   //call setResult in the gamewin function when that is implemented
-  const [result, setResult] = useState({ winner: "none", state: "none" });
+  // const [result, setResult] = useState({ winner: "none", state: "none" });
   const ctx = useContext(UserContext);
   const { channel } = useChannelStateContext();
   const { client } = useChatContext();
@@ -135,9 +135,9 @@ const ChessBoard = (props) => {
     setNodes(() => {
       return newNodes;
     }); //rerender board based on new highlighted states
-    setEdges(() => {
-      return generatePossibleMoves(newNodes, edgesForKing);
-    });
+    // setEdges(() => {
+    //   return generatePossibleMoves(newNodes, edgesForKing);
+    // });
     setEdgesForKing(() => {
       return generatePossibleMoves(newNodes, edgesForKing, true);
     });
@@ -368,9 +368,9 @@ const ChessBoard = (props) => {
         return newNodes;
       }); //rerender board based on new highlighted states
       const newEdges = generatePossibleMoves(newNodes, edgesForKing);
-      setEdges(() => {
-        return newEdges;
-      });
+      // setEdges(() => {
+      //   return newEdges;
+      // });
       const newEdgesForKing = generatePossibleMoves(newNodes, edgesForKing, true);
       setEdgesForKing(() => {
         return newEdgesForKing;
@@ -482,10 +482,10 @@ const ChessBoard = (props) => {
         setNodes(() => {
           return newNodes;
         }); //rerender board based on new highlighted states
-        const newEdges = generatePossibleMoves(newNodes, edgesForKing);
-        setEdges(() => {
-          return newEdges;
-        });
+        // const newEdges = generatePossibleMoves(newNodes, edgesForKing);
+        // setEdges(() => {
+        //   return newEdges;
+        // });
         const newEdgesForKing = generatePossibleMoves(newNodes, edgesForKing, true);
         setEdgesForKing(() => {
           return newEdgesForKing;
@@ -557,10 +557,10 @@ const ChessBoard = (props) => {
         setNodes(() => {
           return newNodes;
         }); //rerender board based on new highlighted states
-        const newEdges = generatePossibleMoves(newNodes, edgesForKing);
-        setEdges(() => {
-          return newEdges;
-        });
+        // const newEdges = generatePossibleMoves(newNodes, edgesForKing);
+        // setEdges(() => {
+        //   return newEdges;
+        // });
         const newEdgesForKing = generatePossibleMoves(newNodes, edgesForKing, true);
         setEdgesForKing(() => {
           return newEdgesForKing;

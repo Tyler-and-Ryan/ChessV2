@@ -5,10 +5,19 @@ import cors from "cors";
 import { StreamChat } from "stream-chat";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcrypt";
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
+// const path = require('path')
+const currentDir = dirname(fileURLToPath(import.meta.url))
+const parentDir = join(currentDir, "..")
+const publicDir = join(parentDir, "public")
+console.log("currentDir: " + currentDir);
+console.log("parentDir: " + parentDir);
+console.log("publicDir: " + publicDir);
 
 const app = express();
-
+app.use(express.static(publicDir))
 app.use(cors());
 app.use(express.json());
 

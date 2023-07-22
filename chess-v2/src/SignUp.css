@@ -1,10 +1,47 @@
 .signUpContainer {
     position: fixed;
-    margin-bottom: 50vh;
-    height: 50%;
-    width: 100%;
-    background-color: #3c3cd0;
+    margin-bottom: 40vh;
+    height: 60vh;
+    width: 100vw;
+    background-color: #282c34;
     color: white;
-    font-size: calc(10px + 2vmin);
+    font-size: calc(10px + 4vmin);
     font-weight: bold;
+}
+
+
+.signUpLabelContainer {
+    position: relative;
+    left: 40.5%;
+    max-width: 21vw;
+    top: 30vh;
+    color: white;
+}
+
+.signUpLabelContainer:hover {
+    transform: scale(1.02);
+}
+
+.signUpLabel:hover {
+    border-radius: 10%;
+    border-color: white;
+    border-style: solid;
+    cursor: pointer;
+    padding: 2px;
+}
+
+.signUpForm {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: 30vh;
+    max-width: 30vw;
+    left: 35vw;
+    margin-top: 1vh;
+}
+
+.signUpForm input {
+    height: 2vh;
+    font-size: 0.4em;
+    margin-bottom: 5px;
 }

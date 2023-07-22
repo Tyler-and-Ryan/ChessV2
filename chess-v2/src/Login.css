@@ -1,22 +1,43 @@
 .logInContainer {
     position: fixed;
-    margin-top: 50vh;
-    height: 50%;
-    width: 100%;
-    background-color: #3c3cd0;
+    margin-top: 60vh;
+    height: 40vh;
+    width: 100vw;
+    background-color: #282c34;
     color: white;
     font-size: calc(10px + 4vmin);
     font-weight: bold;
 }
 
-.loginLabel {
-    transform: translate(50%, 0%);
+.loginLabelContainer {
+    position: relative;
+    left: 43vw;
+    max-width: 17vw;
     color: white;
+}
+
+.loginLabelContainer:hover {
+    transform: scale(1.02);
+}
+
+.loginLabel:hover {
+    border-radius: 10%;
+    border-color: white;
+    border-style: solid;
+    cursor: pointer;
 }
 
 .loginForm {
     display: flex;
     flex-direction: column;
-    transform: translate(100%, 50%);
-    width: 30vw;
+    position: relative;
+    max-width: 30vw;
+    left: 35vw;
+    margin-top: 1vh;
+}
+
+.loginForm input {
+    height: 2vh;
+    font-size: 0.4em;
+    margin-bottom: 5px;
 }

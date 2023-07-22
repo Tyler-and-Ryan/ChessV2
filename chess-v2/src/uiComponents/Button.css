@@ -36,6 +36,22 @@
     transform: scale(1.02);
 }
 
+.tertiaryBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #D700FF;
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: white;
+    font-weight: 50;
+    letter-spacing: 1.2px;
+    font-size: 0.5em;
+    width: 11vw;
+    height: 3vh;
+}
+
 .tertiaryBtn:hover {
     transform: scale(1.02);
+    background-color: #ae03cc;
 }

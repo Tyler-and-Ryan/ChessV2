@@ -1,9 +1,8 @@
-import React, { Fragment, useContext, useState, useEffect } from "react";
+import React, { Fragment, useState } from "react";
 import { StreamChat } from "stream-chat";
 import { Chat } from "stream-chat-react";
 import Cookies from "universal-cookie";
 import JoinGame from "./JoinGame.js";
-import UserContext from "./store/user-context.js";
 import Button from "./uiComponents/Button.js";
 import { BUTTON_TYPES, STRINGS } from "./data/stringEnums.js";
 import "./App.css";
@@ -17,12 +16,6 @@ const App = () => {
   const client = StreamChat.getInstance(process.env.REACT_APP_API_KEY);
   const cookies = new Cookies();
   const token = cookies.get("token");
-  const ctx = useContext(UserContext);
-  const [gameDisconnectFunc, setGameDisconnectFunc] = useState(() => {
-    return () => {
-      console.log("gameDisconnectFunction has not been set");
-    };
-  });
   const [popUpOpen, setPopUpOpen] = useState(false);
   const [isWrongTurn, setIsWrongTurn] = useState(false);
   const [isIllegalMove, setIsIllegalMove] = useState(false);
@@ -31,35 +24,36 @@ const App = () => {
   const [gameLost, setGameLost] = useState(false);
   const [gameActive, setGameActive] = useState(false);
 
-  useEffect(() => {
-    if (token) {
-      client
-        .connectUser(
-          {
-            id: cookies.get("userId"),
-            name: cookies.get("username"),
-            firstName: cookies.get("firstName"),
-            lastName: cookies.get("lastName"),
-            hashedPassword: cookies.get("hashedPassword"),
-          },
-          token
-        )
-        .then((user) => {
-          setIsAuth(true);
-        });
-    }
-  }, []);
+  if (token && client.user === undefined) {
+    client
+      .connectUser(
+        {
+          id: cookies.get("userId"),
+          name: cookies.get("username"),
+          firstName: cookies.get("firstName"),
+          lastName: cookies.get("lastName"),
+          hashedPassword: cookies.get("hashedPassword"),
+        },
+        token
+      )
+      .then((user) => {
+        setIsAuth(true);
+      });
+  }
 
   const logOut = () => {
-    cookies.remove("token");
-    cookies.remove("userId");
-    cookies.remove("firstName");
-    cookies.remove("lastName");
-    cookies.remove("hashedPassword");
-    cookies.remove("channelName");
-    cookies.remove("username");
-    client.disconnectUser();
-    setIsAuth(false);
+    if (client) {
+      console.log("logout being executed");
+      cookies.remove("token");
+      cookies.remove("userId");
+      cookies.remove("firstName");
+      cookies.remove("lastName");
+      cookies.remove("hashedPassword");
+      cookies.remove("channelName");
+      cookies.remove("username");
+      client.disconnectUser();
+      setIsAuth(false);
+    }
   };
 
   /*
@@ -131,11 +125,11 @@ const App = () => {
           <header className="App-header">
             <div className="btn-wrapper">
               <div>
-                <Button
+                {/* <Button TODO: ADD THIS BACK AS A PROFILE BUTTON WITH PLAYER STATS
                   type={BUTTON_TYPES.PRIMARY}
                   onClick={() => {}}
                   text={STRINGS.HOME}
-                ></Button>
+                ></Button> */}
               </div>
               <div>
                 {gameActive && (
@@ -172,7 +166,6 @@ const App = () => {
                   showPopUp={showPopUp}
                   closePopUp={closePopUp}
                   leaveGame={leaveGame}
-                  setGameDisconnectFunc={setGameDisconnectFunc}
                   gameActive={gameActive}
                   setGameActive={setGameActive}
                 />
@@ -200,7 +193,7 @@ const App = () => {
                 <img
                   className="App-footer-image"
                   src={LinkedInLogo}
-                  altText="LinkedIn Logo"
+                  alt="LinkedIn Logo"
                 />
               </a>
             </div>
