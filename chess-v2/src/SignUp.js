@@ -11,17 +11,19 @@ const SignUp = (props) => {
   const [showSignIn, setShowSignIn] = useState(false);
 
   const signUp = () => {
-    Axios.post("https://checkmate-the-king.onrender.com/signup", user).then((res) => {
-      const { token, userId, firstName, lastName, username, hashedPassword } =
-        res.data;
-      cookies.set("token", token);
-      cookies.set("userId", userId);
-      cookies.set("firstName", firstName);
-      cookies.set("lastName", lastName);
-      cookies.set("username", username);
-      cookies.set("hashedPassword", hashedPassword);
-      props.setIsAuth(true);
-    });
+    Axios.post("https://checkmate-the-king.onrender.com/signup", user).then(
+      (res) => {
+        const { token, userId, firstName, lastName, username, hashedPassword } =
+          res.data;
+        cookies.set("token", token);
+        cookies.set("userId", userId);
+        cookies.set("firstName", firstName);
+        cookies.set("lastName", lastName);
+        cookies.set("username", username);
+        cookies.set("hashedPassword", hashedPassword);
+        props.setIsAuth(true);
+      }
+    );
   };
 
   const handleSignInOptions = () => {
@@ -32,39 +34,47 @@ const SignUp = (props) => {
 
   return (
     <div className="signUpContainer">
-      <div className="signUpLabelContainer">
-        <label className="signUpLabel" onClick={handleSignInOptions}>Sign Up</label>
-      </div>
-      {showSignIn && (
-        <div className="signUpForm">
-          <input
-            placeholder="First Name"
-            onChange={(event) => {
-              setUser({ ...user, firstName: event.target.value });
-            }}
-          />
-          <input
-            placeholder="Last Name"
-            onChange={(event) => {
-              setUser({ ...user, lastName: event.target.value });
-            }}
-          />
-          <input
-            placeholder="Username"
-            onChange={(event) => {
-              setUser({ ...user, username: event.target.value });
-            }}
-          />
-          <input
-            placeholder="Password"
-            type="password"
-            onChange={(event) => {
-              setUser({ ...user, password: event.target.value });
-            }}
-          />
-          <Button onClick={signUp} type={BUTTON_TYPES.TERTIARY} text="Sign Up" />
+      <div className="signUpForm">
+        <div className="signUpLabelContainer">
+          <label className="signUpLabel" onClick={handleSignInOptions}>
+            Sign Up
+          </label>
         </div>
-      )}
+        {showSignIn && (
+          <>
+            <input
+              placeholder="First Name"
+              onChange={(event) => {
+                setUser({ ...user, firstName: event.target.value });
+              }}
+            />
+            <input
+              placeholder="Last Name"
+              onChange={(event) => {
+                setUser({ ...user, lastName: event.target.value });
+              }}
+            />
+            <input
+              placeholder="Username"
+              onChange={(event) => {
+                setUser({ ...user, username: event.target.value });
+              }}
+            />
+            <input
+              placeholder="Password"
+              type="password"
+              onChange={(event) => {
+                setUser({ ...user, password: event.target.value });
+              }}
+            />
+            <Button
+              onClick={signUp}
+              type={BUTTON_TYPES.TERTIARY}
+              text="Sign Up"
+            />
+          </>
+        )}
+      </div>
     </div>
   );
 };

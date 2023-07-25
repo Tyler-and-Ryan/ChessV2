@@ -10,14 +10,24 @@
 }
 
 .loginLabelContainer {
-    position: relative;
-    left: 43vw;
-    max-width: 17vw;
-    color: white;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
 }
 
 .loginLabelContainer:hover {
     transform: scale(1.02);
+}
+
+.loginLabel {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+    padding: 8px;
 }
 
 .loginLabel:hover {
@@ -25,6 +35,7 @@
     border-color: white;
     border-style: solid;
     cursor: pointer;
+    padding: 2px;
 }
 
 .loginForm {

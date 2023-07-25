@@ -12,7 +12,10 @@ const Login = (props) => {
 
   const cookies = new Cookies();
   const login = () => {
-    Axios.post("https://checkmate-the-king.onrender.com/login", { username, password })
+    Axios.post("https://checkmate-the-king.onrender.com/login", {
+      username,
+      password,
+    })
       .then((res) => {
         console.log("res: " + res);
         const { token, userId, firstName, lastName, username } = res.data;
@@ -36,27 +39,35 @@ const Login = (props) => {
 
   return (
     <div className="logInContainer">
-      <div className="loginLabelContainer">
-        <label className="loginLabel" onClick={handleLogInOptions}>Log In</label>
-      </div>
-      {showLogIn && (
-        <div className="loginForm">
-          <input
-            placeholder="Username"
-            onChange={(event) => {
-              setUsername(event.target.value);
-            }}
-          />
-          <input
-            placeholder="Password"
-            type="password"
-            onChange={(event) => {
-              setPassword(event.target.value);
-            }}
-          />
-          <Button onClick={login} text="Submit" type={BUTTON_TYPES.TERTIARY}/>
+      <div className="loginForm">
+        <div className="loginLabelContainer">
+          <label className="loginLabel" onClick={handleLogInOptions}>
+            Log In
+          </label>
         </div>
-      )}
+        {showLogIn && (
+          <>
+            <input
+              placeholder="Username"
+              onChange={(event) => {
+                setUsername(event.target.value);
+              }}
+            />
+            <input
+              placeholder="Password"
+              type="password"
+              onChange={(event) => {
+                setPassword(event.target.value);
+              }}
+            />
+            <Button
+              onClick={login}
+              text="Submit"
+              type={BUTTON_TYPES.TERTIARY}
+            />
+          </>
+        )}
+      </div>
     </div>
   );
 };
