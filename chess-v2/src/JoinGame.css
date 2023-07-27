@@ -1,9 +1,69 @@
 .joinGameHeader {
     font-style: normal;
     margin: 40px;
-
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-.joinGameHeader input {
+.joinGameHeader label {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1em;
+}
+
+.joinComputerHeader {
+    font-style: normal;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.joinComputerHeader h4 {
+    margin-bottom: 0px;
+}
+
+.infoBtn {
+    max-width: 1.75em;
+    max-height: 1.75em;
+    margin-top: 10%;
+}
+
+.infoText {
+    background-color: #fff;
+    border-radius: 3%;
+    color: #000;
+    font-size: .7em;
+    left: 65%;
+    top: 45%;
+    max-width: 15vw;
+    position: absolute;
+    text-align: center;
+    z-index: 1;
+    padding: 5px;
+}
+
+.opponentInputBox {
+    margin: 5px;
+    border-radius: 5%;
+    height: 2vh;
+}
+
+.joinGameLabel {
+    display: flex;
+    flex-direction: row;
+}
+
+.joinGameLabel h4 {
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.playComputerLabel {
     margin: 5px;
 }
